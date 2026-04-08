@@ -4,8 +4,14 @@
  */
 package ui.SystemAdminWorkArea;
 
+import Business.Enterprise.Enterprise;
+import Business.Organization;
 import javax.swing.JPanel;
 import Business.System.System;
+import Business.UserAccount.UserAccount;
+import java.awt.CardLayout;
+import java.awt.Component;
+import ui.utils.IranHormuzMapJPanel;
 /**
  *
  * @author ben
@@ -18,11 +24,18 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
     
     JPanel userProcessContainer;
     System system;
+    UserAccount userAccount;
+    Organization inOrganization;
+    Enterprise inEnterprise;
+    
     /** Creates new form AdminWorkAreaJPanel */
-    public AdminWorkAreaJPanel(JPanel userProcessContainer, System system) {
+    public AdminWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Organization inOrganization, Enterprise inEnterprise, System system) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.system = system;
+        this.userAccount = userAccount;
+        this.inOrganization = inOrganization;
+        this.inEnterprise = inEnterprise;
     }
 
     /**
@@ -36,11 +49,19 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
+        btnIranHormuzMap = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         lblTitle.setText("Administrative Work Area");
+
+        btnIranHormuzMap.setText("Iran Hormuz Map");
+        btnIranHormuzMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIranHormuzMapActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -48,7 +69,9 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(37, 37, 37)
-                .addComponent(lblTitle)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnIranHormuzMap)
+                    .addComponent(lblTitle))
                 .addContainerGap(189, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -56,7 +79,9 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addComponent(lblTitle)
-                .addContainerGap(255, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnIranHormuzMap)
+                .addContainerGap(226, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -75,8 +100,20 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnIranHormuzMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIranHormuzMapActionPerformed
+        // TODO add your handling code here:
+        IranHormuzMapJPanel hormuzPanel = new IranHormuzMapJPanel();
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        userProcessContainer.add(hormuzPanel, "IranHormuzMapJPanel");
+        // LOAD YOUTUBE HERE (before or after show is fine)
+        hormuzPanel.loadURL("https://www.youtube.com/live/8SAo9jrrB_s");
+        layout.show(userProcessContainer, "IranHormuzMapJPanel");
+
+    }//GEN-LAST:event_btnIranHormuzMapActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnIranHormuzMap;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblTitle;
     // End of variables declaration//GEN-END:variables

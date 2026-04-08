@@ -7,7 +7,6 @@ package Business.Role;
 
 import Business.Enterprise.Enterprise;
 import Business.Organization;
-import Business.Person.PersonAccount;
 import Business.UserAccount.UserAccount;
 import javax.swing.JPanel;
 import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
@@ -21,7 +20,7 @@ public class AdminRole extends Role {
 
 
 
-    public AdminRole(PersonAccount p) {
+    public AdminRole(UserAccount p) {
 
         super(p, RoleType.Admin); 
 
@@ -33,7 +32,7 @@ public class AdminRole extends Role {
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
         
-        return new AdminWorkAreaJPanel(userProcessContainer, system);
+        return new AdminWorkAreaJPanel(userProcessContainer, account, organization, enterprise, system);
     }
 
 }

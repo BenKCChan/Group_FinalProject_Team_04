@@ -6,56 +6,53 @@
 package Business.UserAccount;
 
 import Business.Role.Role;
-
-
+import java.util.UUID;
 
 /**
  *
  * @author kal bugrara
  */
 public class UserAccount {
-    
-    Role role;
+
+    String id;
     String username;
     String password;
-    
-    public UserAccount (Role role, String un, String pw){
+
+    public UserAccount(String un, String pw) {
+        id = UUID.randomUUID().toString();
         username = un;
-         password = pw;
-         this.role = role;
-
+        password = pw;
     }
 
-    public String getPersonId(){
-        return role.getPerson().getPersonId();
+    public String getId() {
+        return id;
     }
-    public String getUserLoginName(){
+
+    public String getUserLoginName() {
         return username;
     }
 
-        public boolean isMatch(String id){
-        if(getPersonId().equals(id)) return true;
+    public boolean isMatch(String id) {
+        if (getId().equals(id)) {
+            return true;
+        }
         return false;
     }
-        public boolean IsValidUser(String un, String pw){
-        
-            if (username.equalsIgnoreCase(un) && password.equals(pw)) return true;
-            else return false;
-        
-        }
-        public String getRole(){
-            return role.getRole();
-        }
-        
-        public Role getAssociatedPersonProfile(){
-            return role;
-        }
-        
-    @Override
-        public String toString(){
-            
-            return getUserLoginName();
-        }
-        
-}
 
+    public boolean IsValidUser(String un, String pw) {
+
+        if (username.equalsIgnoreCase(un) && password.equals(pw)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    @Override
+    public String toString() {
+
+        return getUserLoginName();
+    }
+
+}

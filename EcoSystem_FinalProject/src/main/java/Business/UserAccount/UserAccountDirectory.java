@@ -23,9 +23,9 @@ public class UserAccountDirectory {
 
     }
 
-    public UserAccount newUserAccount(Role p, String un, String pw) {
+    public UserAccount newUserAccount(String un, String pw) {
 
-        UserAccount ua = new UserAccount (p,  un,  pw);
+        UserAccount ua = new UserAccount ( un,  pw);
         useraccountlist.add(ua);
         return ua;
     }

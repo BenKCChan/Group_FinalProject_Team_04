@@ -6,8 +6,6 @@ import Business.UserAccount.UserAccount;
 import Business.System.System;
 import Business.Organization;
 import Business.Network.Network;
-import Business.Person.PersonAccount;
-import Business.Person.PersonDirectory;
 import Business.Role.AdminDirectory;
 import Business.Role.AdminRole;
 import Business.UserAccount.UserAccountDirectory;
@@ -45,11 +43,9 @@ public class ConfigureASystem {
         Organization e3_org2 = e3.newOrganization("Purchasing Dept");
         
         // Create Admin
-        PersonDirectory personDirectory = orgAdmin.getPersonDirectory();
-        PersonAccount admin = personDirectory.newPerson("Admin");
+        UserAccount admin = orgAdmin.getUserAccountDirectory().newUserAccount("admin", "****");
         AdminDirectory adminDirectory = system.getAdminDirectory();
         AdminRole adminRole0 = adminDirectory.newAdminRole(admin);
-        orgAdmin.getUserAccountDirectory().newUserAccount(adminRole0, "admin", "****");
 
         return system;
     };

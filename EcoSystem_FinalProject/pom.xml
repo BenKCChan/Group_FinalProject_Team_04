@@ -5,6 +5,20 @@
     <artifactId>EcoSystemDemo</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url> <!-- Correct Maven Central -->
+        </repository>
+        <repository>
+            <id>openjfx-repo</id>
+            <url>https://maven.central.com/repository/</url>
+        </repository>
+        <repository>
+            <id>com.teamdev</id>
+            <url>https://europe-maven.pkg.dev/jxbrowser/releases</url>
+        </repository>
+    </repositories>
     <dependencies>
         <dependency>
             <groupId>io.github.nilshoffmann</groupId>
@@ -17,12 +31,38 @@
             <artifactId>AbsoluteLayout</artifactId>
             <version>RELEASE220</version>
         </dependency>
+        <!-- JavaFX Controls Dependency -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>21</version> <!-- Match this with your JDK version -->
+        </dependency>
+
+        <!-- JavaFX Swing Dependency -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>21</version>
+        </dependency>
+
+        <!-- JavaFX WebView Dependency -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>21</version>
+        </dependency>
+        <dependency>
+            <groupId>me.friwi</groupId>
+            <artifactId>jcefmaven</artifactId>
+            <version>${jcef.version}</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <exec.mainClass>ui.MainJFrame</exec.mainClass>
+        <jcef.version>143.0.14</jcef.version>
     </properties>
     <name>EcoSystem_FinalProject</name>
 </project>

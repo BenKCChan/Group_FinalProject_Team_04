@@ -4,7 +4,6 @@
  */
 package Business;
 
-import Business.Person.PersonDirectory;
 import Business.Role.AdminDirectory;
 import Business.Role.SupplierDirectory;
 import Business.UserAccount.UserAccountDirectory;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 public class Organization {
     
     String name;
-    PersonDirectory personDirectory; // all people profile regradless of the profile
     
     AdminDirectory adminDirectory;
     UserAccountDirectory userAccountDirectory; 
@@ -28,7 +26,6 @@ public class Organization {
     public Organization(String n){
         name = n;
         
-        personDirectory = new PersonDirectory();
         adminDirectory = new AdminDirectory();
         userAccountDirectory = new UserAccountDirectory();
         supplierDirectory = new SupplierDirectory();
@@ -38,8 +35,7 @@ public class Organization {
     
     public Organization(){
         name = "noname";
-        
-        personDirectory = new PersonDirectory();
+
         adminDirectory = new AdminDirectory();
         userAccountDirectory = new UserAccountDirectory();
         supplierDirectory = new SupplierDirectory();
@@ -47,9 +43,6 @@ public class Organization {
         
     }
 
-    public PersonDirectory getPersonDirectory() {
-        return personDirectory;
-    }
 
     public AdminDirectory getAdminDirectory() {
         return adminDirectory;

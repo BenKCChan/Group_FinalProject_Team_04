@@ -133,7 +133,7 @@ public class MainJFrame extends javax.swing.JFrame {
         String password = String.valueOf(passwordCharArray);
         
         //Step1: Check in the system admin user account directory if you have the user
-        UserAccount userAccount=system.getUserAccountDirectory().AuthenticateUser(userName, password);
+        UserAccount userAccount = system.getUserAccountDirectory().AuthenticateUser(userName, password);
         
         Enterprise inEnterprise=null;
         Organization inOrganization=null;
@@ -154,7 +154,7 @@ public class MainJFrame extends javax.swing.JFrame {
                                
                                if(inEnterprise.equals("Admin") && inOrganization.equals("Admin")){
                                     CardLayout layout=(CardLayout)container.getLayout();
-                                    container.add("workArea",userAccount.getAssociatedPersonProfile().createWorkArea(container, userAccount, inOrganization, inEnterprise, system));
+                                    container.add("AdminWorkAreaJPanel",system.getAdminDirectory().findAdmin(userAccount.getId()).createWorkArea(container, userAccount, organization, enterprise, system));
                                     layout.next(container);
                                }
                                
@@ -183,7 +183,7 @@ public class MainJFrame extends javax.swing.JFrame {
         }
         else{
             CardLayout layout=(CardLayout)container.getLayout();
-            container.add("workArea",userAccount.getAssociatedPersonProfile().createWorkArea(container, userAccount, inOrganization, inEnterprise, system));
+            container.add("workArea",system.getAdminDirectory().findAdmin(userAccount.getId()).createWorkArea(container, userAccount, inOrganization, inEnterprise, system));
             layout.next(container);
         }
         

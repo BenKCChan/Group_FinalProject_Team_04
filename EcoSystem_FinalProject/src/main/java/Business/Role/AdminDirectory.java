@@ -5,7 +5,7 @@
  */
 package Business.Role;
 
-import Business.Person.PersonAccount;
+import Business.UserAccount.UserAccount;
 
 import java.util.ArrayList;
 
@@ -23,7 +23,7 @@ public class AdminDirectory {
 
     }
 
-    public AdminRole newAdminRole(PersonAccount p) {
+    public AdminRole newAdminRole(UserAccount p) {
 
         AdminRole sp = new AdminRole(p);
         adminlist.add(sp);

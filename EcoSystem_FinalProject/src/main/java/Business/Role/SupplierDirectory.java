@@ -5,7 +5,7 @@
  */
 package Business.Role;
 
-import Business.Person.PersonAccount;
+import Business.UserAccount.UserAccount;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ public class SupplierDirectory {
 
     }
 
-    public SupplierRole newStudentProfile(PersonAccount p) {
+    public SupplierRole newStudentProfile(UserAccount p) {
 
         SupplierRole sp = new SupplierRole(p);
         studentlist.add(sp);
