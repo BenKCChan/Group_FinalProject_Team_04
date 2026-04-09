@@ -23,18 +23,20 @@ public class UserAccountDirectory {
 
     }
 
-    public UserAccount newUserAccount(String un, String pw) {
-
+    public UserAccount newUserAccount(String un, String pw) throws Exception {
+        if(findUserAccount(un)!=null){
+            throw new Exception("User Name exist");
+        }
         UserAccount ua = new UserAccount ( un,  pw);
         useraccountlist.add(ua);
         return ua;
     }
 
-    public UserAccount findUserAccount(String id) {
+    public UserAccount findUserAccount(String un) {
 
         for (UserAccount ua : useraccountlist) {
 
-            if (ua.isMatch(id)) {
+            if (ua.isMatch(un)) {
                 return ua;
             }
         }
