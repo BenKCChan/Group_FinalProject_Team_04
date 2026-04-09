@@ -29,6 +29,7 @@ ui\LogisticsCorp\LogisticsAnalystWorkAreaJPanel$4.class
 ui\UAEOilSupplier\OilAnalystWorkAreaJPanel$2.class
 ui\SystemAdminWorkArea\ManageSystem\CreateNetworkWorkAreaJPanel$3.class
 Business\UserAccount\UserAccountDirectory.class
+Business\utils\FakerDataGenerator.class
 Business\Organization.class
 Business\Role\FactoryManagerDirectory.class
 ui\SystemAdminWorkArea\ManageSystem\CreateUserWorkAreaJPanel$2.class

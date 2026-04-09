@@ -17,6 +17,11 @@ import Business.Role.TransportCoordinatorRole;
 import Business.utils.RealTimeOilAPI;
 import java.io.IOException;
 
+
+import Business.utils.FakerDataGenerator;
+import static java.time.Clock.system;
+import static java.time.InstantSource.system;
+
 /**
  *
  * @author rrheg
@@ -29,8 +34,11 @@ public class ConfigureASystem {
         RealTimeOilAPI oilApi = new RealTimeOilAPI();
         String oilPrice;
         oilPrice = oilApi.refreshNow();
+        
 
         System system = new System("Oil_manufacturing");
+        
+        RequestBoard rb = system.getRequestBoard();
 
         // Create 1 network
         Network network = system.newNetwork("Oil Supply Chain Network");
@@ -59,22 +67,22 @@ public class ConfigureASystem {
         // Add third org to e3
         Organization e3_org3 = e3.newOrganization("Oil Inventory Dept");
 
-// Oil Analyst
+        // Oil Analyst
         UserAccount uaAnalyst = e3_org1.getUserAccountDirectory().newUserAccount("oil.analyst", "Pass@123");
         SupplierAnalystRole analystRole = new SupplierAnalystRole(uaAnalyst);
         e3_org1.getRoleDirectory().addRole(analystRole);
 
-// Oil Supplier Agent
+        // Oil Supplier Agent
         UserAccount uaAgent = e3_org2.getUserAccountDirectory().newUserAccount("oil.supplier", "Pass@123");
         SupplierRole agentRole = new SupplierRole(uaAgent);
         e3_org2.getRoleDirectory().addRole(agentRole);
 
-// Oil Inventory Control
+        // Oil Inventory Control
         UserAccount uaInv = e3_org3.getUserAccountDirectory().newUserAccount("oil.inventory", "Pass@123");
         SupplierInventoryContorlRole invRole = new SupplierInventoryContorlRole(uaInv);
         e3_org3.getRoleDirectory().addRole(invRole);
 
-// Logistics Corp
+        // Logistics Corp
         Enterprise e4 = network.newEnterprise("Logistics Corp");
         Organization e4_org1 = e4.newOrganization("Shipment Operations");
         Organization e4_org2 = e4.newOrganization("Fleet Management");
@@ -90,13 +98,13 @@ public class ConfigureASystem {
         LogisticsAnalystRole laRole = new LogisticsAnalystRole(uaLA);
         e4_org2.getRoleDirectory().addRole(laRole);
 
-// Pre-populate RequestBoard
-        RequestBoard rb = system.getRequestBoard();
-        rb.newBuyRequest("MGR-001", "India Factory", 5000, 80.00, "2026-04-01");
-        rb.newBuyRequest("MGR-001", "Japan Factory", 8000, 77.50, "2026-04-03");
-        rb.newBuyRequest("MGR-002", "India Factory", 3200, 82.00, "2026-04-06");
-        rb.newBuyRequest("MGR-002", "Japan Factory", 6100, 79.00, "2026-04-07");
-        rb.newBuyRequest("MGR-001", "India Factory", 4400, 81.50, "2026-04-08");
+       // Retrieve accounts for Faker population
+        UserAccount analystAccount = e3_org1.getUserAccountDirectory().findUserAccount("oil.analyst");
+        UserAccount agentAccount = e3_org2.getUserAccountDirectory().findUserAccount("oil.supplier");
+
+        // Generate 20 historical records using Faker
+        FakerDataGenerator.populate(rb, analystAccount, agentAccount, 20); 
+       
 
         // Create Admin
         UserAccount admin = orgAdmin.getUserAccountDirectory().newUserAccount("admin", "****");
