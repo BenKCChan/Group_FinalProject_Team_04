@@ -17,15 +17,9 @@ import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
  * @author kal bugrara
  */
 public class SupplierInventoryContorlRole extends Role {
-
-    UserAccount person;
     
     public SupplierInventoryContorlRole(UserAccount p) {
         super(p, RoleType.OilSupplierInventoryControl);
-    }
-
-    public boolean isMatch(String id) {
-        return person.getId().equals(id);
     }
 
     @Override

@@ -18,14 +18,9 @@ import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
  */
 public class SupplierRole extends Role {
 
-    UserAccount person;
     
     public SupplierRole(UserAccount p) {
         super(p, RoleType.OilSupplier);
-    }
-
-    public boolean isMatch(String id) {
-        return person.getId().equals(id);
     }
 
     @Override

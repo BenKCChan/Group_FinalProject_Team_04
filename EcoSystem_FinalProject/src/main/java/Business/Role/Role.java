@@ -47,7 +47,7 @@ public abstract class Role {
 
     public Role(UserAccount p, RoleType type) {
         person = p;
-        type = this.type;
+        this.type = type;
     }
 
     public abstract String getRole();

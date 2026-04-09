@@ -18,14 +18,8 @@ import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
  */
 public class FactoryAnalystRole extends Role {
 
-    UserAccount person;
-    
     public FactoryAnalystRole(UserAccount p) {
         super(p, RoleType.FactoryAnalyst);
-    }
-
-    public boolean isMatch(String id) {
-        return person.getId().equals(id);
     }
 
     @Override

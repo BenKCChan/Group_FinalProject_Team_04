@@ -18,14 +18,8 @@ import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
  */
 public class FactoryInventoryControlRole extends Role {
 
-    UserAccount person;
-    
     public FactoryInventoryControlRole(UserAccount p) {
         super(p, RoleType.FactoryInventoryControl);
-    }
-
-    public boolean isMatch(String id) {
-        return person.getId().equals(id);
     }
 
     @Override
