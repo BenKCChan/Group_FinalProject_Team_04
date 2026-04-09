@@ -12,6 +12,7 @@ import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import java.awt.Component;
 import ui.utils.IranHormuzMapJPanel;
+
 /**
  *
  * @author ben
@@ -21,14 +22,15 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
     /**
      * Creates new form AdminWorkAreaJPanel
      */
-    
     JPanel userProcessContainer;
     System system;
     UserAccount userAccount;
     Organization inOrganization;
     Enterprise inEnterprise;
-    
-    /** Creates new form AdminWorkAreaJPanel */
+
+    /**
+     * Creates new form AdminWorkAreaJPanel
+     */
     public AdminWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Organization inOrganization, Enterprise inEnterprise, System system) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
@@ -124,6 +126,11 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnIranHormuzMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIranHormuzMapActionPerformed
         // TODO add your handling code here:
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        IranHormuzMapJPanel iranHormuzMapJPanel = new IranHormuzMapJPanel(userProcessContainer);
+        iranHormuzMapJPanel.loadURL("https://www.youtube.com/live/8SAo9jrrB_s");
+        userProcessContainer.add("IranHormuzMapJPanel",iranHormuzMapJPanel);
+        layout.next(userProcessContainer);
     }//GEN-LAST:event_btnIranHormuzMapActionPerformed
 
     private void btnSystemAdminReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSystemAdminReportActionPerformed
@@ -132,7 +139,7 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnManageSystemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageSystemActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_btnManageSystemActionPerformed
 
 

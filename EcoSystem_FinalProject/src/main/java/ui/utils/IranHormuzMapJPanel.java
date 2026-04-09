@@ -63,8 +63,7 @@ public class IranHormuzMapJPanel extends javax.swing.JPanel {
             jfxPanel.setScene(new Scene(webView));
 
             String url
-                    = "https://www.youtube.com/embed/VrCUbXKA5Tk"
-                    + "?controls=0&playsinline=1&rel=0&autoplay=1&mute=1";
+                    = "https://www.youtube.com/live/8SAo9jrrB_s?si=81whZ95aHnsb2zxr";
             engine.setUserAgent(
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                     + "AppleWebKit/537.36 (KHTML, like Gecko) "
