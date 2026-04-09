@@ -13,27 +13,27 @@ import java.util.ArrayList;
  *
  * @author kal bugrara
  */
-public class SupplierDirectory {
+public class FactoryInventoryControlDirectory {
 
 
-    ArrayList<SupplierRole> supplierList;
+    ArrayList<FactoryInventoryControlRole> factoryList;
 
-    public SupplierDirectory() {
+    public FactoryInventoryControlDirectory() {
 
-     supplierList = new ArrayList();
+     factoryList = new ArrayList();
 
     }
 
-    public SupplierRole newSupplierRole(UserAccount p) {
+    public FactoryInventoryControlRole newFactoryInventoryControlRole(UserAccount p) {
 
-        SupplierRole sp = new SupplierRole(p);
-        supplierList.add(sp);
+        FactoryInventoryControlRole sp = new FactoryInventoryControlRole(p);
+        factoryList.add(sp);
         return sp;
     }
 
-    public SupplierRole findSupplier(String id) {
+    public FactoryInventoryControlRole findFactoryInventoryControlRole(String id) {
 
-        for (SupplierRole sp : supplierList) {
+        for (FactoryInventoryControlRole sp : factoryList) {
 
             if (sp.isMatch(id)) {
                 return sp;

@@ -36,6 +36,6 @@ public class SupplierRole extends Role {
 
     @Override
     public String getRole(){
-        return  "OilSupplier";
+        return  RoleType.OilSupplier.getValue();
     }
 }

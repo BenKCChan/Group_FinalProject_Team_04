@@ -8,6 +8,7 @@ package Business.Role;
 import Business.Enterprise.Enterprise;
 import Business.Organization;
 import Business.UserAccount.UserAccount;
+import Business.System.System;
 import javax.swing.JPanel;
 import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
 
@@ -15,24 +16,26 @@ import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
  *
  * @author kal bugrara
  */
-import Business.System.System;
-public class AdminRole extends Role {
+public class SupplierAnalystRole extends Role {
 
-
-
-    public AdminRole(UserAccount p) {
-
-        super(p, RoleType.Admin); 
-
+    UserAccount person;
+    
+    public SupplierAnalystRole(UserAccount p) {
+        super(p, RoleType.OilSupplierAnalyst);
     }
-    @Override
-    public String getRole(){
-        return  RoleType.Admin.getValue();
+
+    public boolean isMatch(String id) {
+        return person.getId().equals(id);
     }
+
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
         
-        return new AdminWorkAreaJPanel(userProcessContainer, account, organization, enterprise, system);
+        return new AdminWorkAreaJPanel(userProcessContainer,account, organization, enterprise, system);
     }
 
+    @Override
+    public String getRole(){
+        return  RoleType.OilSupplierAnalyst.getValue();
+    }
 }
