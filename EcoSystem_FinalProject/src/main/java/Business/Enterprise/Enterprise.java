@@ -13,9 +13,10 @@ import java.util.ArrayList;
  */
 public class Enterprise extends Organization {
     ArrayList<Organization> participatingunits;
-
+    String name;
     public Enterprise(String name) {
         super(name);
+        this.name = name;
         participatingunits = new ArrayList();
     }
     
@@ -27,5 +28,10 @@ public class Enterprise extends Organization {
     
     public ArrayList<Organization> getParticipatingunits(){
         return participatingunits;
+    }
+    
+    @Override
+    public String toString(){
+        return name;
     }
 }

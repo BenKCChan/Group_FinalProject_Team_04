@@ -16,9 +16,10 @@ import Business.Organization;
 public class System extends Organization {
     
     ArrayList<Network> participantnetworks;
-    
+    String name;
     public System(String name){
         super();
+        this.name = name;
         participantnetworks = new ArrayList();
     }
     public Network newNetwork(String networkName){
@@ -29,4 +30,9 @@ public class System extends Organization {
     public ArrayList<Network> getNetworkList(){
         return participantnetworks;
     }
+
+    public String getName() {
+        return name;
+    }
+    
 }

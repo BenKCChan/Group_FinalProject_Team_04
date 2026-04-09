@@ -50,16 +50,32 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
         btnIranHormuzMap = new javax.swing.JButton();
+        btnSystemAdminReport = new javax.swing.JButton();
+        btnManageSystem = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         lblTitle.setText("Administrative Work Area");
 
-        btnIranHormuzMap.setText("Iran Hormuz Map");
+        btnIranHormuzMap.setText("Iran Hormuz situation");
         btnIranHormuzMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIranHormuzMapActionPerformed(evt);
+            }
+        });
+
+        btnSystemAdminReport.setText("System Report");
+        btnSystemAdminReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSystemAdminReportActionPerformed(evt);
+            }
+        });
+
+        btnManageSystem.setText("Manage System");
+        btnManageSystem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageSystemActionPerformed(evt);
             }
         });
 
@@ -69,10 +85,12 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(37, 37, 37)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnIranHormuzMap)
-                    .addComponent(lblTitle))
-                .addContainerGap(189, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblTitle)
+                    .addComponent(btnSystemAdminReport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnIranHormuzMap, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                    .addComponent(btnManageSystem, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -80,8 +98,12 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
                 .addGap(29, 29, 29)
                 .addComponent(lblTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnManageSystem)
+                .addGap(18, 18, 18)
+                .addComponent(btnSystemAdminReport, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnIranHormuzMap)
-                .addContainerGap(226, Short.MAX_VALUE))
+                .addContainerGap(127, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -102,18 +124,22 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnIranHormuzMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIranHormuzMapActionPerformed
         // TODO add your handling code here:
-        IranHormuzMapJPanel hormuzPanel = new IranHormuzMapJPanel(userProcessContainer);
-        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        userProcessContainer.add(hormuzPanel, "IranHormuzMapJPanel");
-        // LOAD YOUTUBE HERE (before or after show is fine)
-        hormuzPanel.loadURL("https://www.youtube.com/live/8SAo9jrrB_s");
-        layout.show(userProcessContainer, "IranHormuzMapJPanel");
-
     }//GEN-LAST:event_btnIranHormuzMapActionPerformed
+
+    private void btnSystemAdminReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSystemAdminReportActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSystemAdminReportActionPerformed
+
+    private void btnManageSystemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageSystemActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnManageSystemActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIranHormuzMap;
+    private javax.swing.JButton btnManageSystem;
+    private javax.swing.JButton btnSystemAdminReport;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblTitle;
     // End of variables declaration//GEN-END:variables

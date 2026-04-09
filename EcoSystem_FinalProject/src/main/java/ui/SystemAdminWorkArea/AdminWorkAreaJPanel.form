@@ -44,11 +44,13 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btnIranHormuzMap" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="lblTitle" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnSystemAdminReport" max="32767" attributes="0"/>
+                      <Component id="btnIranHormuzMap" alignment="0" pref="244" max="32767" attributes="0"/>
+                      <Component id="btnManageSystem" alignment="1" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="189" max="32767" attributes="0"/>
+                  <EmptySpace pref="119" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -58,8 +60,12 @@
                   <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                   <Component id="lblTitle" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Component id="btnManageSystem" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="btnSystemAdminReport" min="-2" pref="40" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnIranHormuzMap" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="226" max="32767" attributes="0"/>
+                  <EmptySpace pref="127" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -75,10 +81,26 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnIranHormuzMap">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Iran Hormuz Map"/>
+            <Property name="text" type="java.lang.String" value="Iran Hormuz situation"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnIranHormuzMapActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnSystemAdminReport">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="System Report"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSystemAdminReportActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnManageSystem">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Manage System"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnManageSystemActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
