@@ -5,6 +5,7 @@
 package ui.utils;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import javax.swing.SwingUtilities;
 
@@ -33,12 +34,14 @@ public class IranHormuzMapJPanel extends javax.swing.JPanel {
     private WebEngine engine;
     private final JButton closeBtn = new JButton("Close");
 
-    public IranHormuzMapJPanel() {
+    public IranHormuzMapJPanel(JPanel userProcessContainer) {
         initComponents();
         closeBtn.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 closeWebView();
+                CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+                layout.previous(userProcessContainer);
             }
         });
         // Make sure THIS panel is a BorderLayout container

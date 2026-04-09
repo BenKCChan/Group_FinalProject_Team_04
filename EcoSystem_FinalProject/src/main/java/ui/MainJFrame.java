@@ -4,7 +4,7 @@
  */
 package ui;
 
-import Business.ConfigureASystem;
+import Business.System.ConfigureASystem;
 import Business.System.System;
 //import Business.DB4OUtil.DB4OUtil;
 import Business.Enterprise.Enterprise;
@@ -12,6 +12,9 @@ import Business.Network.Network;
 import Business.Organization;
 import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
@@ -20,7 +23,7 @@ import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
  *
  * @author Lingfeng
  */
-public class MainJFrame extends javax.swing.JFrame {
+public class MainJFrame extends javax.swing.JFrame  {
 
     /**
      * Creates new form MainJFrame
@@ -28,11 +31,12 @@ public class MainJFrame extends javax.swing.JFrame {
     private System system;
 //    private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
 
-    public MainJFrame() {
+    public MainJFrame() throws IOException, InterruptedException {
         initComponents();
 //        system = dB4OUtil.retrieveSystem();
-        system = ConfigureASystem.initialize();
-        this.setSize(1680, 1050);
+          system = ConfigureASystem.initialize();
+          this.setSize(1680, 1050);
+        
     }
 
     /**
@@ -213,7 +217,7 @@ public class MainJFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException, InterruptedException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -240,7 +244,13 @@ public class MainJFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainJFrame().setVisible(true);
+                try {
+                    new MainJFrame().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

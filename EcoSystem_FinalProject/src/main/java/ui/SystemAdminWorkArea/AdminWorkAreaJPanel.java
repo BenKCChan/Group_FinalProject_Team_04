@@ -102,7 +102,7 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnIranHormuzMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIranHormuzMapActionPerformed
         // TODO add your handling code here:
-        IranHormuzMapJPanel hormuzPanel = new IranHormuzMapJPanel();
+        IranHormuzMapJPanel hormuzPanel = new IranHormuzMapJPanel(userProcessContainer);
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         userProcessContainer.add(hormuzPanel, "IranHormuzMapJPanel");
         // LOAD YOUTUBE HERE (before or after show is fine)

@@ -1,21 +1,28 @@
-package Business;
+package Business.System;
 
 //import Business.Employee.Employee;
 import Business.Enterprise.Enterprise;
 import Business.UserAccount.UserAccount;
-import Business.System.System;
-import Business.Organization;
+//import Business.System.System;
 import Business.Network.Network;
+import Business.Organization;
 import Business.Role.AdminDirectory;
 import Business.Role.AdminRole;
-import Business.UserAccount.UserAccountDirectory;
+import Business.utils.RealTimeOilAPI;
+import java.io.IOException;
 /**
  *
  * @author rrheg
  */
 public class ConfigureASystem {
     
-    public static System initialize(){
+    public static System initialize() throws IOException, InterruptedException{
+        
+        // Oil Price API
+        RealTimeOilAPI oilApi = new RealTimeOilAPI();
+        String oilPrice;
+        oilPrice = oilApi.refreshNow();
+        
         System system = new System("Oil_manufacturing"); 
         
         // Create 1 network
