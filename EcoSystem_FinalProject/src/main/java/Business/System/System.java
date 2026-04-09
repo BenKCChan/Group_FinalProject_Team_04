@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import Business.Network.Network;
 import Business.Organization;
 import Business.Organization;
+import Business.Operations.RequestBoard;
 
 /**
  *
@@ -15,6 +16,7 @@ import Business.Organization;
  */
 public class System extends Organization {
     
+    private RequestBoard requestBoard = new RequestBoard();
     ArrayList<Network> participantnetworks;
     String name;
     public System(String name){
@@ -34,5 +36,10 @@ public class System extends Organization {
     public String getName() {
         return name;
     }
+
+    public RequestBoard getRequestBoard() {
+        return requestBoard;
+    }
+    
     
 }

@@ -8,6 +8,7 @@ import Business.Role.AdminDirectory;
 import Business.Role.SupplierDirectory;
 import Business.UserAccount.UserAccountDirectory;
 import Business.Operations.Workspace;
+import Business.Role.RoleDirectory;
 import java.util.ArrayList;
 /**
  *
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 public class Organization {
     
     String name;
-    
+    private RoleDirectory roleDirectory = new RoleDirectory();
     AdminDirectory adminDirectory;
     UserAccountDirectory userAccountDirectory; 
     SupplierDirectory supplierDirectory;
