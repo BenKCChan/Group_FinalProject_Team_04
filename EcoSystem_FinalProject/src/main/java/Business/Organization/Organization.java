@@ -56,6 +56,10 @@ public class Organization {
     public SupplierDirectory getSupplierDirectory() {
         return supplierDirectory;
     }
+
+    public RoleDirectory getRoleDirectory() {
+        return roleDirectory;
+    }
     
     
 }
