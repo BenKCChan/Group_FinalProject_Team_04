@@ -215,7 +215,7 @@ public class CreateOrgWorkAreaJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Org Name cannot be empty", "ERROR", ERROR_MESSAGE);
             return;
         }
-        network.newEnterprise(txtOrgName.getText());
+        enterprise.newOrganization(txtOrgName.getText());
         reloadTable();
     }//GEN-LAST:event_btnCreateOrgActionPerformed
 

@@ -16,8 +16,9 @@ public class RequestBoard {
     private ArrayList<PriceSuggestion> priceSuggestions = new ArrayList<>();
     private ArrayList<SellRequest> sellRequests = new ArrayList<>();
     private ArrayList<OilTransaction> transactions = new ArrayList<>();
+    private ArrayList<ShipmentRequest> shipmentRequests = new ArrayList<>();
 
-    // BuyRequest (written by Factory Manager, read by you)
+    // BuyRequest
     public BuyRequest newBuyRequest(String managerId, String factoryName, double volume, double ceiling, String date) {
         BuyRequest br = new BuyRequest(managerId, factoryName, volume, ceiling, date);
         buyRequests.add(br);
@@ -37,7 +38,7 @@ public class RequestBoard {
         return null;
     }
 
-    // PriceSuggestion (written by Oil Analyst) 
+    // PriceSuggestion
     public PriceSuggestion newPriceSuggestion(String analystId, String buyReqId, double price, double margin,
             String notes, String date) {
         PriceSuggestion ps = new PriceSuggestion(analystId, buyReqId, price, margin, notes, date);
@@ -49,7 +50,7 @@ public class RequestBoard {
         return priceSuggestions;
     }
 
-    // SellRequest (written by Oil Supplier Agent) ---
+    // SellRequest
     public SellRequest newSellRequest(String agentId, String buyReqId, double price, double volume, String date) {
         SellRequest sr = new SellRequest(agentId, buyReqId, price, volume, date);
         sellRequests.add(sr);
@@ -60,11 +61,31 @@ public class RequestBoard {
         return sellRequests;
     }
 
-    // OilTransaction (written when sell request approved) ---
+    // OilTransaction
     public OilTransaction newTransaction(String sellReqId, double volume, double price, String date) {
         OilTransaction t = new OilTransaction(sellReqId, volume, price, date);
         transactions.add(t);
         return t;
+    }
+
+    public ShipmentRequest newShipmentRequest(String sellReqId, double volume,
+            String origin, String destination, String date) {
+        ShipmentRequest sh = new ShipmentRequest(sellReqId, volume, origin, destination, date);
+        shipmentRequests.add(sh);
+        return sh;
+    }
+
+    public ArrayList<ShipmentRequest> getShipmentRequests() {
+        return shipmentRequests;
+    }
+
+    public ShipmentRequest findShipmentRequest(String id) {
+        for (ShipmentRequest sh : shipmentRequests) {
+            if (sh.getId().equals(id)) {
+                return sh;
+            }
+        }
+        return null;
     }
 
     public ArrayList<OilTransaction> getTransactions() {

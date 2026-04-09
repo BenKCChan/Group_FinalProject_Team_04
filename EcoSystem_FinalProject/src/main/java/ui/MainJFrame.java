@@ -32,7 +32,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private System system;
 //    private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
 
-    public MainJFrame() throws IOException, InterruptedException {
+    public MainJFrame() throws IOException, InterruptedException, Exception {
         initComponents();
 //        system = dB4OUtil.retrieveSystem();
         system = ConfigureASystem.initialize();
@@ -157,12 +157,6 @@ public class MainJFrame extends javax.swing.JFrame {
                                 inEnterprise = enterprise;
                                 inOrganization = organization;
 
-                                if (inEnterprise.equals("Admin") && inOrganization.equals("Admin")) {
-                                    CardLayout layout = (CardLayout) container.getLayout();
-                                    container.add("AdminWorkAreaJPanel", system.getAdminDirectory().findAdmin(userAccount.getId()).createWorkArea(container, userAccount, organization, enterprise, system));
-                                    layout.next(container);
-                                }
-
                                 break;
                             }
                         }
@@ -228,8 +222,10 @@ public class MainJFrame extends javax.swing.JFrame {
 
     /**
      * @param args the command line arguments
+     * @throws java.io.IOException
+     * @throws java.lang.InterruptedException
      */
-    public static void main(String args[]) throws IOException, InterruptedException {
+    public static void main(String args[]) throws IOException, InterruptedException, Exception {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -261,6 +257,8 @@ public class MainJFrame extends javax.swing.JFrame {
                 } catch (IOException ex) {
                     Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InterruptedException ex) {
+                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {          // ← add this
                     Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

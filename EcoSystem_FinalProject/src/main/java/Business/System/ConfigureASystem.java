@@ -5,9 +5,13 @@ import Business.Enterprise.Enterprise;
 import Business.UserAccount.UserAccount;
 //import Business.System.System;
 import Business.Network.Network;
+import Business.Operations.RequestBoard;
 import Business.Organization;
 import Business.Role.AdminDirectory;
 import Business.Role.AdminRole;
+import Business.Role.SupplierAnalystRole;
+import Business.Role.SupplierInventoryContorlRole;
+import Business.Role.SupplierRole;
 import Business.utils.RealTimeOilAPI;
 import java.io.IOException;
 
@@ -49,6 +53,39 @@ public class ConfigureASystem {
 
         Organization e3_org1 = e3.newOrganization("Financial Analyst Team");
         Organization e3_org2 = e3.newOrganization("Purchasing Dept");
+
+        // Add third org to e3
+        Organization e3_org3 = e3.newOrganization("Oil Inventory Dept");
+
+// Oil Analyst
+        UserAccount uaAnalyst = e3_org1.getUserAccountDirectory().newUserAccount("oil.analyst", "Pass@123");
+        SupplierAnalystRole analystRole = new SupplierAnalystRole(uaAnalyst);
+        e3_org1.getRoleDirectory().addRole(analystRole);
+
+// Oil Supplier Agent
+        UserAccount uaAgent = e3_org2.getUserAccountDirectory().newUserAccount("oil.supplier", "Pass@123");
+        SupplierRole agentRole = new SupplierRole(uaAgent);
+        e3_org2.getRoleDirectory().addRole(agentRole);
+
+// Oil Inventory Control
+        UserAccount uaInv = e3_org3.getUserAccountDirectory().newUserAccount("oil.inventory", "Pass@123");
+        SupplierInventoryContorlRole invRole = new SupplierInventoryContorlRole(uaInv);
+        e3_org3.getRoleDirectory().addRole(invRole);
+
+// Logistics Corp
+        Enterprise e4 = network.newEnterprise("Logistics Corp");
+        Organization e4_org1 = e4.newOrganization("Shipment Operations");
+        Organization e4_org2 = e4.newOrganization("Fleet Management");
+
+// Transport Coordinator and Logistics Analyst roles go here
+// once you create those role classes
+// Pre-populate RequestBoard
+        RequestBoard rb = system.getRequestBoard();
+        rb.newBuyRequest("MGR-001", "India Factory", 5000, 80.00, "2026-04-01");
+        rb.newBuyRequest("MGR-001", "Japan Factory", 8000, 77.50, "2026-04-03");
+        rb.newBuyRequest("MGR-002", "India Factory", 3200, 82.00, "2026-04-06");
+        rb.newBuyRequest("MGR-002", "Japan Factory", 6100, 79.00, "2026-04-07");
+        rb.newBuyRequest("MGR-001", "India Factory", 4400, 81.50, "2026-04-08");
 
         // Create Admin
         UserAccount admin = orgAdmin.getUserAccountDirectory().newUserAccount("admin", "****");
