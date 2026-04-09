@@ -9,9 +9,11 @@ import Business.Operations.RequestBoard;
 import Business.Organization;
 import Business.Role.AdminDirectory;
 import Business.Role.AdminRole;
+import Business.Role.LogisticsAnalystRole;
 import Business.Role.SupplierAnalystRole;
 import Business.Role.SupplierInventoryContorlRole;
 import Business.Role.SupplierRole;
+import Business.Role.TransportCoordinatorRole;
 import Business.utils.RealTimeOilAPI;
 import java.io.IOException;
 
@@ -77,8 +79,17 @@ public class ConfigureASystem {
         Organization e4_org1 = e4.newOrganization("Shipment Operations");
         Organization e4_org2 = e4.newOrganization("Fleet Management");
 
-// Transport Coordinator and Logistics Analyst roles go here
-// once you create those role classes
+        // Transport Coordinator
+        UserAccount uaTC = e4_org1.getUserAccountDirectory().newUserAccount("transport.coord", "Pass@123");
+        TransportCoordinatorRole tcRole = new TransportCoordinatorRole(uaTC);
+        e4_org1.getRoleDirectory().addRole(tcRole);
+
+        // Logistics Analyst  
+        UserAccount uaLA = e4_org2.getUserAccountDirectory()
+                .newUserAccount("logistics.analyst", "Pass@123");
+        LogisticsAnalystRole laRole = new LogisticsAnalystRole(uaLA);
+        e4_org2.getRoleDirectory().addRole(laRole);
+
 // Pre-populate RequestBoard
         RequestBoard rb = system.getRequestBoard();
         rb.newBuyRequest("MGR-001", "India Factory", 5000, 80.00, "2026-04-01");

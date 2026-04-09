@@ -34,4 +34,8 @@ public class Enterprise extends Organization {
     public String toString(){
         return name;
     }
+
+    public String getName() {
+        return name;
+    }
 }
