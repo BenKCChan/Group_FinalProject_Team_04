@@ -11,6 +11,7 @@ import Business.System.System;
 import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import java.awt.Component;
+import ui.SystemAdminWorkArea.ManageSystem.ManageSystemWorkAreaJPanel;
 import ui.utils.IranHormuzMapJPanel;
 
 /**
@@ -139,7 +140,10 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnManageSystemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageSystemActionPerformed
         // TODO add your handling code here:
-
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        ManageSystemWorkAreaJPanel manageSystemWorkAreaJPanel = new ManageSystemWorkAreaJPanel(userProcessContainer, userAccount, system);
+        userProcessContainer.add("manageSystemWorkAreaJPanel",manageSystemWorkAreaJPanel);
+        layout.next(userProcessContainer);
     }//GEN-LAST:event_btnManageSystemActionPerformed
 
 

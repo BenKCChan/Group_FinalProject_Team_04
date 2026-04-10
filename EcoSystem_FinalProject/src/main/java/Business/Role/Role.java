@@ -26,7 +26,9 @@ public abstract class Role {
         FactoryInventoryControl("Factory Inventory Control"),
         OilSupplier("Oil Supplier"),
         OilSupplierAnalyst("Oil Supplier Analyst"),
-        OilSupplierInventoryControl("Oil Supplier Inventory Control");
+        OilSupplierInventoryControl("Oil Supplier Inventory Control"),
+        Auditor("Trade Auditor"),
+        FleetMonitor("Fleet Monitor");
 
         private String value;
 
