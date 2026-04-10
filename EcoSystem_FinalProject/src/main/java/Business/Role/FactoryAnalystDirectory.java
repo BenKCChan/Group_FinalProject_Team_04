@@ -24,7 +24,7 @@ public class FactoryAnalystDirectory {
 
     }
 
-    public FactoryAnalystRole newFactoryManagerRole(UserAccount p) {
+    public FactoryAnalystRole newFactoryAnalystRole(UserAccount p) {
 
         FactoryAnalystRole sp = new FactoryAnalystRole(p);
         factoryList.add(sp);
