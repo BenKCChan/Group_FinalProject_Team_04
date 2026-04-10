@@ -38,7 +38,7 @@ public class AdminDirectory {
                 return admin;
             }
         }
-            return null; //not found after going through the whole list
-         }
-    
+        return null; //not found after going through the whole list
+    }
+
 }

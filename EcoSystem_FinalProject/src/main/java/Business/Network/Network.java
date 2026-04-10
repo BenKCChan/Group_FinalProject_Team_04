@@ -13,22 +13,24 @@ import java.util.ArrayList;
  * @author ben
  */
 public class Network extends Organization {
-    
+
     ArrayList<Enterprise> participatingEnterprise;
-    
-    public Network (String n){
+
+    public Network(String n) {
         super(n);
         participatingEnterprise = new ArrayList();
     }
-    
-    public Enterprise newEnterprise(String enterpriseName){
-        
+
+    public Enterprise newEnterprise(String enterpriseName) {
+
         Enterprise enterprise = new Enterprise(enterpriseName);
         participatingEnterprise.add(enterprise);
         return enterprise;
-    };
+    }
+
+    ;
     
-    public ArrayList<Enterprise> getEnterpriseDirectory(){
+    public ArrayList<Enterprise> getEnterpriseDirectory() {
         return participatingEnterprise;
     }
 }

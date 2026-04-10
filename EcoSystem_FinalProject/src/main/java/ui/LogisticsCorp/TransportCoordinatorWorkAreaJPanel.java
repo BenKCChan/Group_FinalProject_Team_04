@@ -8,7 +8,6 @@ package ui.LogisticsCorp;
  *
  * @author lindq
  */
-
 import Business.Enterprise.Enterprise;
 import Business.Operations.RequestBoard;
 import Business.Operations.ShipmentRequest;
@@ -48,7 +47,7 @@ public class TransportCoordinatorWorkAreaJPanel extends JPanel {
     private JTextField txtDeliveryNote;
 
     public TransportCoordinatorWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount,
-                                               Organization organization, Enterprise enterprise, System system) {
+            Organization organization, Enterprise enterprise, System system) {
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
         this.organization = organization;
@@ -88,9 +87,9 @@ public class TransportCoordinatorWorkAreaJPanel extends JPanel {
         metricsPanel.setBorder(BorderFactory.createEmptyBorder(10, 16, 10, 16));
         metricsPanel.setBackground(new Color(240, 250, 246));
 
-        lblScheduled  = new JLabel("0");
-        lblInTransit  = new JLabel("0");
-        lblDelivered  = new JLabel("0");
+        lblScheduled = new JLabel("0");
+        lblInTransit = new JLabel("0");
+        lblDelivered = new JLabel("0");
         lblTotalVolume = new JLabel("0 bbl");
 
         metricsPanel.add(buildMetricCard("Scheduled", lblScheduled, new Color(225, 245, 238)));
@@ -106,9 +105,12 @@ public class TransportCoordinatorWorkAreaJPanel extends JPanel {
 
         // ── Center: shipment table ────────────────────────────────────────────
         String[] cols = {"Shipment ID", "Linked Sell Req", "Volume (bbl)",
-                         "Origin", "Destination", "Scheduled", "Delivered", "Status"};
+            "Origin", "Destination", "Scheduled", "Delivered", "Status"};
         shipmentModel = new DefaultTableModel(cols, 0) {
-            @Override public boolean isCellEditable(int r, int c) { return false; }
+            @Override
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
         };
         shipmentTable = new JTable(shipmentModel);
         shipmentTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -126,10 +128,14 @@ public class TransportCoordinatorWorkAreaJPanel extends JPanel {
                 if (!isSelected) {
                     String status = (String) shipmentModel.getValueAt(row, 7);
                     switch (status) {
-                        case "SCHEDULED"  -> c.setBackground(new Color(225, 245, 238));
-                        case "IN_TRANSIT" -> c.setBackground(new Color(214, 234, 248));
-                        case "DELIVERED"  -> c.setBackground(new Color(214, 245, 214));
-                        default           -> c.setBackground(Color.WHITE);
+                        case "SCHEDULED" ->
+                            c.setBackground(new Color(225, 245, 238));
+                        case "IN_TRANSIT" ->
+                            c.setBackground(new Color(214, 234, 248));
+                        case "DELIVERED" ->
+                            c.setBackground(new Color(214, 245, 214));
+                        default ->
+                            c.setBackground(Color.WHITE);
                     }
                 }
                 return c;
@@ -177,31 +183,31 @@ public class TransportCoordinatorWorkAreaJPanel extends JPanel {
         int row = shipmentTable.getSelectedRow();
         if (row < 0) {
             JOptionPane.showMessageDialog(this,
-                "Please select a shipment from the table.",
-                "No Selection", JOptionPane.WARNING_MESSAGE);
+                    "Please select a shipment from the table.",
+                    "No Selection", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        String shipId  = (String) shipmentModel.getValueAt(row, 0);
+        String shipId = (String) shipmentModel.getValueAt(row, 0);
         String current = (String) shipmentModel.getValueAt(row, 7);
 
         // Enforce valid transitions
         if ("DELIVERED".equals(current)) {
             JOptionPane.showMessageDialog(this,
-                "This shipment has already been delivered.",
-                "Already Delivered", JOptionPane.INFORMATION_MESSAGE);
+                    "This shipment has already been delivered.",
+                    "Already Delivered", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         if ("IN_TRANSIT".equals(newStatus) && "IN_TRANSIT".equals(current)) {
             JOptionPane.showMessageDialog(this,
-                "Shipment is already in transit.",
-                "No Change", JOptionPane.INFORMATION_MESSAGE);
+                    "Shipment is already in transit.",
+                    "No Change", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         if ("IN_TRANSIT".equals(newStatus) && "DELIVERED".equals(current)) {
             JOptionPane.showMessageDialog(this,
-                "Cannot move a delivered shipment back to in transit.",
-                "Invalid Transition", JOptionPane.WARNING_MESSAGE);
+                    "Cannot move a delivered shipment back to in transit.",
+                    "Invalid Transition", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -217,8 +223,8 @@ public class TransportCoordinatorWorkAreaJPanel extends JPanel {
         }
 
         JOptionPane.showMessageDialog(this,
-            "Shipment " + shipId + " updated to " + newStatus + ".",
-            "Status Updated", JOptionPane.INFORMATION_MESSAGE);
+                "Shipment " + shipId + " updated to " + newStatus + ".",
+                "Status Updated", JOptionPane.INFORMATION_MESSAGE);
 
         txtDeliveryNote.setText("");
         refreshAll();
@@ -255,9 +261,12 @@ public class TransportCoordinatorWorkAreaJPanel extends JPanel {
         for (ShipmentRequest sh : rb.getShipmentRequests()) {
             totalVolume += sh.getVolume();
             switch (sh.getStatus()) {
-                case "SCHEDULED"  -> scheduled++;
-                case "IN_TRANSIT" -> inTransit++;
-                case "DELIVERED"  -> delivered++;
+                case "SCHEDULED" ->
+                    scheduled++;
+                case "IN_TRANSIT" ->
+                    inTransit++;
+                case "DELIVERED" ->
+                    delivered++;
             }
         }
 
@@ -272,8 +281,8 @@ public class TransportCoordinatorWorkAreaJPanel extends JPanel {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(bg);
         card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(159, 225, 203), 1),
-            BorderFactory.createEmptyBorder(8, 12, 8, 12)
+                BorderFactory.createLineBorder(new Color(159, 225, 203), 1),
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)
         ));
         JLabel lbl = new JLabel(label);
         lbl.setFont(new Font("Tahoma", Font.PLAIN, 11));

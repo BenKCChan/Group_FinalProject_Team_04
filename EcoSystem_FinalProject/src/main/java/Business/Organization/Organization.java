@@ -10,40 +10,40 @@ import Business.UserAccount.UserAccountDirectory;
 import Business.Operations.Workspace;
 import Business.Role.RoleDirectory;
 import java.util.ArrayList;
+
 /**
  *
  * @author ben
  */
 public class Organization {
-    
+
     String name;
     private RoleDirectory roleDirectory = new RoleDirectory();
     AdminDirectory adminDirectory;
-    UserAccountDirectory userAccountDirectory; 
+    UserAccountDirectory userAccountDirectory;
     SupplierDirectory supplierDirectory;
-    
+
     ArrayList<Workspace> operations;
-    
-    public Organization(String n){
+
+    public Organization(String n) {
         name = n;
-        
+
         adminDirectory = new AdminDirectory();
         userAccountDirectory = new UserAccountDirectory();
         supplierDirectory = new SupplierDirectory();
         ArrayList<Organization> subordinateorgs;
-        
+
     }
-    
-    public Organization(){
+
+    public Organization() {
         name = "noname";
 
         adminDirectory = new AdminDirectory();
         userAccountDirectory = new UserAccountDirectory();
         supplierDirectory = new SupplierDirectory();
         ArrayList<Organization> subordinateorgs;
-        
-    }
 
+    }
 
     public AdminDirectory getAdminDirectory() {
         return adminDirectory;
@@ -60,6 +60,5 @@ public class Organization {
     public RoleDirectory getRoleDirectory() {
         return roleDirectory;
     }
-    
-    
+
 }

@@ -18,19 +18,19 @@ import ui.UAEOilSupplier.OilInventoryWorkAreaJPanel;
  * @author kal bugrara
  */
 public class SupplierInventoryContorlRole extends Role {
-    
+
     public SupplierInventoryContorlRole(UserAccount p) {
         super(p, RoleType.OilSupplierInventoryControl);
     }
 
     @Override
-public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
-    
-    return new OilInventoryWorkAreaJPanel(userProcessContainer, account, organization, enterprise, system);
-}
+    public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
+
+        return new OilInventoryWorkAreaJPanel(userProcessContainer, account, organization, enterprise, system);
+    }
 
     @Override
-    public String getRole(){
-        return  RoleType.OilSupplierInventoryControl.getValue();
+    public String getRole() {
+        return RoleType.OilSupplierInventoryControl.getValue();
     }
 }

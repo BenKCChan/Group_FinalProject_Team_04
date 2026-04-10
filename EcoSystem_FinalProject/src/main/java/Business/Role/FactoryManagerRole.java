@@ -24,12 +24,12 @@ public class FactoryManagerRole extends Role {
 
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
-        
-        return new AdminWorkAreaJPanel(userProcessContainer,account, organization, enterprise, system);
+
+        return new AdminWorkAreaJPanel(userProcessContainer, account, organization, enterprise, system);
     }
 
     @Override
-    public String getRole(){
-        return  RoleType.FactoryManager.getValue();
+    public String getRole() {
+        return RoleType.FactoryManager.getValue();
     }
 }

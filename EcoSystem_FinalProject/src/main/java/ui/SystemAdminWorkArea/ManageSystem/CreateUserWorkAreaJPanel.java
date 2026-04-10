@@ -31,9 +31,10 @@ public class CreateUserWorkAreaJPanel extends javax.swing.JPanel {
     Network network;
     Enterprise enterprise;
     Organization org;
+
     public CreateUserWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Business.System.System system, Network network, Enterprise enterprise, Organization org) {
         initComponents();
-                this.userProcessContainer = userProcessContainer;
+        this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
         this.system = system;
         this.network = network;
@@ -41,7 +42,7 @@ public class CreateUserWorkAreaJPanel extends javax.swing.JPanel {
         this.org = org;
         reloadTable();
     }
-    
+
     public void reloadTable() {
         int rowCount = tblUser.getRowCount();
         DefaultTableModel model = (DefaultTableModel) tblUser.getModel();
@@ -239,7 +240,7 @@ public class CreateUserWorkAreaJPanel extends javax.swing.JPanel {
         //            return;
         //        }
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        
+
         layout.next(userProcessContainer);
     }//GEN-LAST:event_btnNextActionPerformed
 

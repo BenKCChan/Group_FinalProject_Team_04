@@ -73,6 +73,5 @@ public class OilTransaction {
     public void setCompletedAt(String completedAt) {
         this.completedAt = completedAt;
     }
-    
-    
+
 }

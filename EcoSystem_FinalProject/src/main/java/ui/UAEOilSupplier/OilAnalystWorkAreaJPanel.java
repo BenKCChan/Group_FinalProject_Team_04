@@ -8,7 +8,6 @@ package ui.UAEOilSupplier;
  *
  * @author lindq
  */
-
 import Business.Enterprise.Enterprise;
 import Business.Operations.BuyRequest;
 import Business.Operations.PriceSuggestion;
@@ -58,7 +57,7 @@ public class OilAnalystWorkAreaJPanel extends JPanel {
     private DefaultTableModel historyModel;
 
     public OilAnalystWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount,
-                                     Organization organization, Enterprise enterprise, System system) {
+            Organization organization, Enterprise enterprise, System system) {
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
         this.organization = organization;
@@ -96,9 +95,9 @@ public class OilAnalystWorkAreaJPanel extends JPanel {
         metricsPanel.setBackground(new Color(245, 245, 240));
 
         lblMarketPrice = new JLabel("$78.40");
-        lblAvg30       = new JLabel("$76.15");
-        lblInventory   = new JLabel("42,500 bbl");
-        lblBreakEven   = new JLabel(String.format("$%.2f", BREAK_EVEN));
+        lblAvg30 = new JLabel("$76.15");
+        lblInventory = new JLabel("42,500 bbl");
+        lblBreakEven = new JLabel(String.format("$%.2f", BREAK_EVEN));
 
         metricsPanel.add(buildMetricCard("Market price (live)", lblMarketPrice));
         metricsPanel.add(buildMetricCard("30-day average", lblAvg30));
@@ -134,7 +133,10 @@ public class OilAnalystWorkAreaJPanel extends JPanel {
     private JPanel buildBuyRequestPane() {
         String[] cols = {"Request ID", "Factory", "Volume (bbl)", "Their Ceiling", "Date", "Status"};
         buyRequestModel = new DefaultTableModel(cols, 0) {
-            @Override public boolean isCellEditable(int r, int c) { return false; }
+            @Override
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
         };
         buyRequestTable = new JTable(buyRequestModel);
         buyRequestTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -234,9 +236,17 @@ public class OilAnalystWorkAreaJPanel extends JPanel {
 
         // Live margin update
         txtSuggestedPrice.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e)  { updateMarginDisplay(); }
-            public void removeUpdate(DocumentEvent e)  { updateMarginDisplay(); }
-            public void changedUpdate(DocumentEvent e) { updateMarginDisplay(); }
+            public void insertUpdate(DocumentEvent e) {
+                updateMarginDisplay();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                updateMarginDisplay();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                updateMarginDisplay();
+            }
         });
 
         // Notes
@@ -268,9 +278,12 @@ public class OilAnalystWorkAreaJPanel extends JPanel {
     // ── Zone 3: History table ─────────────────────────────────────────────────
     private JPanel buildHistoryPane() {
         String[] cols = {"Suggestion ID", "Date", "Price ($/bbl)", "Margin %",
-                         "Linked Request", "Status", "Supplier Note"};
+            "Linked Request", "Status", "Supplier Note"};
         historyModel = new DefaultTableModel(cols, 0) {
-            @Override public boolean isCellEditable(int r, int c) { return false; }
+            @Override
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
         };
         historyTable = new JTable(historyModel);
         historyTable.setRowHeight(22);
@@ -287,9 +300,12 @@ public class OilAnalystWorkAreaJPanel extends JPanel {
                 if (!isSelected) {
                     String status = (String) historyModel.getValueAt(row, 5);
                     switch (status) {
-                        case "ACCEPTED" -> c.setBackground(new Color(220, 245, 220));
-                        case "REJECTED" -> c.setBackground(new Color(250, 220, 220));
-                        default         -> c.setBackground(Color.WHITE);
+                        case "ACCEPTED" ->
+                            c.setBackground(new Color(220, 245, 220));
+                        case "REJECTED" ->
+                            c.setBackground(new Color(250, 220, 220));
+                        default ->
+                            c.setBackground(Color.WHITE);
                     }
                 }
                 return c;
@@ -312,16 +328,16 @@ public class OilAnalystWorkAreaJPanel extends JPanel {
         String selectedReqId = (String) cboBuyRequest.getSelectedItem();
         if (selectedReqId == null || selectedReqId.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                "Please select a linked buy request.",
-                "Validation Error", JOptionPane.WARNING_MESSAGE);
+                    "Please select a linked buy request.",
+                    "Validation Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         String priceText = txtSuggestedPrice.getText().trim();
         if (priceText.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                "Please enter a suggested price.",
-                "Validation Error", JOptionPane.WARNING_MESSAGE);
+                    "Please enter a suggested price.",
+                    "Validation Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -330,30 +346,30 @@ public class OilAnalystWorkAreaJPanel extends JPanel {
             price = Double.parseDouble(priceText);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this,
-                "Suggested price must be a valid number.",
-                "Validation Error", JOptionPane.WARNING_MESSAGE);
+                    "Suggested price must be a valid number.",
+                    "Validation Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         if (price <= 0) {
             JOptionPane.showMessageDialog(this,
-                "Price must be greater than zero.",
-                "Validation Error", JOptionPane.WARNING_MESSAGE);
+                    "Price must be greater than zero.",
+                    "Validation Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         if (price < BREAK_EVEN) {
             JOptionPane.showMessageDialog(this,
-                String.format("Price $%.2f is below break-even ($%.2f). Cannot submit.", price, BREAK_EVEN),
-                "Below Break-Even", JOptionPane.WARNING_MESSAGE);
+                    String.format("Price $%.2f is below break-even ($%.2f). Cannot submit.", price, BREAK_EVEN),
+                    "Below Break-Even", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         String notes = txtNotes.getText().trim();
         if (notes.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                "Please provide justification notes.",
-                "Validation Error", JOptionPane.WARNING_MESSAGE);
+                    "Please provide justification notes.",
+                    "Validation Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -361,21 +377,23 @@ public class OilAnalystWorkAreaJPanel extends JPanel {
         String today = LocalDate.now().toString();
 
         rb.newPriceSuggestion(
-            userAccount.getId(),
-            selectedReqId,
-            price,
-            margin,
-            notes,
-            today
+                userAccount.getId(),
+                selectedReqId,
+                price,
+                margin,
+                notes,
+                today
         );
 
         JOptionPane.showMessageDialog(this,
-            "Price suggestion submitted successfully.\nLinked to: " + selectedReqId,
-            "Submitted", JOptionPane.INFORMATION_MESSAGE);
+                "Price suggestion submitted successfully.\nLinked to: " + selectedReqId,
+                "Submitted", JOptionPane.INFORMATION_MESSAGE);
 
         txtSuggestedPrice.setText("");
         txtNotes.setText("");
-        if (cboBuyRequest.getItemCount() > 0) cboBuyRequest.setSelectedIndex(0);
+        if (cboBuyRequest.getItemCount() > 0) {
+            cboBuyRequest.setSelectedIndex(0);
+        }
 
         refreshHistoryTable();
     }
@@ -433,8 +451,8 @@ public class OilAnalystWorkAreaJPanel extends JPanel {
         try {
             double p = Double.parseDouble(text);
             lblMargin.setForeground(p >= BREAK_EVEN
-                ? new Color(59, 109, 17)
-                : new Color(162, 45, 45));
+                    ? new Color(59, 109, 17)
+                    : new Color(162, 45, 45));
         } catch (NumberFormatException ex) {
             lblMargin.setForeground(Color.GRAY);
         }
@@ -443,7 +461,9 @@ public class OilAnalystWorkAreaJPanel extends JPanel {
     private String computeMarginText(String priceText) {
         try {
             double p = Double.parseDouble(priceText);
-            if (p <= 0) return "—";
+            if (p <= 0) {
+                return "—";
+            }
             double m = ((p - BREAK_EVEN) / BREAK_EVEN) * 100.0;
             return String.format("%.1f%%", m);
         } catch (NumberFormatException ex) {
@@ -455,8 +475,8 @@ public class OilAnalystWorkAreaJPanel extends JPanel {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(new Color(237, 237, 230));
         card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 196, 185), 1),
-            BorderFactory.createEmptyBorder(8, 12, 8, 12)
+                BorderFactory.createLineBorder(new Color(200, 196, 185), 1),
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)
         ));
         JLabel lbl = new JLabel(label);
         lbl.setFont(new Font("Tahoma", Font.PLAIN, 11));

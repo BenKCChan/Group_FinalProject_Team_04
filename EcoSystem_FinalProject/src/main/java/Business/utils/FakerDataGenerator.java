@@ -8,7 +8,6 @@ package Business.utils;
  *
  * @author lindq
  */
-
 import Business.Operations.BuyRequest;
 import Business.Operations.OilTransaction;
 import Business.Operations.PriceSuggestion;
@@ -57,9 +56,9 @@ public class FakerDataGenerator {
     }
 
     public static void populate(RequestBoard rb,
-                                 UserAccount analystAccount,
-                                 UserAccount agentAccount,
-                                 int numberOfRecords) {
+            UserAccount analystAccount,
+            UserAccount agentAccount,
+            int numberOfRecords) {
 
         for (int i = 0; i < numberOfRecords; i++) {
 
@@ -72,10 +71,10 @@ public class FakerDataGenerator {
             String factory = FACTORIES[random.nextInt(FACTORIES.length)];
 
             // Random volume and price ceiling
-            double volume    = randomVolume(3000, 10000);
-            double ceiling   = randomPrice(76.00, 83.00);
+            double volume = randomVolume(3000, 10000);
+            double ceiling = randomPrice(76.00, 83.00);
             double sellPrice = randomPrice(BREAK_EVEN + 10, ceiling);
-            double margin    = computeMargin(sellPrice);
+            double margin = computeMargin(sellPrice);
 
             // Faker-generated manager ID
             String managerId = "MGR-" + faker.number().digits(4);
@@ -87,12 +86,12 @@ public class FakerDataGenerator {
             // 2. Price suggestion from analyst
             String analystNote = faker.lorem().sentence(8);
             PriceSuggestion ps = rb.newPriceSuggestion(
-                analystAccount.getId(),
-                br.getId(),
-                sellPrice,
-                margin,
-                analystNote,
-                date
+                    analystAccount.getId(),
+                    br.getId(),
+                    sellPrice,
+                    margin,
+                    analystNote,
+                    date
             );
 
             // Vary suggestion outcomes — 75% accepted, 25% rejected
@@ -109,11 +108,11 @@ public class FakerDataGenerator {
 
                 // 3. Sell request
                 SellRequest sr = rb.newSellRequest(
-                    agentAccount.getId(),
-                    br.getId(),
-                    sellPrice,
-                    volume,
-                    date
+                        agentAccount.getId(),
+                        br.getId(),
+                        sellPrice,
+                        volume,
+                        date
                 );
                 sr.setStatus("APPROVED");
 
@@ -122,7 +121,7 @@ public class FakerDataGenerator {
 
                 // 5. Shipment request — vary status by age
                 ShipmentRequest sh = rb.newShipmentRequest(
-                    sr.getId(), volume, ORIGIN, factory, date);
+                        sr.getId(), volume, ORIGIN, factory, date);
 
                 if (daysAgoValue > 7) {
                     sh.setStatus("DELIVERED");
@@ -137,9 +136,9 @@ public class FakerDataGenerator {
 
         // Add a few open buy requests for the analyst to work on live
         for (int i = 0; i < 5; i++) {
-            String factory  = FACTORIES[random.nextInt(FACTORIES.length)];
-            double volume   = randomVolume(3000, 10000);
-            double ceiling  = randomPrice(76.00, 83.00);
+            String factory = FACTORIES[random.nextInt(FACTORIES.length)];
+            double volume = randomVolume(3000, 10000);
+            double ceiling = randomPrice(76.00, 83.00);
             String managerId = "MGR-" + faker.number().digits(4);
             String date = daysAgo(random.nextInt(5));
             rb.newBuyRequest(managerId, factory, volume, ceiling, date);

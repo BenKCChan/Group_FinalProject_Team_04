@@ -8,7 +8,6 @@ package ui.LogisticsCorp;
  *
  * @author lindq
  */
-
 import Business.Enterprise.Enterprise;
 import Business.Operations.RequestBoard;
 import Business.Operations.ShipmentRequest;
@@ -46,7 +45,7 @@ public class LogisticsAnalystWorkAreaJPanel extends JPanel {
     private DefaultTableModel routeModel;
 
     public LogisticsAnalystWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount,
-                                           Organization organization, Enterprise enterprise, System system) {
+            Organization organization, Enterprise enterprise, System system) {
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
         this.organization = organization;
@@ -87,9 +86,9 @@ public class LogisticsAnalystWorkAreaJPanel extends JPanel {
         metricsPanel.setBackground(new Color(240, 250, 246));
 
         lblTotalShipments = new JLabel("0");
-        lblDelivered      = new JLabel("0");
-        lblInTransit      = new JLabel("0");
-        lblTotalVolume    = new JLabel("0 bbl");
+        lblDelivered = new JLabel("0");
+        lblInTransit = new JLabel("0");
+        lblTotalVolume = new JLabel("0 bbl");
 
         metricsPanel.add(buildMetricCard("Total shipments", lblTotalShipments));
         metricsPanel.add(buildMetricCard("Delivered", lblDelivered));
@@ -104,9 +103,12 @@ public class LogisticsAnalystWorkAreaJPanel extends JPanel {
 
         // ── Center: full shipment log ─────────────────────────────────────────
         String[] cols = {"Shipment ID", "Volume (bbl)", "Origin",
-                         "Destination", "Scheduled", "Delivered", "Status"};
+            "Destination", "Scheduled", "Delivered", "Status"};
         shipmentModel = new DefaultTableModel(cols, 0) {
-            @Override public boolean isCellEditable(int r, int c) { return false; }
+            @Override
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
         };
         shipmentTable = new JTable(shipmentModel);
         shipmentTable.setRowHeight(24);
@@ -123,10 +125,14 @@ public class LogisticsAnalystWorkAreaJPanel extends JPanel {
                 if (!isSelected) {
                     String status = (String) shipmentModel.getValueAt(row, 6);
                     switch (status) {
-                        case "SCHEDULED"  -> c.setBackground(new Color(225, 245, 238));
-                        case "IN_TRANSIT" -> c.setBackground(new Color(214, 234, 248));
-                        case "DELIVERED"  -> c.setBackground(new Color(214, 245, 214));
-                        default           -> c.setBackground(Color.WHITE);
+                        case "SCHEDULED" ->
+                            c.setBackground(new Color(225, 245, 238));
+                        case "IN_TRANSIT" ->
+                            c.setBackground(new Color(214, 234, 248));
+                        case "DELIVERED" ->
+                            c.setBackground(new Color(214, 245, 214));
+                        default ->
+                            c.setBackground(Color.WHITE);
                     }
                 }
                 return c;
@@ -139,9 +145,12 @@ public class LogisticsAnalystWorkAreaJPanel extends JPanel {
 
         // ── South: route breakdown ────────────────────────────────────────────
         String[] routeCols = {"Route (Origin → Destination)", "Shipments",
-                              "Volume (bbl)", "Delivered", "Pending"};
+            "Volume (bbl)", "Delivered", "Pending"};
         routeModel = new DefaultTableModel(routeCols, 0) {
-            @Override public boolean isCellEditable(int r, int c) { return false; }
+            @Override
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
         };
         routeTable = new JTable(routeModel);
         routeTable.setRowHeight(24);
@@ -209,8 +218,11 @@ public class LogisticsAnalystWorkAreaJPanel extends JPanel {
             double[] s = map.get(route);
             s[0]++;
             s[1] += sh.getVolume();
-            if ("DELIVERED".equals(sh.getStatus())) s[2]++;
-            else s[3]++;
+            if ("DELIVERED".equals(sh.getStatus())) {
+                s[2]++;
+            } else {
+                s[3]++;
+            }
         }
 
         for (Map.Entry<String, double[]> entry : map.entrySet()) {
@@ -228,7 +240,10 @@ public class LogisticsAnalystWorkAreaJPanel extends JPanel {
         if (!map.isEmpty()) {
             double tc = 0, tv = 0, td = 0, tp = 0;
             for (double[] s : map.values()) {
-                tc += s[0]; tv += s[1]; td += s[2]; tp += s[3];
+                tc += s[0];
+                tv += s[1];
+                td += s[2];
+                tp += s[3];
             }
             routeModel.addRow(new Object[]{
                 "TOTAL",
@@ -254,7 +269,9 @@ public class LogisticsAnalystWorkAreaJPanel extends JPanel {
                                 ? table.getSelectionBackground()
                                 : Color.WHITE);
                     }
-                    if (col >= 1) ((JLabel) c).setHorizontalAlignment(SwingConstants.RIGHT);
+                    if (col >= 1) {
+                        ((JLabel) c).setHorizontalAlignment(SwingConstants.RIGHT);
+                    }
                     return c;
                 }
             });
@@ -268,8 +285,11 @@ public class LogisticsAnalystWorkAreaJPanel extends JPanel {
 
         for (ShipmentRequest sh : list) {
             totalVol += sh.getVolume();
-            if ("DELIVERED".equals(sh.getStatus())) delivered++;
-            else other++;
+            if ("DELIVERED".equals(sh.getStatus())) {
+                delivered++;
+            } else {
+                other++;
+            }
         }
 
         lblTotalShipments.setText(String.valueOf(list.size()));
@@ -283,8 +303,8 @@ public class LogisticsAnalystWorkAreaJPanel extends JPanel {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(new Color(225, 245, 238));
         card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(159, 225, 203), 1),
-            BorderFactory.createEmptyBorder(8, 12, 8, 12)
+                BorderFactory.createLineBorder(new Color(159, 225, 203), 1),
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)
         ));
         JLabel lbl = new JLabel(label);
         lbl.setFont(new Font("Tahoma", Font.PLAIN, 11));

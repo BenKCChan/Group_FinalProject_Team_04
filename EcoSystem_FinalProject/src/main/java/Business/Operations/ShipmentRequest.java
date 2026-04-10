@@ -9,6 +9,7 @@ package Business.Operations;
  * @author lindq
  */
 public class ShipmentRequest {
+
     private String id;
     private String linkedSellRequestId;
     private double volume;
@@ -19,7 +20,7 @@ public class ShipmentRequest {
     private String deliveredDate;
 
     public ShipmentRequest(String linkedSellRequestId, double volume, String origin, String destination, String scheduledDate) {
-        
+
         this.id = "SHP-" + java.util.UUID.randomUUID().toString().substring(0, 6).toUpperCase();
         this.linkedSellRequestId = linkedSellRequestId;
         this.volume = volume;
@@ -93,6 +94,5 @@ public class ShipmentRequest {
     public void setDeliveredDate(String deliveredDate) {
         this.deliveredDate = deliveredDate;
     }
-    
-    
+
 }

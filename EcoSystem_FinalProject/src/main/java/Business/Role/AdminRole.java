@@ -16,22 +16,23 @@ import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
  * @author kal bugrara
  */
 import Business.System.System;
+
 public class AdminRole extends Role {
-
-
 
     public AdminRole(UserAccount p) {
 
-        super(p, RoleType.Admin); 
+        super(p, RoleType.Admin);
 
     }
+
     @Override
-    public String getRole(){
-        return  RoleType.Admin.getValue();
+    public String getRole() {
+        return RoleType.Admin.getValue();
     }
+
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
-        
+
         return new AdminWorkAreaJPanel(userProcessContainer, account, organization, enterprise, system);
     }
 

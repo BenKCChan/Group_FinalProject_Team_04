@@ -121,8 +121,8 @@ public class CreateNetworkWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         // TODO add your handling code here:
-        if(txtNetworkName.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Network Name Cannot be Empty","ERROR", ERROR_MESSAGE);
+        if (txtNetworkName.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Network Name Cannot be Empty", "ERROR", ERROR_MESSAGE);
             return;
         }
         system.newNetwork(txtNetworkName.getText());
@@ -132,13 +132,13 @@ public class CreateNetworkWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        if(txtNetworkName.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Network Name Cannot be Empty","ERROR", ERROR_MESSAGE);
+        if (txtNetworkName.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Network Name Cannot be Empty", "ERROR", ERROR_MESSAGE);
             return;
         }
         Network newNetwork = system.newNetwork(txtNetworkName.getText());
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        userProcessContainer.add("CreateEnterpriseWorkAreaJPanel",new CreateEnterpriseWorkAreaJPanel( userProcessContainer,  userAccount, system, newNetwork));
+        userProcessContainer.add("CreateEnterpriseWorkAreaJPanel", new CreateEnterpriseWorkAreaJPanel(userProcessContainer, userAccount, system, newNetwork));
         layout.next(userProcessContainer);
     }//GEN-LAST:event_btnSaveActionPerformed
 

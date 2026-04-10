@@ -8,7 +8,6 @@ package ui.UAEOilSupplier;
  *
  * @author lindq
  */
-
 import Business.Enterprise.Enterprise;
 import Business.Operations.OilTransaction;
 import Business.Operations.RequestBoard;
@@ -48,7 +47,7 @@ public class OilInventoryWorkAreaJPanel extends JPanel {
     private DefaultTableModel breakdownModel;
 
     public OilInventoryWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount,
-                                       Organization organization, Enterprise enterprise, System system) {
+            Organization organization, Enterprise enterprise, System system) {
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
         this.organization = organization;
@@ -89,9 +88,9 @@ public class OilInventoryWorkAreaJPanel extends JPanel {
         metricsPanel.setBackground(new Color(245, 245, 240));
 
         lblTotalRevenue = new JLabel("$0");
-        lblTotalVolume  = new JLabel("0 bbl");
-        lblTxnCount     = new JLabel("0");
-        lblAvgPrice     = new JLabel("$0.00");
+        lblTotalVolume = new JLabel("0 bbl");
+        lblTxnCount = new JLabel("0");
+        lblAvgPrice = new JLabel("$0.00");
 
         metricsPanel.add(buildMetricCard("Total revenue earned", lblTotalRevenue));
         metricsPanel.add(buildMetricCard("Total volume sold", lblTotalVolume));
@@ -107,9 +106,12 @@ public class OilInventoryWorkAreaJPanel extends JPanel {
 
         // ── Center: transaction table ─────────────────────────────────────────
         String[] txnCols = {"Transaction ID", "Date", "Linked Sell Request",
-                            "Volume (bbl)", "Price ($/bbl)", "Total Revenue"};
+            "Volume (bbl)", "Price ($/bbl)", "Total Revenue"};
         txnModel = new DefaultTableModel(txnCols, 0) {
-            @Override public boolean isCellEditable(int r, int c) { return false; }
+            @Override
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
         };
         txnTable = new JTable(txnModel);
         txnTable.setRowHeight(24);
@@ -149,9 +151,12 @@ public class OilInventoryWorkAreaJPanel extends JPanel {
 
         // ── South: per-factory breakdown table ───────────────────────────────
         String[] breakCols = {"Factory (Destination)", "Transactions", "Volume Sold (bbl)",
-                              "Total Revenue", "Avg Price ($/bbl)"};
+            "Total Revenue", "Avg Price ($/bbl)"};
         breakdownModel = new DefaultTableModel(breakCols, 0) {
-            @Override public boolean isCellEditable(int r, int c) { return false; }
+            @Override
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
         };
         breakdownTable = new JTable(breakdownModel);
         breakdownTable.setRowHeight(24);
@@ -185,7 +190,6 @@ public class OilInventoryWorkAreaJPanel extends JPanel {
     }
 
     // ── Refresh ───────────────────────────────────────────────────────────────
-
     private void refreshAll() {
         refreshTransactionTable();
         refreshBreakdownTable();
@@ -295,11 +299,11 @@ public class OilInventoryWorkAreaJPanel extends JPanel {
         }
 
         double totalRevenue = 0;
-        double totalVolume  = 0;
+        double totalVolume = 0;
 
         for (OilTransaction t : list) {
             totalRevenue += t.getTotalRevenue();
-            totalVolume  += t.getVolume();
+            totalVolume += t.getVolume();
         }
 
         double avgPrice = totalVolume > 0 ? totalRevenue / totalVolume : 0;
@@ -311,13 +315,14 @@ public class OilInventoryWorkAreaJPanel extends JPanel {
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
-
     private String getFactoryNameForSellRequest(String sellRequestId) {
         // Walk sell requests to find the linked buy request, then get factory name
         for (SellRequest sr : rb.getSellRequests()) {
             if (sr.getId().equals(sellRequestId)) {
                 var br = rb.findBuyRequest(sr.getLinkedBuyRequestId());
-                if (br != null) return br.getFactoryName();
+                if (br != null) {
+                    return br.getFactoryName();
+                }
             }
         }
         return "Unknown";
@@ -327,8 +332,8 @@ public class OilInventoryWorkAreaJPanel extends JPanel {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(new Color(237, 237, 230));
         card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 196, 185), 1),
-            BorderFactory.createEmptyBorder(8, 12, 8, 12)
+                BorderFactory.createLineBorder(new Color(200, 196, 185), 1),
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)
         ));
         JLabel lbl = new JLabel(label);
         lbl.setFont(new Font("Tahoma", Font.PLAIN, 11));

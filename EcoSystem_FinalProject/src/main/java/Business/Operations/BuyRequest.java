@@ -84,10 +84,10 @@ public class BuyRequest {
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
-    
+
     @Override
-    public String toString() { 
-        return id + " — " + factoryName; 
+    public String toString() {
+        return id + " — " + factoryName;
     }
-    
+
 }

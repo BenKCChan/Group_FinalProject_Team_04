@@ -17,10 +17,7 @@ import Business.Role.TransportCoordinatorRole;
 import Business.utils.RealTimeOilAPI;
 import java.io.IOException;
 
-
 import Business.utils.FakerDataGenerator;
-import static java.time.Clock.system;
-import static java.time.InstantSource.system;
 
 /**
  *
@@ -34,10 +31,9 @@ public class ConfigureASystem {
         RealTimeOilAPI oilApi = new RealTimeOilAPI();
         String oilPrice;
         oilPrice = oilApi.refreshNow();
-        
 
         System system = new System("Oil_manufacturing");
-        
+
         RequestBoard rb = system.getRequestBoard();
 
         // Create 1 network
@@ -97,13 +93,12 @@ public class ConfigureASystem {
         LogisticsAnalystRole laRole = new LogisticsAnalystRole(uaLA);
         e4_org2.getRoleDirectory().addRole(laRole);
 
-       // Retrieve accounts for Faker population
+        // Retrieve accounts for Faker population
         UserAccount analystAccount = e3_org1.getUserAccountDirectory().findUserAccount("oil.analyst");
         UserAccount agentAccount = e3_org2.getUserAccountDirectory().findUserAccount("oil.supplier");
 
         // Generate 20 historical records using Faker
-        FakerDataGenerator.populate(rb, analystAccount, agentAccount, 20); 
-       
+        FakerDataGenerator.populate(rb, analystAccount, agentAccount, 20);
 
         // Create Admin
         UserAccount admin = orgAdmin.getUserAccountDirectory().newUserAccount("admin", "****");

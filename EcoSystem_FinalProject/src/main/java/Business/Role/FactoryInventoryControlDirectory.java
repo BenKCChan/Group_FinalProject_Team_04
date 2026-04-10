@@ -15,12 +15,11 @@ import java.util.ArrayList;
  */
 public class FactoryInventoryControlDirectory {
 
-
     ArrayList<FactoryInventoryControlRole> factoryList;
 
     public FactoryInventoryControlDirectory() {
 
-     factoryList = new ArrayList();
+        factoryList = new ArrayList();
 
     }
 
@@ -39,7 +38,7 @@ public class FactoryInventoryControlDirectory {
                 return sp;
             }
         }
-            return null; //not found after going through the whole list
-         }
-    
+        return null; //not found after going through the whole list
+    }
+
 }

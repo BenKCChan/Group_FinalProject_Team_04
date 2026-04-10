@@ -8,7 +8,6 @@ package Business.Role;
  *
  * @author lindq
  */
-
 import Business.Enterprise.Enterprise;
 import Business.Organization;
 import Business.UserAccount.UserAccount;
@@ -23,7 +22,9 @@ public class LogisticsAnalystRole extends Role {
     }
 
     @Override
-    public String getRole() { return RoleType.LogisticsAnalyst.getValue(); }
+    public String getRole() {
+        return RoleType.LogisticsAnalyst.getValue();
+    }
 
     @Override
     public JPanel createWorkArea(JPanel container, UserAccount account,

@@ -14,20 +14,20 @@ import java.util.ArrayList;
  * @author kal bugrara
  */
 public class UserAccountDirectory {
-    
-      ArrayList<UserAccount> useraccountlist ;
-    
-      public UserAccountDirectory (){
-          
-       useraccountlist = new ArrayList();
+
+    ArrayList<UserAccount> useraccountlist;
+
+    public UserAccountDirectory() {
+
+        useraccountlist = new ArrayList();
 
     }
 
     public UserAccount newUserAccount(String un, String pw) throws Exception {
-        if(findUserAccount(un)!=null){
+        if (findUserAccount(un) != null) {
             throw new Exception("User Name exist");
         }
-        UserAccount ua = new UserAccount ( un,  pw);
+        UserAccount ua = new UserAccount(un, pw);
         useraccountlist.add(ua);
         return ua;
     }
@@ -40,9 +40,10 @@ public class UserAccountDirectory {
                 return ua;
             }
         }
-            return null; //not found after going through the whole list
-         }
-     public UserAccount AuthenticateUser(String un, String pw) {
+        return null; //not found after going through the whole list
+    }
+
+    public UserAccount AuthenticateUser(String un, String pw) {
 
         for (UserAccount ua : useraccountlist) {
 
@@ -50,10 +51,10 @@ public class UserAccountDirectory {
                 return ua;
             }
         }
-            return null; //not found after going through the whole list
-         }   
-     public ArrayList<UserAccount> getUserAccountList()
-     {
-         return useraccountlist;
-     }
+        return null; //not found after going through the whole list
+    }
+
+    public ArrayList<UserAccount> getUserAccountList() {
+        return useraccountlist;
+    }
 }

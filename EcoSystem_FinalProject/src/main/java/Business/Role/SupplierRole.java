@@ -19,18 +19,17 @@ import ui.UAEOilSupplier.OilSupplierAgentWorkAreaJPanel;
  */
 public class SupplierRole extends Role {
 
-    
     public SupplierRole(UserAccount p) {
         super(p, RoleType.OilSupplier);
     }
 
     @Override
-public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
-    return new OilSupplierAgentWorkAreaJPanel(userProcessContainer, account, organization, enterprise, system);
-}
+    public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
+        return new OilSupplierAgentWorkAreaJPanel(userProcessContainer, account, organization, enterprise, system);
+    }
 
     @Override
-    public String getRole(){
-        return  RoleType.OilSupplier.getValue();
+    public String getRole() {
+        return RoleType.OilSupplier.getValue();
     }
 }

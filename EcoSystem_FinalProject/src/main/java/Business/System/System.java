@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import Business.Network.Network;
 import Business.Operations.RequestBoard;
 import Business.Organization;
+
 /**
  *
  * @author ben
@@ -39,12 +40,7 @@ public class System extends Organization {
         return name;
     }
 
-    public RequestBoard getRequestBoard() { 
+    public RequestBoard getRequestBoard() {
         return requestBoard;
     }
 }
-
-          
-    
-          
-     

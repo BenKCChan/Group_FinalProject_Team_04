@@ -15,12 +15,11 @@ import java.util.ArrayList;
  */
 public class SupplierDirectory {
 
-
     ArrayList<SupplierRole> supplierList;
 
     public SupplierDirectory() {
 
-     supplierList = new ArrayList();
+        supplierList = new ArrayList();
 
     }
 
@@ -39,7 +38,7 @@ public class SupplierDirectory {
                 return sp;
             }
         }
-            return null; //not found after going through the whole list
-         }
-    
+        return null; //not found after going through the whole list
+    }
+
 }

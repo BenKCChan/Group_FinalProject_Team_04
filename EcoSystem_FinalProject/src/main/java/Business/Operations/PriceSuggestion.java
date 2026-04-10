@@ -21,7 +21,7 @@ public class PriceSuggestion {
     private String submittedAt;
 
     public PriceSuggestion(String analystPersonId, String linkedBuyRequestId,
-        double suggestedPrice, double marginPct, String notes, String submittedAt) {
+            double suggestedPrice, double marginPct, String notes, String submittedAt) {
         this.id = "SUG-" + java.util.UUID.randomUUID().toString().substring(0, 6).toUpperCase();
         this.analystPersonId = analystPersonId;
         this.linkedBuyRequestId = linkedBuyRequestId;
@@ -104,6 +104,5 @@ public class PriceSuggestion {
     public void setSubmittedAt(String submittedAt) {
         this.submittedAt = submittedAt;
     }
-    
-    
-    }
+
+}

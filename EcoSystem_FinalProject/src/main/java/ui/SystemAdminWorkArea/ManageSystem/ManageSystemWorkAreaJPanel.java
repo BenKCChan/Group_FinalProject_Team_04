@@ -26,7 +26,7 @@ public class ManageSystemWorkAreaJPanel extends javax.swing.JPanel {
 
     public ManageSystemWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, System system) {
         initComponents();
-        lblManageSystem.setText("Manage System: "+system.getName());
+        lblManageSystem.setText("Manage System: " + system.getName());
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
         this.system = system;

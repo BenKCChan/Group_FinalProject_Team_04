@@ -26,6 +26,7 @@ public class CreateEnterpriseWorkAreaJPanel extends javax.swing.JPanel {
     Business.System.System system;
     UserAccount userAccount;
     Network network;
+
     public CreateEnterpriseWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Business.System.System system, Network network) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
@@ -186,8 +187,8 @@ public class CreateEnterpriseWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnCreateEnterpriseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateEnterpriseActionPerformed
         // TODO add your handling code here:
-        if(txtEnterpriseName.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Enterprise Name cannot be empty","ERROR", ERROR_MESSAGE);
+        if (txtEnterpriseName.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Enterprise Name cannot be empty", "ERROR", ERROR_MESSAGE);
             return;
         }
         network.newEnterprise(txtEnterpriseName.getText());
