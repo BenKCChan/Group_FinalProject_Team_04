@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package ui.UAEOilSupplier;
 
@@ -13,51 +13,38 @@ import Business.Operations.BuyRequest;
 import Business.Operations.PriceSuggestion;
 import Business.Operations.RequestBoard;
 import Business.Organization;
-import Business.System.System;
 import Business.UserAccount.UserAccount;
-
-import javax.swing.*;
+import java.awt.Color;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
 
-public class OilAnalystWorkAreaJPanel extends JPanel {
+public class OilAnalystWorkAreaJPanel extends javax.swing.JPanel {
+
+    /**
+     * Creates new form OilAnalystWorkAreaJPanel
+     */
+    private static final double BREAK_EVEN = 61.20;
 
     private JPanel userProcessContainer;
     private UserAccount userAccount;
     private Organization organization;
     private Enterprise enterprise;
-    private System system;
+    private Business.System.System system;
     private RequestBoard rb;
 
-    private static final double BREAK_EVEN = 61.20;
-
-    // Metric labels
-    private JLabel lblMarketPrice;
-    private JLabel lblAvg30;
-    private JLabel lblInventory;
-    private JLabel lblBreakEven;
-
-    // Zone 1 — buy request table
-    private JTable buyRequestTable;
     private DefaultTableModel buyRequestModel;
-
-    // Zone 2 — form
-    private JComboBox<String> cboBuyRequest;
-    private JTextField txtSuggestedPrice;
-    private JLabel lblMargin;
-    private JTextArea txtNotes;
-
-    // Zone 3 — history table
-    private JTable historyTable;
     private DefaultTableModel historyModel;
 
     public OilAnalystWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount,
-            Organization organization, Enterprise enterprise, System system) {
+            Organization organization, Enterprise enterprise, Business.System.System system) {
+        initComponents();
+
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
         this.organization = organization;
@@ -65,340 +52,422 @@ public class OilAnalystWorkAreaJPanel extends JPanel {
         this.system = system;
         this.rb = system.getRequestBoard();
 
-        setLayout(new BorderLayout(0, 0));
-        buildUI();
+        // Header text
+        lblRole.setText("Oil Analyst  |  Oil Analytics Dept  |  " + enterprise.getName());
+        lblUser.setText("Logged in: " + userAccount.getUserLoginName());
+        lblBreakEven.setText(String.format("$%.2f", BREAK_EVEN));
+
+        // table models
+        buyRequestModel = (DefaultTableModel) buyRequestTable.getModel();
+        historyModel = (DefaultTableModel) historyTable.getModel();
+        buyRequestModel.setRowCount(0);
+        historyModel.setRowCount(0);
+        wireHistoryTableRenderer();
+
+
+        // Initial data load
         refreshBuyRequestTable();
         refreshComboBox();
         refreshHistoryTable();
-    }
 
-    private void buildUI() {
-
-        // ── Header ────────────────────────────────────────────────────────────
-        JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT, 16, 10));
-        header.setBackground(new Color(250, 238, 218));
-        header.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(133, 79, 11)));
-
-        JLabel lblRole = new JLabel("Oil Analyst  |  Oil Analytics Dept  |  " + enterprise.getName());
-        lblRole.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblRole.setForeground(new Color(99, 56, 6));
-        header.add(lblRole);
-
-        JLabel lblUser = new JLabel("Logged in: " + userAccount.getUserLoginName());
-        lblUser.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        lblUser.setForeground(new Color(133, 79, 11));
-        header.add(lblUser);
-
-        // ── Metric cards ──────────────────────────────────────────────────────
-        JPanel metricsPanel = new JPanel(new GridLayout(1, 4, 10, 0));
-        metricsPanel.setBorder(BorderFactory.createEmptyBorder(10, 16, 10, 16));
-        metricsPanel.setBackground(new Color(245, 245, 240));
-
-        lblMarketPrice = new JLabel("$78.40");
-        lblAvg30 = new JLabel("$76.15");
-        lblInventory = new JLabel("42,500 bbl");
-        lblBreakEven = new JLabel(String.format("$%.2f", BREAK_EVEN));
-
-        metricsPanel.add(buildMetricCard("Market price (live)", lblMarketPrice));
-        metricsPanel.add(buildMetricCard("30-day average", lblAvg30));
-        metricsPanel.add(buildMetricCard("Inventory available", lblInventory));
-        metricsPanel.add(buildMetricCard("Break-even cost", lblBreakEven));
-
-        JPanel northStack = new JPanel();
-        northStack.setLayout(new BoxLayout(northStack, BoxLayout.Y_AXIS));
-        northStack.add(header);
-        northStack.add(metricsPanel);
-        add(northStack, BorderLayout.NORTH);
-
-        // ── Center split: buy request table | form ────────────────────────────
-        JSplitPane centerSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        centerSplit.setDividerLocation(680);
-        centerSplit.setResizeWeight(0.6);
-        centerSplit.setLeftComponent(buildBuyRequestPane());
-        centerSplit.setRightComponent(buildFormPane());
-
-        // ── South: history table ──────────────────────────────────────────────
-        JPanel southPanel = buildHistoryPane();
-
-        JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        mainSplit.setDividerLocation(300);
-        mainSplit.setResizeWeight(0.55);
-        mainSplit.setTopComponent(centerSplit);
-        mainSplit.setBottomComponent(southPanel);
-
-        add(mainSplit, BorderLayout.CENTER);
-    }
-
-    // ── Zone 1: Buy request table ─────────────────────────────────────────────
-    private JPanel buildBuyRequestPane() {
-        String[] cols = {"Request ID", "Factory", "Volume (bbl)", "Their Ceiling", "Date", "Status"};
-        buyRequestModel = new DefaultTableModel(cols, 0) {
-            @Override
-            public boolean isCellEditable(int r, int c) {
-                return false;
-            }
-        };
-        buyRequestTable = new JTable(buyRequestModel);
-        buyRequestTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        buyRequestTable.setRowHeight(24);
-        buyRequestTable.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        buyRequestTable.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 12));
-
-        // Alternating row colors
-        buyRequestTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value,
-                    boolean isSelected, boolean hasFocus, int row, int col) {
-                Component c = super.getTableCellRendererComponent(
-                        table, value, isSelected, hasFocus, row, col);
-                if (!isSelected) {
-                    c.setBackground(row % 2 == 0 ? Color.WHITE : new Color(252, 251, 248));
-                }
-                return c;
-            }
-        });
-
-        // Row click auto-fills combo box
-        buyRequestTable.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                int row = buyRequestTable.getSelectedRow();
-                if (row >= 0) {
-                    String reqId = (String) buyRequestModel.getValueAt(row, 0);
-                    cboBuyRequest.setSelectedItem(reqId);
-                }
-            }
-        });
-
-        JPanel pane = new JPanel(new BorderLayout());
-        pane.add(makeSectionLabel("Pending buy requests"), BorderLayout.NORTH);
-        pane.add(new JScrollPane(buyRequestTable), BorderLayout.CENTER);
-
-        JLabel hint = new JLabel("  Click a row to link it to your suggestion");
-        hint.setFont(new Font("Tahoma", Font.ITALIC, 11));
-        hint.setForeground(new Color(133, 79, 11));
-        hint.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-        pane.add(hint, BorderLayout.SOUTH);
-
-        return pane;
-    }
-
-    // ── Zone 2: Suggestion form ───────────────────────────────────────────────
-    private JPanel buildFormPane() {
-        JPanel form = new JPanel();
-        form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
-        form.setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 16));
-        form.setBackground(new Color(252, 251, 248));
-
-        JLabel formTitle = new JLabel("Submit price suggestion");
-        formTitle.setFont(new Font("Tahoma", Font.BOLD, 13));
-        formTitle.setForeground(new Color(99, 56, 6));
-        formTitle.setAlignmentX(LEFT_ALIGNMENT);
-        form.add(formTitle);
-        form.add(Box.createVerticalStrut(12));
-
-        // Linked buy request
-        form.add(makeFieldLabel("Linked buy request"));
-        cboBuyRequest = new JComboBox<>();
-        cboBuyRequest.setAlignmentX(LEFT_ALIGNMENT);
-        cboBuyRequest.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
-        form.add(cboBuyRequest);
-        form.add(Box.createVerticalStrut(10));
-
-        // Price + margin row
-        JPanel priceRow = new JPanel(new GridLayout(1, 2, 10, 0));
-        priceRow.setAlignmentX(LEFT_ALIGNMENT);
-        priceRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
-        priceRow.setOpaque(false);
-
-        JPanel priceField = new JPanel(new BorderLayout(0, 4));
-        priceField.setOpaque(false);
-        priceField.add(makeFieldLabel("Suggested price ($/bbl)"), BorderLayout.NORTH);
-        txtSuggestedPrice = new JTextField("79.50");
-        txtSuggestedPrice.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        priceField.add(txtSuggestedPrice, BorderLayout.CENTER);
-
-        JPanel marginField = new JPanel(new BorderLayout(0, 4));
-        marginField.setOpaque(false);
-        marginField.add(makeFieldLabel("Margin vs break-even"), BorderLayout.NORTH);
-        lblMargin = new JLabel(computeMarginText("79.50"));
-        lblMargin.setFont(new Font("Tahoma", Font.BOLD, 18));
-        lblMargin.setForeground(new Color(59, 109, 17));
-        JPanel marginBox = new JPanel(new BorderLayout());
-        marginBox.setBorder(BorderFactory.createLineBorder(new Color(200, 196, 185)));
-        marginBox.setBackground(Color.WHITE);
-        marginBox.add(lblMargin, BorderLayout.CENTER);
-        marginField.add(marginBox, BorderLayout.CENTER);
-
-        priceRow.add(priceField);
-        priceRow.add(marginField);
-        form.add(priceRow);
-        form.add(Box.createVerticalStrut(10));
-
-        // Live margin update
-        txtSuggestedPrice.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {
-                updateMarginDisplay();
-            }
-
-            public void removeUpdate(DocumentEvent e) {
-                updateMarginDisplay();
-            }
-
-            public void changedUpdate(DocumentEvent e) {
-                updateMarginDisplay();
-            }
-        });
-
-        // Notes
-        form.add(makeFieldLabel("Justification notes"));
-        txtNotes = new JTextArea(4, 20);
-        txtNotes.setLineWrap(true);
-        txtNotes.setWrapStyleWord(true);
-        txtNotes.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        txtNotes.setBorder(BorderFactory.createLineBorder(new Color(200, 196, 185)));
-        JScrollPane noteScroll = new JScrollPane(txtNotes);
-        noteScroll.setAlignmentX(LEFT_ALIGNMENT);
-        noteScroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, 90));
-        form.add(noteScroll);
-        form.add(Box.createVerticalStrut(14));
-
-        // Submit button
-        JButton btnSubmit = new JButton("Submit to Oil Supplier Agent");
-        btnSubmit.setAlignmentX(LEFT_ALIGNMENT);
-        btnSubmit.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
-        btnSubmit.setFont(new Font("Tahoma", Font.BOLD, 12));
-        btnSubmit.setBackground(new Color(250, 238, 218));
-        btnSubmit.setForeground(new Color(99, 56, 6));
-        btnSubmit.addActionListener(e -> handleSubmit());
-        form.add(btnSubmit);
-
-        return form;
-    }
-
-    // ── Zone 3: History table ─────────────────────────────────────────────────
-    private JPanel buildHistoryPane() {
-        String[] cols = {"Suggestion ID", "Date", "Price ($/bbl)", "Margin %",
-            "Linked Request", "Status", "Supplier Note"};
-        historyModel = new DefaultTableModel(cols, 0) {
-            @Override
-            public boolean isCellEditable(int r, int c) {
-                return false;
-            }
-        };
-        historyTable = new JTable(historyModel);
-        historyTable.setRowHeight(22);
-        historyTable.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        historyTable.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 12));
-
-        // Color rows by status
-        historyTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value,
-                    boolean isSelected, boolean hasFocus, int row, int col) {
-                Component c = super.getTableCellRendererComponent(
-                        table, value, isSelected, hasFocus, row, col);
-                if (!isSelected) {
-                    String status = (String) historyModel.getValueAt(row, 5);
-                    switch (status) {
-                        case "ACCEPTED" ->
-                            c.setBackground(new Color(220, 245, 220));
-                        case "REJECTED" ->
-                            c.setBackground(new Color(250, 220, 220));
-                        default ->
-                            c.setBackground(Color.WHITE);
+        buyRequestTable.getSelectionModel().addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                if (!evt.getValueIsAdjusting()) {
+                    int row = buyRequestTable.getSelectedRow();
+                    if (row >= 0) {
+                        String reqId = (String) buyRequestModel.getValueAt(row, 0);
+                        cboBuyRequest.setSelectedItem(reqId);
                     }
                 }
-                return c;
             }
-        });
-
-        JScrollPane scroll = new JScrollPane(historyTable);
-        scroll.setPreferredSize(new Dimension(0, 180));
-
-        JPanel pane = new JPanel(new BorderLayout());
-        pane.add(makeSectionLabel("Suggestion history"), BorderLayout.NORTH);
-        pane.add(scroll, BorderLayout.CENTER);
-        pane.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(200, 196, 185)));
-
-        return pane;
-    }
-
-    // ── Submit handler ────────────────────────────────────────────────────────
-    private void handleSubmit() {
-        String selectedReqId = (String) cboBuyRequest.getSelectedItem();
-        if (selectedReqId == null || selectedReqId.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Please select a linked buy request.",
-                    "Validation Error", JOptionPane.WARNING_MESSAGE);
-            return;
         }
-
-        String priceText = txtSuggestedPrice.getText().trim();
-        if (priceText.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Please enter a suggested price.",
-                    "Validation Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        double price;
-        try {
-            price = Double.parseDouble(priceText);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Suggested price must be a valid number.",
-                    "Validation Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        if (price <= 0) {
-            JOptionPane.showMessageDialog(this,
-                    "Price must be greater than zero.",
-                    "Validation Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        if (price < BREAK_EVEN) {
-            JOptionPane.showMessageDialog(this,
-                    String.format("Price $%.2f is below break-even ($%.2f). Cannot submit.", price, BREAK_EVEN),
-                    "Below Break-Even", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        String notes = txtNotes.getText().trim();
-        if (notes.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Please provide justification notes.",
-                    "Validation Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        double margin = ((price - BREAK_EVEN) / BREAK_EVEN) * 100.0;
-        String today = LocalDate.now().toString();
-
-        rb.newPriceSuggestion(
-                userAccount.getId(),
-                selectedReqId,
-                price,
-                margin,
-                notes,
-                today
         );
 
-        JOptionPane.showMessageDialog(this,
-                "Price suggestion submitted successfully.\nLinked to: " + selectedReqId,
-                "Submitted", JOptionPane.INFORMATION_MESSAGE);
-
-        txtSuggestedPrice.setText("");
-        txtNotes.setText("");
-        if (cboBuyRequest.getItemCount() > 0) {
-            cboBuyRequest.setSelectedIndex(0);
-        }
-
-        refreshHistoryTable();
     }
 
-    // ── Refresh methods ───────────────────────────────────────────────────────
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        northStack = new javax.swing.JPanel();
+        headerPanel = new javax.swing.JPanel();
+        lblRole = new javax.swing.JLabel();
+        lblUser = new javax.swing.JLabel();
+        metricsPanel = new javax.swing.JPanel();
+        cardMarketPrice = new javax.swing.JPanel();
+        lblMarketPriceTitle = new javax.swing.JLabel();
+        lblMarketPrice = new javax.swing.JLabel();
+        card30DayAvg = new javax.swing.JPanel();
+        lbl30DayAvgTitle = new javax.swing.JLabel();
+        lblAvg30 = new javax.swing.JLabel();
+        cardInventory = new javax.swing.JPanel();
+        lblInventoryTitle = new javax.swing.JLabel();
+        lblInventory = new javax.swing.JLabel();
+        cardBreakEven = new javax.swing.JPanel();
+        lblBreakEvenTitle = new javax.swing.JLabel();
+        lblBreakEven = new javax.swing.JLabel();
+        mainSplit = new javax.swing.JSplitPane();
+        centerSplit = new javax.swing.JSplitPane();
+        buyRequestPane = new javax.swing.JPanel();
+        lblBuyRequestTitle = new javax.swing.JLabel();
+        lblHint = new javax.swing.JLabel();
+        scrollBuyRequest = new javax.swing.JScrollPane();
+        buyRequestTable = new javax.swing.JTable();
+        formPane = new javax.swing.JPanel();
+        lblFormTitle = new javax.swing.JLabel();
+        lblLinkedRequest = new javax.swing.JLabel();
+        cboBuyRequest = new javax.swing.JComboBox<>();
+        priceRow = new javax.swing.JPanel();
+        priceField = new javax.swing.JPanel();
+        lblPriceTitle = new javax.swing.JLabel();
+        txtSuggestedPrice = new javax.swing.JTextField();
+        marginField = new javax.swing.JPanel();
+        lblMarginTitle = new javax.swing.JLabel();
+        lblMargin = new javax.swing.JLabel();
+        lblNotesTitle = new javax.swing.JLabel();
+        scrollNotes = new javax.swing.JScrollPane();
+        txtNotes = new javax.swing.JTextArea();
+        btnSubmit = new javax.swing.JButton();
+        historyPane = new javax.swing.JPanel();
+        lblHistoryTitle = new javax.swing.JLabel();
+        scrollHistory = new javax.swing.JScrollPane();
+        historyTable = new javax.swing.JTable();
+
+        setLayout(new java.awt.BorderLayout());
+
+        northStack.setLayout(new javax.swing.BoxLayout(northStack, javax.swing.BoxLayout.Y_AXIS));
+
+        headerPanel.setBackground(new java.awt.Color(250, 238, 218));
+        headerPanel.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(133, 79, 11)));
+
+        lblRole.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        lblRole.setForeground(new java.awt.Color(99, 56, 6));
+        lblRole.setText("Oil Analyst  |  Oil Analytics Dept  |  Enterprise");
+        headerPanel.add(lblRole);
+
+        lblUser.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblUser.setForeground(new java.awt.Color(133, 79, 11));
+        lblUser.setText("Logged in: username");
+        headerPanel.add(lblUser);
+
+        northStack.add(headerPanel);
+
+        metricsPanel.setBackground(new java.awt.Color(245, 245, 240));
+        metricsPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 16, 10, 16));
+        metricsPanel.setLayout(new java.awt.GridLayout(1, 4, 10, 0));
+
+        cardMarketPrice.setBackground(new java.awt.Color(237, 237, 230));
+        cardMarketPrice.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 196, 185)), javax.swing.BorderFactory.createEmptyBorder(8, 12, 8, 12)));
+        cardMarketPrice.setLayout(new java.awt.BorderLayout());
+
+        lblMarketPriceTitle.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lblMarketPriceTitle.setForeground(new java.awt.Color(95, 94, 90));
+        lblMarketPriceTitle.setText("Market Price (live)");
+        cardMarketPrice.add(lblMarketPriceTitle, java.awt.BorderLayout.NORTH);
+
+        lblMarketPrice.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        lblMarketPrice.setText("$78.40");
+        cardMarketPrice.add(lblMarketPrice, java.awt.BorderLayout.CENTER);
+
+        metricsPanel.add(cardMarketPrice);
+
+        card30DayAvg.setBackground(new java.awt.Color(237, 237, 230));
+        card30DayAvg.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 196, 185)), javax.swing.BorderFactory.createEmptyBorder(8, 12, 8, 12)));
+        card30DayAvg.setLayout(new java.awt.BorderLayout());
+
+        lbl30DayAvgTitle.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lbl30DayAvgTitle.setForeground(new java.awt.Color(95, 94, 90));
+        lbl30DayAvgTitle.setText("30-Day Average");
+        card30DayAvg.add(lbl30DayAvgTitle, java.awt.BorderLayout.NORTH);
+
+        lblAvg30.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        lblAvg30.setText("$76.15");
+        lblAvg30.setToolTipText("");
+        card30DayAvg.add(lblAvg30, java.awt.BorderLayout.CENTER);
+
+        metricsPanel.add(card30DayAvg);
+
+        cardInventory.setBackground(new java.awt.Color(237, 237, 230));
+        cardInventory.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 196, 185)), javax.swing.BorderFactory.createEmptyBorder(8, 12, 8, 12)));
+        cardInventory.setLayout(new java.awt.BorderLayout());
+
+        lblInventoryTitle.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lblInventoryTitle.setForeground(new java.awt.Color(95, 94, 90));
+        lblInventoryTitle.setText("Inventory Available");
+        cardInventory.add(lblInventoryTitle, java.awt.BorderLayout.NORTH);
+
+        lblInventory.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        lblInventory.setText("42,500 bbl");
+        lblInventory.setToolTipText("");
+        cardInventory.add(lblInventory, java.awt.BorderLayout.CENTER);
+
+        metricsPanel.add(cardInventory);
+
+        cardBreakEven.setBackground(new java.awt.Color(237, 237, 230));
+        cardBreakEven.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 196, 185)), javax.swing.BorderFactory.createEmptyBorder(8, 12, 8, 12)));
+        cardBreakEven.setLayout(new java.awt.BorderLayout());
+
+        lblBreakEvenTitle.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lblBreakEvenTitle.setForeground(new java.awt.Color(95, 94, 90));
+        lblBreakEvenTitle.setText("Break-even Cost");
+        cardBreakEven.add(lblBreakEvenTitle, java.awt.BorderLayout.NORTH);
+
+        lblBreakEven.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        lblBreakEven.setText("$61.20");
+        lblBreakEven.setToolTipText("");
+        cardBreakEven.add(lblBreakEven, java.awt.BorderLayout.CENTER);
+
+        metricsPanel.add(cardBreakEven);
+
+        northStack.add(metricsPanel);
+
+        add(northStack, java.awt.BorderLayout.NORTH);
+
+        mainSplit.setDividerLocation(300);
+        mainSplit.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        mainSplit.setResizeWeight(0.55);
+
+        centerSplit.setDividerLocation(680);
+        centerSplit.setResizeWeight(0.6);
+
+        buyRequestPane.setLayout(new java.awt.BorderLayout());
+
+        lblBuyRequestTitle.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblBuyRequestTitle.setText("Pending buy requests");
+        lblBuyRequestTitle.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 4, 4, 0));
+        buyRequestPane.add(lblBuyRequestTitle, java.awt.BorderLayout.NORTH);
+
+        lblHint.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        lblHint.setForeground(new java.awt.Color(133, 79, 11));
+        lblHint.setText("Click a row to link it to your suggestion");
+        lblHint.setBorder(javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4));
+        buyRequestPane.add(lblHint, java.awt.BorderLayout.SOUTH);
+
+        scrollBuyRequest.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        buyRequestTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Request ID", "Factory", "Volume (bbl)", "Their Ceiling", "Date", "Status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        buyRequestTable.setRowHeight(24);
+        buyRequestTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        buyRequestTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buyRequestTableMouseClicked(evt);
+            }
+        });
+        scrollBuyRequest.setViewportView(buyRequestTable);
+
+        buyRequestPane.add(scrollBuyRequest, java.awt.BorderLayout.CENTER);
+
+        centerSplit.setLeftComponent(buyRequestPane);
+
+        formPane.setBackground(new java.awt.Color(252, 251, 248));
+        formPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(12, 16, 12, 16));
+        formPane.setLayout(new javax.swing.BoxLayout(formPane, javax.swing.BoxLayout.Y_AXIS));
+
+        lblFormTitle.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        lblFormTitle.setForeground(new java.awt.Color(99, 56, 6));
+        lblFormTitle.setText("Submit Price Suggestion");
+        formPane.add(lblFormTitle);
+
+        lblLinkedRequest.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lblLinkedRequest.setForeground(new java.awt.Color(95, 94, 90));
+        lblLinkedRequest.setText("Linked Buy Request");
+        formPane.add(lblLinkedRequest);
+
+        cboBuyRequest.setAlignmentX(0.0F);
+        cboBuyRequest.setAutoscrolls(true);
+        cboBuyRequest.setMaximumSize(new java.awt.Dimension(2147483647, 30));
+        formPane.add(cboBuyRequest);
+
+        priceRow.setAlignmentX(0.0F);
+        priceRow.setMaximumSize(new java.awt.Dimension(2147483647, 60));
+        priceRow.setOpaque(false);
+        priceRow.setLayout(new java.awt.GridLayout(1, 2, 10, 0));
+
+        priceField.setOpaque(false);
+        priceField.setLayout(new java.awt.BorderLayout());
+
+        lblPriceTitle.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lblPriceTitle.setForeground(new java.awt.Color(95, 94, 90));
+        lblPriceTitle.setText("Suggested Price ($/bbl)");
+        priceField.add(lblPriceTitle, java.awt.BorderLayout.NORTH);
+
+        txtSuggestedPrice.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        txtSuggestedPrice.setText("79.50");
+        txtSuggestedPrice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSuggestedPriceActionPerformed(evt);
+            }
+        });
+        txtSuggestedPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSuggestedPriceKeyReleased(evt);
+            }
+        });
+        priceField.add(txtSuggestedPrice, java.awt.BorderLayout.CENTER);
+
+        priceRow.add(priceField);
+
+        marginField.setOpaque(false);
+        marginField.setLayout(new java.awt.BorderLayout());
+
+        lblMarginTitle.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lblMarginTitle.setForeground(new java.awt.Color(95, 94, 90));
+        lblMarginTitle.setText("Margin vs Break-even");
+        marginField.add(lblMarginTitle, java.awt.BorderLayout.NORTH);
+
+        lblMargin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblMargin.setForeground(new java.awt.Color(59, 109, 17));
+        lblMargin.setText("29.0%");
+        lblMargin.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 196, 185)));
+        lblMargin.setOpaque(true);
+        marginField.add(lblMargin, java.awt.BorderLayout.CENTER);
+
+        priceRow.add(marginField);
+
+        formPane.add(priceRow);
+
+        lblNotesTitle.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lblNotesTitle.setForeground(new java.awt.Color(95, 94, 90));
+        lblNotesTitle.setText("Justification Notes");
+        formPane.add(lblNotesTitle);
+
+        scrollNotes.setAlignmentX(0.0F);
+        scrollNotes.setMaximumSize(new java.awt.Dimension(2147483647, 90));
+
+        txtNotes.setColumns(20);
+        txtNotes.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtNotes.setLineWrap(true);
+        txtNotes.setRows(5);
+        txtNotes.setWrapStyleWord(true);
+        txtNotes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 196, 185)));
+        scrollNotes.setViewportView(txtNotes);
+
+        formPane.add(scrollNotes);
+
+        btnSubmit.setBackground(new java.awt.Color(250, 238, 218));
+        btnSubmit.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnSubmit.setForeground(new java.awt.Color(99, 56, 6));
+        btnSubmit.setText("Submit to Oil Supplier Agent");
+        btnSubmit.setMaximumSize(new java.awt.Dimension(2147483647, 36));
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
+        formPane.add(btnSubmit);
+
+        centerSplit.setRightComponent(formPane);
+
+        mainSplit.setTopComponent(centerSplit);
+
+        historyPane.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(200, 196, 185)));
+        historyPane.setLayout(new java.awt.BorderLayout());
+
+        lblHistoryTitle.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblHistoryTitle.setText("Suggestion History");
+        lblHistoryTitle.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 4, 4, 0));
+        historyPane.add(lblHistoryTitle, java.awt.BorderLayout.NORTH);
+
+        scrollHistory.setPreferredSize(new java.awt.Dimension(0, 180));
+
+        historyTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        historyTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Suggestion ID", "Date", "Price ($/bbl)", "Margin %", "Linked Request", "Status", "Supplier Note"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        historyTable.setRowHeight(22);
+        scrollHistory.setViewportView(historyTable);
+
+        historyPane.add(scrollHistory, java.awt.BorderLayout.CENTER);
+
+        mainSplit.setBottomComponent(historyPane);
+
+        add(mainSplit, java.awt.BorderLayout.CENTER);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        // TODO add your handling code here:
+        handleSubmit();
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
+    private void buyRequestTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buyRequestTableMouseClicked
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_buyRequestTableMouseClicked
+
+    private void txtSuggestedPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSuggestedPriceActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSuggestedPriceActionPerformed
+
+    private void txtSuggestedPriceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSuggestedPriceKeyReleased
+        // TODO add your handling code here:
+        updateMarginDisplay();
+    }//GEN-LAST:event_txtSuggestedPriceKeyReleased
+
+    private void updateMarginDisplay() {
+        String text = txtSuggestedPrice.getText().trim();
+        lblMargin.setText(computeMarginText(text));
+        try {
+            double p = Double.parseDouble(text);
+            lblMargin.setForeground(p >= BREAK_EVEN
+                    ? new Color(59, 109, 17)
+                    : new Color(162, 45, 45));
+        } catch (NumberFormatException ex) {
+            lblMargin.setForeground(Color.GRAY);
+        }
+    }
+
+    private String computeMarginText(String priceText) {
+        try {
+            double p = Double.parseDouble(priceText);
+            if (p <= 0) {
+                return "—";
+            }
+            double m = ((p - BREAK_EVEN) / BREAK_EVEN) * 100.0;
+            return String.format("%.1f%%", m);
+        } catch (NumberFormatException ex) {
+            return "—";
+        }
+    }
+
     private void refreshBuyRequestTable() {
         buyRequestModel.setRowCount(0);
         for (BuyRequest br : rb.getBuyRequests()) {
@@ -444,61 +513,149 @@ public class OilAnalystWorkAreaJPanel extends JPanel {
         }
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
-    private void updateMarginDisplay() {
-        String text = txtSuggestedPrice.getText().trim();
-        lblMargin.setText(computeMarginText(text));
-        try {
-            double p = Double.parseDouble(text);
-            lblMargin.setForeground(p >= BREAK_EVEN
-                    ? new Color(59, 109, 17)
-                    : new Color(162, 45, 45));
-        } catch (NumberFormatException ex) {
-            lblMargin.setForeground(Color.GRAY);
+  
+private void handleSubmit() {
+        String selectedReqId = (String) cboBuyRequest.getSelectedItem();
+        if (selectedReqId == null || selectedReqId.trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Please select a linked buy request.",
+                    "Validation Error", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
         }
+
+        String priceText = txtSuggestedPrice.getText().trim();
+        if (priceText.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Please enter a suggested price.",
+                    "Validation Error", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        double price;
+        try {
+            price = Double.parseDouble(priceText);
+        } catch (NumberFormatException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Suggested price must be a valid number.",
+                    "Validation Error", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (price <= 0) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Price must be greater than zero.",
+                    "Validation Error", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (price < BREAK_EVEN) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    String.format("Price $%.2f is below break-even ($%.2f). Cannot submit.",
+                            price, BREAK_EVEN),
+                    "Below Break-Even", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String notes = txtNotes.getText().trim();
+        if (notes.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Please provide justification notes.",
+                    "Validation Error", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        double margin = ((price - BREAK_EVEN) / BREAK_EVEN) * 100.0;
+        String today = LocalDate.now().toString();
+
+        rb.newPriceSuggestion(
+                userAccount.getId(),
+                selectedReqId,
+                price,
+                margin,
+                notes,
+                today
+        );
+
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Price suggestion submitted successfully.\nLinked to: " + selectedReqId,
+                "Submitted", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+        txtSuggestedPrice.setText("");
+        txtNotes.setText("");
+        if (cboBuyRequest.getItemCount() > 0) {
+            cboBuyRequest.setSelectedIndex(0);
+        }
+
+        refreshHistoryTable();
     }
 
-    private String computeMarginText(String priceText) {
-        try {
-            double p = Double.parseDouble(priceText);
-            if (p <= 0) {
-                return "—";
+    private void wireHistoryTableRenderer() {
+        historyTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table,
+                    Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+                java.awt.Component c = super.getTableCellRendererComponent(
+                        table, value, isSelected, hasFocus, row, col);
+                if (!isSelected) {
+                    String status = (String) historyModel.getValueAt(row, 5);
+                    switch (status) {
+                        case "ACCEPTED" ->
+                            c.setBackground(new Color(220, 245, 220));
+                        case "REJECTED" ->
+                            c.setBackground(new Color(250, 220, 220));
+                        default ->
+                            c.setBackground(Color.WHITE);
+                    }
+                }
+                return c;
             }
-            double m = ((p - BREAK_EVEN) / BREAK_EVEN) * 100.0;
-            return String.format("%.1f%%", m);
-        } catch (NumberFormatException ex) {
-            return "—";
-        }
+        });
     }
 
-    private JPanel buildMetricCard(String label, JLabel valueLabel) {
-        JPanel card = new JPanel(new BorderLayout());
-        card.setBackground(new Color(237, 237, 230));
-        card.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 196, 185), 1),
-                BorderFactory.createEmptyBorder(8, 12, 8, 12)
-        ));
-        JLabel lbl = new JLabel(label);
-        lbl.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lbl.setForeground(new Color(95, 94, 90));
-        valueLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
-        card.add(lbl, BorderLayout.NORTH);
-        card.add(valueLabel, BorderLayout.CENTER);
-        return card;
-    }
 
-    private JLabel makeSectionLabel(String text) {
-        JLabel lbl = new JLabel("  " + text);
-        lbl.setFont(new Font("Tahoma", Font.BOLD, 12));
-        lbl.setBorder(BorderFactory.createEmptyBorder(6, 4, 4, 0));
-        return lbl;
-    }
-
-    private JLabel makeFieldLabel(String text) {
-        JLabel lbl = new JLabel(text);
-        lbl.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lbl.setForeground(new Color(95, 94, 90));
-        lbl.setAlignmentX(LEFT_ALIGNMENT);
-        return lbl;
-    }
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSubmit;
+    private javax.swing.JPanel buyRequestPane;
+    private javax.swing.JTable buyRequestTable;
+    private javax.swing.JPanel card30DayAvg;
+    private javax.swing.JPanel cardBreakEven;
+    private javax.swing.JPanel cardInventory;
+    private javax.swing.JPanel cardMarketPrice;
+    private javax.swing.JComboBox<String> cboBuyRequest;
+    private javax.swing.JSplitPane centerSplit;
+    private javax.swing.JPanel formPane;
+    private javax.swing.JPanel headerPanel;
+    private javax.swing.JPanel historyPane;
+    private javax.swing.JTable historyTable;
+    private javax.swing.JLabel lbl30DayAvgTitle;
+    private javax.swing.JLabel lblAvg30;
+    private javax.swing.JLabel lblBreakEven;
+    private javax.swing.JLabel lblBreakEvenTitle;
+    private javax.swing.JLabel lblBuyRequestTitle;
+    private javax.swing.JLabel lblFormTitle;
+    private javax.swing.JLabel lblHint;
+    private javax.swing.JLabel lblHistoryTitle;
+    private javax.swing.JLabel lblInventory;
+    private javax.swing.JLabel lblInventoryTitle;
+    private javax.swing.JLabel lblLinkedRequest;
+    private javax.swing.JLabel lblMargin;
+    private javax.swing.JLabel lblMarginTitle;
+    private javax.swing.JLabel lblMarketPrice;
+    private javax.swing.JLabel lblMarketPriceTitle;
+    private javax.swing.JLabel lblNotesTitle;
+    private javax.swing.JLabel lblPriceTitle;
+    private javax.swing.JLabel lblRole;
+    private javax.swing.JLabel lblUser;
+    private javax.swing.JSplitPane mainSplit;
+    private javax.swing.JPanel marginField;
+    private javax.swing.JPanel metricsPanel;
+    private javax.swing.JPanel northStack;
+    private javax.swing.JPanel priceField;
+    private javax.swing.JPanel priceRow;
+    private javax.swing.JScrollPane scrollBuyRequest;
+    private javax.swing.JScrollPane scrollHistory;
+    private javax.swing.JScrollPane scrollNotes;
+    private javax.swing.JTextArea txtNotes;
+    private javax.swing.JTextField txtSuggestedPrice;
+    // End of variables declaration//GEN-END:variables
 }
