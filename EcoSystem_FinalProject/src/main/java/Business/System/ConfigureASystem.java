@@ -93,8 +93,7 @@ public class ConfigureASystem {
         e4_org1.getRoleDirectory().addRole(tcRole);
 
         // Logistics Analyst  
-        UserAccount uaLA = e4_org2.getUserAccountDirectory()
-                .newUserAccount("logistics.analyst", "Pass@123");
+        UserAccount uaLA = e4_org2.getUserAccountDirectory().newUserAccount("logistics.analyst", "Pass@123");
         LogisticsAnalystRole laRole = new LogisticsAnalystRole(uaLA);
         e4_org2.getRoleDirectory().addRole(laRole);
 
