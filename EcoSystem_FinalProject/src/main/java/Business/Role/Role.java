@@ -18,13 +18,15 @@ import javax.swing.JPanel;
  */
 public abstract class Role {
     PersonAccount person;
-    
+
     public enum RoleType {
         Admin("Admin"),
         Analyst("Analyst Team"),
         Supplier("Supplier"),
-        Purchase("Purchase Department");
-        
+        Purchase("Purchase Department"),
+        FactoryManager("Factory Manager"),
+        InventoryControl("Inventory Control");
+
 
         private String value;
 
@@ -44,15 +46,15 @@ public abstract class Role {
     public RoleType type;
     public Role(PersonAccount p, RoleType type){
         person = p;
-        type = this.type;
+        this.type = type;
     }
-    
+
     public abstract String getRole();
-    
+
     public PersonAccount getPerson(){
         return person;
     }
-     
+
     public boolean isMatch(String id) {
         if (person.getPersonId().equals(id)) {
             return true;
