@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package ui.UAEOilSupplier;
 
@@ -10,54 +10,55 @@ package ui.UAEOilSupplier;
  */
 import Business.Enterprise.Enterprise;
 import Business.Operations.BuyRequest;
-import Business.Operations.OilTransaction;
 import Business.Operations.PriceSuggestion;
 import Business.Operations.RequestBoard;
 import Business.Operations.SellRequest;
 import Business.Operations.ShipmentRequest;
 import Business.Organization;
-import Business.System.System;
 import Business.UserAccount.UserAccount;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
-public class OilSupplierAgentWorkAreaJPanel extends JPanel {
+public class OilSupplierAgentWorkAreaJPanel extends javax.swing.JPanel {
 
     private JPanel userProcessContainer;
     private UserAccount userAccount;
     private Organization organization;
     private Enterprise enterprise;
-    private System system;
+    private Business.System.System system;
     private RequestBoard rb;
 
-    // Zone 1 — buy requests
-    private JTable buyRequestTable;
     private DefaultTableModel buyRequestModel;
-
-    // Zone 2 — analyst suggestions
-    private JTable suggestionTable;
     private DefaultTableModel suggestionModel;
-    private JTextField txtSupplierNote;
-    private JButton btnAccept;
-    private JButton btnReject;
+    private DefaultTableModel sellHistoryModel;
 
-    // Zone 3 — sell request form
     private JComboBox<String> cboBuyRequest;
     private JTextField txtSellPrice;
     private JTextField txtVolume;
     private JTextArea txtNotes;
+    private JButton btnSubmitSell;
 
-    // Zone 4 — sell request history
-    private JTable sellHistoryTable;
-    private DefaultTableModel sellHistoryModel;
-
+    /**
+     * Creates new form OilSupplierAgentWorkAreaJPanel1
+     */
     public OilSupplierAgentWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount,
-            Organization organization, Enterprise enterprise, System system) {
+            Organization organization, Enterprise enterprise, Business.System.System system) {
+        initComponents();
+
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
         this.organization = organization;
@@ -65,425 +66,366 @@ public class OilSupplierAgentWorkAreaJPanel extends JPanel {
         this.system = system;
         this.rb = system.getRequestBoard();
 
-        setLayout(new BorderLayout(0, 0));
-        buildUI();
-        refreshAll();
-    }
+        lblRole.setText("Oil Supplier Agent  |  Oil Commercial Dept  |  " + enterprise.getName());
+        lblUser.setText("Logged in: " + userAccount.getUserLoginName());
 
-    private void buildUI() {
+        buyRequestModel = (DefaultTableModel) buyRequestTable.getModel();
+        suggestionModel = (DefaultTableModel) suggestionTable.getModel();
+        sellHistoryModel = (DefaultTableModel) sellHistoryTable.getModel();
 
-        // ── Header ───────────────────────────────────────────────────────────
-        JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT, 16, 10));
-        header.setBackground(new Color(250, 238, 218));
-        header.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(133, 79, 11)));
+        buyRequestModel.setRowCount(0);
+        suggestionModel.setRowCount(0);
+        sellHistoryModel.setRowCount(0);
 
-        JLabel lblRole = new JLabel("Oil Supplier Agent  |  Oil Commercial Dept  |  " + enterprise.getName());
-        lblRole.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lblRole.setForeground(new Color(99, 56, 6));
-        header.add(lblRole);
+        buildSellRequestForm();
 
-        JLabel lblUser = new JLabel("Logged in: " + userAccount.getUserLoginName());
-        lblUser.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        lblUser.setForeground(new Color(133, 79, 11));
-        header.add(lblUser);
-
-        add(header, BorderLayout.NORTH);
-
-        // ── Main center area: top split (buy requests | suggestions) ─────────
-        JSplitPane topSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        topSplit.setDividerLocation(620);
-        topSplit.setResizeWeight(0.55);
-        topSplit.setLeftComponent(buildBuyRequestPane());
-        topSplit.setRightComponent(buildSuggestionPane());
-
-        // ── Form + history stacked in south ───────────────────────────────────
-        JPanel southStack = new JPanel();
-        southStack.setLayout(new BoxLayout(southStack, BoxLayout.Y_AXIS));
-        southStack.add(buildSellRequestForm());
-        southStack.add(buildSellHistoryPane());
-
-        JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        mainSplit.setDividerLocation(280);
-        mainSplit.setResizeWeight(0.4);
-        mainSplit.setTopComponent(topSplit);
-        mainSplit.setBottomComponent(southStack);
-
-        add(mainSplit, BorderLayout.CENTER);
-    }
-
-    // ── Zone 1: Buy Request table ─────────────────────────────────────────────
-    private JPanel buildBuyRequestPane() {
-        String[] cols = {"Request ID", "Factory", "Volume (bbl)", "Ceiling Price", "Date", "Status"};
-        buyRequestModel = new DefaultTableModel(cols, 0) {
-            @Override
-            public boolean isCellEditable(int r, int c) {
-                return false;
-            }
-        };
-        buyRequestTable = new JTable(buyRequestModel);
-        buyRequestTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        buyRequestTable.setRowHeight(24);
-        buyRequestTable.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 12));
-
-        // Selecting a buy request filters the suggestion table and fills the form combo
-        buyRequestTable.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                int row = buyRequestTable.getSelectedRow();
-                if (row >= 0) {
-                    String reqId = (String) buyRequestModel.getValueAt(row, 0);
-                    refreshSuggestionTable(reqId);
-                    cboBuyRequest.setSelectedItem(reqId);
-                }
-            }
-        });
-
-        JPanel pane = new JPanel(new BorderLayout());
-        pane.add(makeSectionLabel("Incoming Buy Requests"), BorderLayout.NORTH);
-        pane.add(new JScrollPane(buyRequestTable), BorderLayout.CENTER);
-        return pane;
-    }
-
-    // ── Zone 2: Analyst suggestions + accept/reject ───────────────────────────
-    private JPanel buildSuggestionPane() {
-        String[] cols = {"Suggestion ID", "Suggested Price", "Margin %", "Notes", "Status"};
-        suggestionModel = new DefaultTableModel(cols, 0) {
-            @Override
-            public boolean isCellEditable(int r, int c) {
-                return false;
-            }
-        };
-        suggestionTable = new JTable(suggestionModel);
-        suggestionTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        suggestionTable.setRowHeight(24);
-        suggestionTable.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 12));
-
-        // Color ACCEPTED green, REJECTED red
-        suggestionTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value,
-                    boolean isSelected, boolean hasFocus, int row, int col) {
-                Component c = super.getTableCellRendererComponent(
-                        table, value, isSelected, hasFocus, row, col);
-                String status = (String) suggestionModel.getValueAt(row, 4);
-                if (!isSelected) {
-                    if ("ACCEPTED".equals(status)) {
-                        c.setBackground(new Color(220, 245, 220));
-                    } else if ("REJECTED".equals(status)) {
-                        c.setBackground(new Color(250, 220, 220));
-                    } else {
-                        c.setBackground(Color.WHITE);
+        buyRequestTable.getSelectionModel().addListSelectionListener(
+                new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                if (!evt.getValueIsAdjusting()) {
+                    int row = buyRequestTable.getSelectedRow();
+                    if (row >= 0) {
+                        String reqId = (String) buyRequestModel.getValueAt(row, 0);
+                        refreshSuggestionTable(reqId);
+                        cboBuyRequest.setSelectedItem(reqId);
                     }
                 }
-                return c;
             }
-        });
+        }
+        );
 
-        // Supplier note field + buttons
-        JPanel actionBar = new JPanel(new BorderLayout(8, 0));
-        actionBar.setBorder(BorderFactory.createEmptyBorder(6, 4, 6, 4));
+        refreshAll();
 
-        JPanel notePanel = new JPanel(new BorderLayout(4, 0));
-        JLabel noteLabel = new JLabel("Note to analyst:");
-        noteLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        txtSupplierNote = new JTextField();
-        notePanel.add(noteLabel, BorderLayout.WEST);
-        notePanel.add(txtSupplierNote, BorderLayout.CENTER);
-
-        JPanel btnPanel = new JPanel(new GridLayout(1, 2, 6, 0));
-        btnAccept = new JButton("Accept");
-        btnReject = new JButton("Reject");
-        btnAccept.setBackground(new Color(220, 245, 220));
-        btnAccept.setFont(new Font("Tahoma", Font.BOLD, 12));
-        btnReject.setBackground(new Color(250, 220, 220));
-        btnReject.setFont(new Font("Tahoma", Font.BOLD, 12));
-
-        btnAccept.addActionListener(e -> handleSuggestionDecision("ACCEPTED"));
-        btnReject.addActionListener(e -> handleSuggestionDecision("REJECTED"));
-
-        btnPanel.add(btnAccept);
-        btnPanel.add(btnReject);
-
-        actionBar.add(notePanel, BorderLayout.CENTER);
-        actionBar.add(btnPanel, BorderLayout.EAST);
-
-        JPanel pane = new JPanel(new BorderLayout());
-        pane.add(makeSectionLabel("Analyst Price Suggestions"), BorderLayout.NORTH);
-        pane.add(new JScrollPane(suggestionTable), BorderLayout.CENTER);
-        pane.add(actionBar, BorderLayout.SOUTH);
-        return pane;
     }
 
-    // ── Zone 3: Create sell request form ──────────────────────────────────────
-    private JPanel buildSellRequestForm() {
-        JPanel form = new JPanel(new GridBagLayout());
-        form.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(1, 0, 1, 0, new Color(200, 196, 185)),
-                BorderFactory.createEmptyBorder(10, 16, 10, 16)
-        ));
-        form.setBackground(new Color(252, 251, 248));
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
 
+        headerPanel = new javax.swing.JPanel();
+        lblRole = new javax.swing.JLabel();
+        lblUser = new javax.swing.JLabel();
+        mainSplit = new javax.swing.JSplitPane();
+        topSplit = new javax.swing.JSplitPane();
+        buyRequestPane = new javax.swing.JPanel();
+        lblBuyRequestTitle = new javax.swing.JLabel();
+        scrollBuyRequest = new javax.swing.JScrollPane();
+        buyRequestTable = new javax.swing.JTable();
+        suggestionPane = new javax.swing.JPanel();
+        lblSuggestionTitle = new javax.swing.JLabel();
+        scrollSuggestion = new javax.swing.JScrollPane();
+        suggestionTable = new javax.swing.JTable();
+        actionBar = new javax.swing.JPanel();
+        notePanel = new javax.swing.JPanel();
+        txtSupplierNote = new javax.swing.JTextField();
+        lblNoteToAnalyst = new javax.swing.JLabel();
+        btnPanel = new javax.swing.JPanel();
+        btnAccept = new javax.swing.JButton();
+        btnReject = new javax.swing.JButton();
+        southStack = new javax.swing.JPanel();
+        sellRequestForm = new javax.swing.JPanel();
+        sellHistoryPane = new javax.swing.JPanel();
+        lblSellHistoryTitle = new javax.swing.JLabel();
+        scrollSellHistory = new javax.swing.JScrollPane();
+        sellHistoryTable = new javax.swing.JTable();
+
+        setLayout(new java.awt.BorderLayout());
+
+        headerPanel.setBackground(new java.awt.Color(250, 238, 218));
+        headerPanel.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(133, 79, 11)));
+
+        lblRole.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        lblRole.setForeground(new java.awt.Color(99, 56, 6));
+        lblRole.setText("Oil Supplier Agent  |  Oil Commercial Dept  |  Enterprise");
+        headerPanel.add(lblRole);
+
+        lblUser.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblUser.setForeground(new java.awt.Color(133, 79, 11));
+        lblUser.setText("Logged in: username");
+        headerPanel.add(lblUser);
+
+        add(headerPanel, java.awt.BorderLayout.NORTH);
+
+        mainSplit.setDividerLocation(280);
+        mainSplit.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        mainSplit.setResizeWeight(0.4);
+
+        topSplit.setDividerLocation(620);
+        topSplit.setResizeWeight(0.55);
+
+        buyRequestPane.setLayout(new java.awt.BorderLayout());
+
+        lblBuyRequestTitle.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblBuyRequestTitle.setText("Incoming Buy Requests");
+        lblBuyRequestTitle.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 4, 4, 0));
+        buyRequestPane.add(lblBuyRequestTitle, java.awt.BorderLayout.PAGE_START);
+
+        buyRequestTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        buyRequestTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Request ID", "Factory", "Volume (bbl)", "Ceiling Price", "Date", "Status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        buyRequestTable.setRowHeight(24);
+        buyRequestTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        buyRequestTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buyRequestTableMouseClicked(evt);
+            }
+        });
+        scrollBuyRequest.setViewportView(buyRequestTable);
+
+        buyRequestPane.add(scrollBuyRequest, java.awt.BorderLayout.CENTER);
+
+        topSplit.setLeftComponent(buyRequestPane);
+
+        suggestionPane.setLayout(new java.awt.BorderLayout());
+
+        lblSuggestionTitle.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblSuggestionTitle.setText("Analyst Price Suggestions");
+        lblSuggestionTitle.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 4, 4, 0));
+        suggestionPane.add(lblSuggestionTitle, java.awt.BorderLayout.NORTH);
+
+        suggestionTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Suggestion ID", "Suggested Price", "Margin %", "Notes", "Status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        suggestionTable.setRowHeight(24);
+        suggestionTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        scrollSuggestion.setViewportView(suggestionTable);
+
+        suggestionPane.add(scrollSuggestion, java.awt.BorderLayout.CENTER);
+
+        actionBar.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 4, 6, 4));
+        actionBar.setLayout(new java.awt.BorderLayout());
+
+        notePanel.setLayout(new java.awt.BorderLayout());
+
+        txtSupplierNote.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtSupplierNote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSupplierNoteActionPerformed(evt);
+            }
+        });
+        notePanel.add(txtSupplierNote, java.awt.BorderLayout.CENTER);
+
+        lblNoteToAnalyst.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        lblNoteToAnalyst.setText("Note to Analyst:");
+        notePanel.add(lblNoteToAnalyst, java.awt.BorderLayout.WEST);
+
+        btnPanel.setLayout(new java.awt.GridLayout(1, 2, 6, 0));
+
+        btnAccept.setBackground(new java.awt.Color(220, 245, 220));
+        btnAccept.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnAccept.setText("Accept");
+        btnAccept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAcceptActionPerformed(evt);
+            }
+        });
+        btnPanel.add(btnAccept);
+
+        btnReject.setBackground(new java.awt.Color(250, 220, 220));
+        btnReject.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnReject.setText("Reject");
+        btnReject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRejectActionPerformed(evt);
+            }
+        });
+        btnPanel.add(btnReject);
+
+        notePanel.add(btnPanel, java.awt.BorderLayout.EAST);
+
+        actionBar.add(notePanel, java.awt.BorderLayout.CENTER);
+
+        suggestionPane.add(actionBar, java.awt.BorderLayout.PAGE_END);
+
+        topSplit.setRightComponent(suggestionPane);
+
+        mainSplit.setTopComponent(topSplit);
+
+        southStack.setLayout(new javax.swing.BoxLayout(southStack, javax.swing.BoxLayout.Y_AXIS));
+
+        sellRequestForm.setBackground(new java.awt.Color(252, 251, 248));
+        sellRequestForm.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 1, 0, new java.awt.Color(200, 196, 185)), javax.swing.BorderFactory.createEmptyBorder(10, 16, 10, 16)));
+        southStack.add(sellRequestForm);
+
+        sellHistoryPane.setLayout(new java.awt.BorderLayout());
+
+        lblSellHistoryTitle.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblSellHistoryTitle.setText("Sell Request History");
+        lblSellHistoryTitle.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 4, 4, 0));
+        sellHistoryPane.add(lblSellHistoryTitle, java.awt.BorderLayout.NORTH);
+
+        scrollSellHistory.setPreferredSize(new java.awt.Dimension(0, 160));
+
+        sellHistoryTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Sell Request ID", "Date", "Linked Buy Req", "Price ($/bbl)", "Volume (bbl)", "Total Revenue", "Status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        sellHistoryTable.setRowHeight(22);
+        scrollSellHistory.setViewportView(sellHistoryTable);
+
+        sellHistoryPane.add(scrollSellHistory, java.awt.BorderLayout.CENTER);
+
+        southStack.add(sellHistoryPane);
+
+        mainSplit.setBottomComponent(southStack);
+
+        add(mainSplit, java.awt.BorderLayout.CENTER);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void buyRequestTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buyRequestTableMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buyRequestTableMouseClicked
+
+    private void btnAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcceptActionPerformed
+        // TODO add your handling code here:
+        handleSuggestionDecision("ACCEPTED");
+    }//GEN-LAST:event_btnAcceptActionPerformed
+
+    private void btnRejectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRejectActionPerformed
+        // TODO add your handling code here:
+        handleSuggestionDecision("REJECTED");
+    }//GEN-LAST:event_btnRejectActionPerformed
+
+    private void txtSupplierNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSupplierNoteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSupplierNoteActionPerformed
+
+    private void buildSellRequestForm() {
+        sellRequestForm.setLayout(new GridBagLayout());
         GridBagConstraints gc = new GridBagConstraints();
         gc.insets = new Insets(4, 6, 4, 6);
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.gridy = 0;
 
-        // Row 0: section label spanning full width
+        // Row 0 — section title
         JLabel formTitle = new JLabel("Create Sell Request  →  Sends to Factory Manager");
-        formTitle.setFont(new Font("Tahoma", Font.BOLD, 12));
+        formTitle.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 12));
         formTitle.setForeground(new Color(99, 56, 6));
         gc.gridx = 0;
         gc.gridwidth = 6;
         gc.weightx = 1.0;
-        form.add(formTitle, gc);
+        sellRequestForm.add(formTitle, gc);
 
         gc.gridwidth = 1;
         gc.gridy = 1;
 
-        // Row 1: Linked Buy Request
+        // Linked buy request
         gc.gridx = 0;
         gc.weightx = 0;
-        form.add(makeFieldLabel("Linked buy request"), gc);
+        sellRequestForm.add(makeFormLabel("Linked buy request"), gc);
         gc.gridx = 1;
         gc.weightx = 0.3;
         cboBuyRequest = new JComboBox<>();
-        form.add(cboBuyRequest, gc);
+        sellRequestForm.add(cboBuyRequest, gc);
 
-        // Sell Price
+        // Sell price
         gc.gridx = 2;
         gc.weightx = 0;
-        form.add(makeFieldLabel("Sell price ($/bbl)"), gc);
+        sellRequestForm.add(makeFormLabel("Sell price ($/bbl)"), gc);
         gc.gridx = 3;
         gc.weightx = 0.2;
         txtSellPrice = new JTextField(8);
-        form.add(txtSellPrice, gc);
+        sellRequestForm.add(txtSellPrice, gc);
 
         // Volume
         gc.gridx = 4;
         gc.weightx = 0;
-        form.add(makeFieldLabel("Volume (bbl)"), gc);
+        sellRequestForm.add(makeFormLabel("Volume (bbl)"), gc);
         gc.gridx = 5;
         gc.weightx = 0.2;
         txtVolume = new JTextField(8);
-        form.add(txtVolume, gc);
+        sellRequestForm.add(txtVolume, gc);
 
-        // Row 2: Notes + submit
+        // Row 2 — notes + submit
         gc.gridy = 2;
         gc.gridx = 0;
         gc.weightx = 0;
-        form.add(makeFieldLabel("Notes to factory"), gc);
+        sellRequestForm.add(makeFormLabel("Notes to factory"), gc);
         gc.gridx = 1;
         gc.gridwidth = 4;
         gc.weightx = 0.7;
         txtNotes = new JTextArea(2, 30);
-        txtNotes.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        txtNotes.setFont(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 12));
         txtNotes.setLineWrap(true);
-        txtNotes.setBorder(BorderFactory.createLineBorder(new Color(200, 196, 185)));
-        form.add(new JScrollPane(txtNotes), gc);
+        txtNotes.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(200, 196, 185)));
+        sellRequestForm.add(new JScrollPane(txtNotes), gc);
 
         gc.gridx = 5;
         gc.gridwidth = 1;
         gc.weightx = 0.1;
-        JButton btnSubmit = new JButton("<html><center>Submit<br>Sell Request</center></html>");
-        btnSubmit.setFont(new Font("Tahoma", Font.BOLD, 12));
-        btnSubmit.setBackground(new Color(250, 238, 218));
-        btnSubmit.setForeground(new Color(99, 56, 6));
-        btnSubmit.setPreferredSize(new Dimension(140, 50));
-        btnSubmit.addActionListener(e -> handleSellRequestSubmit());
-        form.add(btnSubmit, gc);
-
-        return form;
+        btnSubmitSell = new JButton("<html><center>Submit<br>Sell Request</center></html>");
+        btnSubmitSell.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 12));
+        btnSubmitSell.setBackground(new Color(250, 238, 218));
+        btnSubmitSell.setForeground(new Color(99, 56, 6));
+        btnSubmitSell.setPreferredSize(new Dimension(140, 50));
+        btnSubmitSell.addActionListener(e -> handleSellRequestSubmit());
+        sellRequestForm.add(btnSubmitSell, gc);
     }
 
-    // ── Zone 4: Sell request history ──────────────────────────────────────────
-    private JPanel buildSellHistoryPane() {
-        String[] cols = {"Sell Request ID", "Date", "Linked Buy Req", "Price ($/bbl)",
-            "Volume (bbl)", "Total Revenue", "Status"};
-        sellHistoryModel = new DefaultTableModel(cols, 0) {
-            @Override
-            public boolean isCellEditable(int r, int c) {
-                return false;
-            }
-        };
-        sellHistoryTable = new JTable(sellHistoryModel);
-        sellHistoryTable.setRowHeight(22);
-        sellHistoryTable.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 12));
-
-        JScrollPane scroll = new JScrollPane(sellHistoryTable);
-        scroll.setPreferredSize(new Dimension(0, 160));
-
-        JPanel pane = new JPanel(new BorderLayout());
-        pane.add(makeSectionLabel("Sell Request History"), BorderLayout.NORTH);
-        pane.add(scroll, BorderLayout.CENTER);
-        return pane;
+    private JLabel makeFormLabel(String text) {
+        JLabel lbl = new JLabel(text);
+        lbl.setFont(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11));
+        lbl.setForeground(new Color(95, 94, 90));
+        return lbl;
     }
 
-    // ── Action handlers ───────────────────────────────────────────────────────
-    private void handleSuggestionDecision(String decision) {
-        int row = suggestionTable.getSelectedRow();
-        if (row < 0) {
-            JOptionPane.showMessageDialog(this,
-                    "Please select a suggestion to " + decision.toLowerCase() + ".",
-                    "No Selection", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        String sugId = (String) suggestionModel.getValueAt(row, 0);
-        String currentStatus = (String) suggestionModel.getValueAt(row, 4);
-
-        if (!"PENDING".equals(currentStatus)) {
-            JOptionPane.showMessageDialog(this,
-                    "This suggestion has already been " + currentStatus + ".",
-                    "Already Decided", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-
-        String note = txtSupplierNote.getText().trim();
-
-        // Find and update the PriceSuggestion object
-        for (PriceSuggestion ps : rb.getPriceSuggestions()) {
-            if (ps.getId().equals(sugId)) {
-                ps.setStatus(decision);
-                ps.setSupplierNote(note.isEmpty() ? "—" : note);
-                break;
-            }
-        }
-
-        // Refresh the suggestion table for current buy request
-        int buyRow = buyRequestTable.getSelectedRow();
-        if (buyRow >= 0) {
-            refreshSuggestionTable((String) buyRequestModel.getValueAt(buyRow, 0));
-        }
-
-        txtSupplierNote.setText("");
-
-        // Auto-fill sell price from accepted suggestion
-        if ("ACCEPTED".equals(decision)) {
-            for (PriceSuggestion ps : rb.getPriceSuggestions()) {
-                if (ps.getId().equals(sugId)) {
-                    txtSellPrice.setText(String.format("%.2f", ps.getSuggestedPrice()));
-                    // Auto-fill volume from linked buy request
-                    BuyRequest br = rb.findBuyRequest(ps.getLinkedBuyRequestId());
-                    if (br != null) {
-                        txtVolume.setText(String.format("%.0f", br.getVolume()));
-                    }
-                    break;
-                }
-            }
-            JOptionPane.showMessageDialog(this,
-                    "Suggestion accepted. Sell price and volume pre-filled from analyst recommendation.",
-                    "Accepted", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Suggestion rejected. Note sent back to analyst.",
-                    "Rejected", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
-
-    private void handleSellRequestSubmit() {
-        // ── Validation ────────────────────────────────────────────────────────
-        String linkedBuyId = (String) cboBuyRequest.getSelectedItem();
-        if (linkedBuyId == null || linkedBuyId.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please select a linked buy request.",
-                    "Validation Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        String priceText = txtSellPrice.getText().trim();
-        if (priceText.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a sell price.",
-                    "Validation Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        double sellPrice;
-        try {
-            sellPrice = Double.parseDouble(priceText);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Sell price must be a valid number.",
-                    "Validation Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        if (sellPrice <= 0) {
-            JOptionPane.showMessageDialog(this, "Sell price must be greater than zero.",
-                    "Validation Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        String volumeText = txtVolume.getText().trim();
-        if (volumeText.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a volume.",
-                    "Validation Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        double volume;
-        try {
-            volume = Double.parseDouble(volumeText);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Volume must be a valid number.",
-                    "Validation Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        if (volume <= 0) {
-            JOptionPane.showMessageDialog(this, "Volume must be greater than zero.",
-                    "Validation Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        // Check the factory's price ceiling
-        BuyRequest br = rb.findBuyRequest(linkedBuyId);
-        if (br != null && sellPrice > br.getPriceCeiling()) {
-            int confirm = JOptionPane.showConfirmDialog(this,
-                    String.format("Sell price $%.2f exceeds factory ceiling $%.2f. Submit anyway?",
-                            sellPrice, br.getPriceCeiling()),
-                    "Above Ceiling", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if (confirm != JOptionPane.YES_OPTION) {
-                return;
-            }
-        }
-
-        // ── Submit ────────────────────────────────────────────────────────────
-        String today = LocalDate.now().toString();
-        String agentName = enterprise.getName();
-        String factoryName = (br != null) ? br.getFactoryName() : "Factory";
-
-        // 1. Create sell request (cross-enterprise work request)
-        SellRequest sr = rb.newSellRequest(
-                userAccount.getId(), linkedBuyId, sellPrice, volume, today);
-
-        // 2. Auto-create OilTransaction
-        rb.newTransaction(sr.getId(), volume, sellPrice, today);
-
-        // 3. Auto-create ShipmentRequest → notifies Transport Coordinator
-        rb.newShipmentRequest(sr.getId(), volume, agentName, factoryName, today);
-
-        // 4. Update the buy request status to APPROVED
-        if (br != null) {
-            br.setStatus("APPROVED");
-        }
-
-        JOptionPane.showMessageDialog(this,
-                String.format("Sell request %s submitted.\nTransaction and shipment request created automatically.",
-                        sr.getId()),
-                "Submitted", JOptionPane.INFORMATION_MESSAGE);
-
-        // Clear form
-        txtSellPrice.setText("");
-        txtVolume.setText("");
-        txtNotes.setText("");
-        cboBuyRequest.setSelectedIndex(0);
-
-        refreshAll();
-    }
-
-    // ── Refresh methods ───────────────────────────────────────────────────────
     private void refreshAll() {
         refreshBuyRequestTable();
         refreshComboBox();
         refreshSellHistoryTable();
-        // Clear suggestion table until a buy request is selected
         suggestionModel.setRowCount(0);
     }
 
@@ -501,6 +443,16 @@ public class OilSupplierAgentWorkAreaJPanel extends JPanel {
         }
     }
 
+    private void refreshComboBox() {
+        cboBuyRequest.removeAllItems();
+        cboBuyRequest.addItem("");
+        for (BuyRequest br : rb.getBuyRequests()) {
+            if ("OPEN".equals(br.getStatus())) {
+                cboBuyRequest.addItem(br.getId());
+            }
+        }
+    }
+
     private void refreshSuggestionTable(String linkedBuyReqId) {
         suggestionModel.setRowCount(0);
         for (PriceSuggestion ps : rb.getPriceSuggestions()) {
@@ -514,16 +466,6 @@ public class OilSupplierAgentWorkAreaJPanel extends JPanel {
                     : ps.getNotes(),
                     ps.getStatus()
                 });
-            }
-        }
-    }
-
-    private void refreshComboBox() {
-        cboBuyRequest.removeAllItems();
-        cboBuyRequest.addItem("");
-        for (BuyRequest br : rb.getBuyRequests()) {
-            if ("OPEN".equals(br.getStatus())) {
-                cboBuyRequest.addItem(br.getId());
             }
         }
     }
@@ -548,18 +490,197 @@ public class OilSupplierAgentWorkAreaJPanel extends JPanel {
         }
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
-    private JLabel makeSectionLabel(String text) {
-        JLabel lbl = new JLabel("  " + text);
-        lbl.setFont(new Font("Tahoma", Font.BOLD, 12));
-        lbl.setBorder(BorderFactory.createEmptyBorder(6, 4, 4, 0));
-        return lbl;
+    private void handleSuggestionDecision(String decision) {
+        int row = suggestionTable.getSelectedRow();
+        if (row < 0) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Please select a suggestion to " + decision.toLowerCase() + ".",
+                    "No Selection", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String sugId = (String) suggestionModel.getValueAt(row, 0);
+        String currentStatus = (String) suggestionModel.getValueAt(row, 4);
+
+        if (!"PENDING".equals(currentStatus)) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "This suggestion has already been " + currentStatus + ".",
+                    "Already Decided", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        String note = txtSupplierNote.getText().trim();
+
+        for (PriceSuggestion ps : rb.getPriceSuggestions()) {
+            if (ps.getId().equals(sugId)) {
+                ps.setStatus(decision);
+                ps.setSupplierNote(note.isEmpty() ? "—" : note);
+                break;
+            }
+        }
+
+        // Refresh suggestion table for current buy request
+        int buyRow = buyRequestTable.getSelectedRow();
+        if (buyRow >= 0) {
+            refreshSuggestionTable((String) buyRequestModel.getValueAt(buyRow, 0));
+        }
+
+        txtSupplierNote.setText("");
+
+        // Auto-fill sell price and volume if accepted
+        if ("ACCEPTED".equals(decision)) {
+            for (PriceSuggestion ps : rb.getPriceSuggestions()) {
+                if (ps.getId().equals(sugId)) {
+                    txtSellPrice.setText(String.format("%.2f", ps.getSuggestedPrice()));
+                    BuyRequest br = rb.findBuyRequest(ps.getLinkedBuyRequestId());
+                    if (br != null) {
+                        txtVolume.setText(String.format("%.0f", br.getVolume()));
+                    }
+                    break;
+                }
+            }
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Suggestion accepted. Sell price and volume pre-filled.",
+                    "Accepted", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Suggestion rejected. Note sent back to analyst.",
+                    "Rejected", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
-    private JLabel makeFieldLabel(String text) {
-        JLabel lbl = new JLabel(text);
-        lbl.setFont(new Font("Tahoma", Font.PLAIN, 11));
-        lbl.setForeground(new Color(95, 94, 90));
-        return lbl;
+    private void handleSellRequestSubmit() {
+        String linkedBuyId = (String) cboBuyRequest.getSelectedItem();
+        if (linkedBuyId == null || linkedBuyId.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Please select a linked buy request.",
+                    "Validation Error", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String priceText = txtSellPrice.getText().trim();
+        if (priceText.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Please enter a sell price.",
+                    "Validation Error", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        double sellPrice;
+        try {
+            sellPrice = Double.parseDouble(priceText);
+        } catch (NumberFormatException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Sell price must be a valid number.",
+                    "Validation Error", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (sellPrice <= 0) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Sell price must be greater than zero.",
+                    "Validation Error", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String volumeText = txtVolume.getText().trim();
+        if (volumeText.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Please enter a volume.",
+                    "Validation Error", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        double volume;
+        try {
+            volume = Double.parseDouble(volumeText);
+        } catch (NumberFormatException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Volume must be a valid number.",
+                    "Validation Error", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (volume <= 0) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Volume must be greater than zero.",
+                    "Validation Error", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Check ceiling price
+        BuyRequest br = rb.findBuyRequest(linkedBuyId);
+        if (br != null && sellPrice > br.getPriceCeiling()) {
+            int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
+                    String.format("Sell price $%.2f exceeds factory ceiling $%.2f. Submit anyway?",
+                            sellPrice, br.getPriceCeiling()),
+                    "Above Ceiling", javax.swing.JOptionPane.YES_NO_OPTION,
+                    javax.swing.JOptionPane.WARNING_MESSAGE);
+            if (confirm != javax.swing.JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
+
+        String today = LocalDate.now().toString();
+        String agentName = enterprise.getName();
+        String factoryName = (br != null) ? br.getFactoryName() : "Factory";
+
+        // Create sell request
+        SellRequest sr = rb.newSellRequest(
+                userAccount.getId(), linkedBuyId, sellPrice, volume, today);
+
+        // Auto-create transaction
+        rb.newTransaction(sr.getId(), volume, sellPrice, today);
+
+        // Auto-create shipment request
+        rb.newShipmentRequest(sr.getId(), volume, agentName, factoryName, today);
+
+        // Update buy request status
+        if (br != null) {
+            br.setStatus("APPROVED");
+        }
+
+        javax.swing.JOptionPane.showMessageDialog(this,
+                String.format("Sell request %s submitted.\nTransaction and shipment created automatically.",
+                        sr.getId()),
+                "Submitted", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+        // Clear form
+        txtSellPrice.setText("");
+        txtVolume.setText("");
+        txtNotes.setText("");
+        cboBuyRequest.setSelectedIndex(0);
+
+        refreshAll();
     }
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel actionBar;
+    private javax.swing.JButton btnAccept;
+    private javax.swing.JPanel btnPanel;
+    private javax.swing.JButton btnReject;
+    private javax.swing.JPanel buyRequestPane;
+    private javax.swing.JTable buyRequestTable;
+    private javax.swing.JPanel headerPanel;
+    private javax.swing.JLabel lblBuyRequestTitle;
+    private javax.swing.JLabel lblNoteToAnalyst;
+    private javax.swing.JLabel lblRole;
+    private javax.swing.JLabel lblSellHistoryTitle;
+    private javax.swing.JLabel lblSuggestionTitle;
+    private javax.swing.JLabel lblUser;
+    private javax.swing.JSplitPane mainSplit;
+    private javax.swing.JPanel notePanel;
+    private javax.swing.JScrollPane scrollBuyRequest;
+    private javax.swing.JScrollPane scrollSellHistory;
+    private javax.swing.JScrollPane scrollSuggestion;
+    private javax.swing.JPanel sellHistoryPane;
+    private javax.swing.JTable sellHistoryTable;
+    private javax.swing.JPanel sellRequestForm;
+    private javax.swing.JPanel southStack;
+    private javax.swing.JPanel suggestionPane;
+    private javax.swing.JTable suggestionTable;
+    private javax.swing.JSplitPane topSplit;
+    private javax.swing.JTextField txtSupplierNote;
+    // End of variables declaration//GEN-END:variables
 }

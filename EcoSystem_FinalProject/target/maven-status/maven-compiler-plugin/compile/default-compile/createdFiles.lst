@@ -1,6 +1,8 @@
 ui\SystemAdminWorkArea\ManageSystem\CreateNetworkWorkAreaJPanel$2.class
+ui\UAEOilSupplier\OilSupplierAgentWorkAreaJPanel$5.class
 ui\LogisticsCorp\TransportCoordinatorWorkAreaJPanel$6.class
 ui\LogisticsCorp\LogisticsAnalystWorkAreaJPanel.class
+ui\UAEOilSupplier\OilSupplierAgentWorkAreaJPanel$8.class
 ui\SystemAdminWorkArea\ManageSystem\CreateEnterpriseWorkAreaJPanel.class
 Business\Role\SupplierInventoryContorlRole.class
 Business\utils\RealTimeOilAPI.class
@@ -29,6 +31,7 @@ ui\UAEOilSupplier\OilAnalystWorkAreaJPanel$5.class
 Business\Role\FactoryInventoryControlRole.class
 ui\LogisticsCorp\LogisticsAnalystWorkAreaJPanel$3.class
 ui\SystemAdminWorkArea\ManageSystem\ManageSystemWorkAreaJPanel$3.class
+ui\UAEOilSupplier\OilSupplierAgentWorkAreaJPanel$7.class
 Business\Role\AdminDirectory.class
 ui\LogisticsCorp\TransportCoordinatorWorkAreaJPanel$5.class
 Business\Role\SupplierAnalystDirectory.class
@@ -68,6 +71,7 @@ Business\Role\FactoryManagerDirectory.class
 ui\SystemAdminWorkArea\ManageSystem\CreateUserWorkAreaJPanel$2.class
 Business\Operations\ShipmentRequest.class
 ui\LogisticsCorp\TransportCoordinatorWorkAreaJPanel$4.class
+ui\UAEOilSupplier\OilSupplierAgentWorkAreaJPanel$6.class
 Business\Operations\SellRequest.class
 ui\UAEOilSupplier\OilSupplierAgentWorkAreaJPanel$3.class
 Business\Role\FactoryInventoryControlDirectory.class
