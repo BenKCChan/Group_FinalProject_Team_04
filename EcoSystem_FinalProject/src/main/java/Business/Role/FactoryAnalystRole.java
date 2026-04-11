@@ -24,9 +24,6 @@ public class FactoryAnalystRole extends Role {
         super(p, RoleType.FactoryAnalyst);
     }
 
-    public boolean isMatch(String id) {
-        return person.getId().equals(id);
-    }
 
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {

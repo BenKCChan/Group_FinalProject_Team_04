@@ -15,12 +15,11 @@ import java.util.ArrayList;
  */
 public class SupplierDirectory {
 
-
     ArrayList<SupplierRole> supplierList;
 
     public SupplierDirectory() {
 
-     supplierList = new ArrayList();
+        supplierList = new ArrayList();
 
     }
 
@@ -39,7 +38,14 @@ public class SupplierDirectory {
                 return sp;
             }
         }
-            return null; //not found after going through the whole list
-         }
-    
+        return null; //not found after going through the whole list
+    }
+
+    public ArrayList<SupplierRole> removeRole(UserAccount u) {
+        SupplierRole searchRole = findSupplier(String.valueOf(u.getId()));
+        if (searchRole != null) {
+            supplierList.remove(searchRole);
+        }
+        return supplierList;
+    }
 }

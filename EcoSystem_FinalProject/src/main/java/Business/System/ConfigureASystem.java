@@ -1,15 +1,24 @@
 package Business.System;
 
-//import Business.Employee.Employee;
 import Business.Enterprise.Enterprise;
 import Business.UserAccount.UserAccount;
-//import Business.System.System;
+
 import Business.Network.Network;
 import Business.Organization;
 import Business.Role.AdminDirectory;
 import Business.Role.AdminRole;
+import Business.Role.AuditorDirectory;
+import Business.Role.FactoryAnalystDirectory;
+import Business.Role.FactoryInventoryControlDirectory;
+import Business.Role.FactoryManagerDirectory;
+import Business.Role.FleetMonitorDirectory;
+import Business.Role.SupplierAnalystDirectory;
+import Business.Role.SupplierDirectory;
+import Business.Role.SupplierInventoryControlDirectory;
 import Business.utils.RealTimeOilAPI;
+import com.github.javafaker.Faker;
 import java.io.IOException;
+import java.util.ArrayList;
 /**
  *
  * @author rrheg
@@ -53,6 +62,52 @@ public class ConfigureASystem {
         UserAccount admin = orgAdmin.getUserAccountDirectory().newUserAccount("admin", "****");
         AdminDirectory adminDirectory = system.getAdminDirectory();
         AdminRole adminRole0 = adminDirectory.newAdminRole(admin);
+        
+        // Define all role directory
+        AuditorDirectory auditorDirectory = system.getAuditorDirectory();
+        FactoryAnalystDirectory factoryAnalystDirectory = system.getFactoryAnalystDirectory();
+        FactoryInventoryControlDirectory factoryInventoryControlDirectory = system.getFactoryInventoryControlDirectory();
+        FactoryManagerDirectory factoryManagerDirectory = system.getFactoryManagerDirectory();
+        FleetMonitorDirectory fleetMonitorDirectory = system.getFleetMonitorDirectory();
+        SupplierAnalystDirectory supplierAnalystDirectory = system.getSupplierAnalystDirectory();
+        SupplierDirectory supplierDirectory = system.getSupplierDirectory();
+        SupplierInventoryControlDirectory supplierInventoryControlDirectory = system.getSupplierInventoryControlDirectory();
+       
+        // Create dummy account
+        ArrayList<Enterprise> generatedEnterpriseList = new ArrayList<Enterprise>();
+        for (int i = 0; i<10; i++){
+            Faker faker = new Faker();
+            Enterprise generatedEnterprise = network.newEnterprise(faker.address().country());
+            generatedEnterprise.newOrganization("Financial Analyst Team");
+            generatedEnterprise.newOrganization("Purchasing Dept");
+            for (Organization org: generatedEnterprise.getParticipatingunits()){
+                for (int createUserCount = 0; createUserCount < 10; createUserCount++){
+                    UserAccount generatedUser = org.getUserAccountDirectory().newUserAccount(faker.name().username(), faker.internet().password());
+                    int random = faker.number().numberBetween(0, 8);
+                    switch (random){
+                        case 0:
+                            adminDirectory.newAdminRole(generatedUser);
+                        case 1:
+                            auditorDirectory.newAuditorRole(generatedUser);
+                        case 2:
+                            factoryAnalystDirectory.newFactoryAnalystRole(generatedUser);
+                        case 3:
+                            factoryInventoryControlDirectory.newFactoryInventoryControlRole(generatedUser);
+                        case 4:
+                            factoryManagerDirectory.newFactoryManagerRole(generatedUser);
+                        case 5:
+                            supplierAnalystDirectory.newSupplierAnalystRole(generatedUser);
+                        case 6:
+                            supplierDirectory.newSupplierRole(generatedUser);
+                        case 7:
+                            supplierInventoryControlDirectory.newSupplierInventoryContorlRole(generatedUser);
+                        default:
+                            fleetMonitorDirectory.newFleetMonitorRole(generatedUser);
+                    }
+                }
+            }
+            generatedEnterpriseList.add(generatedEnterprise);
+        }
 
         return system;
     };

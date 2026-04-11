@@ -40,8 +40,15 @@ public class IranHormuzMapJPanel extends javax.swing.JPanel {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 closeWebView();
+
+                // IMPORTANT: remove this panel from the CardLayout container
+                userProcessContainer.remove(IranHormuzMapJPanel.this);
+
                 CardLayout layout = (CardLayout) userProcessContainer.getLayout();
                 layout.previous(userProcessContainer);
+
+                userProcessContainer.revalidate();
+                userProcessContainer.repaint();
             }
         });
         // Make sure THIS panel is a BorderLayout container
@@ -94,7 +101,6 @@ public class IranHormuzMapJPanel extends javax.swing.JPanel {
     }
 
     private void closeWebView() {
-        // 1) Stop/clear content on the JavaFX thread
         Platform.runLater(() -> {
             try {
                 if (engine != null) {
@@ -111,13 +117,11 @@ public class IranHormuzMapJPanel extends javax.swing.JPanel {
             }
         });
 
-        // 2) Remove the panel from Swing UI on the Swing EDT
         SwingUtilities.invokeLater(() -> {
             remove(jfxPanel);
             revalidate();
             repaint();
 
-            // optionally disable the close button after closing
             closeBtn.setEnabled(false);
         });
     }

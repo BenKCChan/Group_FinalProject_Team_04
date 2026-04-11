@@ -24,10 +24,6 @@ public class AuditorRole extends Role {
         super(p, RoleType.Auditor);
     }
 
-    public boolean isMatch(String id) {
-        return person.getId().equals(id);
-    }
-
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
         

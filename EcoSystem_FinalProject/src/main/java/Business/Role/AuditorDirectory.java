@@ -15,12 +15,11 @@ import java.util.ArrayList;
  */
 public class AuditorDirectory {
 
-
     ArrayList<AuditorRole> auditorList;
 
     public AuditorDirectory() {
 
-     auditorList = new ArrayList();
+        auditorList = new ArrayList();
 
     }
 
@@ -39,7 +38,14 @@ public class AuditorDirectory {
                 return sp;
             }
         }
-            return null; //not found after going through the whole list
-         }
-    
+        return null; //not found after going through the whole list
+    }
+
+    public ArrayList<AuditorRole> removeRole(UserAccount u) {
+        AuditorRole searchRole = findAuditor(String.valueOf(u.getId()));
+        if (searchRole != null) {
+            auditorList.remove(searchRole);
+        }
+        return auditorList;
+    }
 }

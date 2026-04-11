@@ -15,12 +15,11 @@ import java.util.ArrayList;
  */
 public class SupplierInventoryControlDirectory {
 
-
     ArrayList<SupplierInventoryControlRole> supplierInventoryContorlRoleList;
 
     public SupplierInventoryControlDirectory() {
 
-     supplierInventoryContorlRoleList = new ArrayList();
+        supplierInventoryContorlRoleList = new ArrayList();
 
     }
 
@@ -39,7 +38,14 @@ public class SupplierInventoryControlDirectory {
                 return sp;
             }
         }
-            return null; //not found after going through the whole list
-         }
-    
+        return null; //not found after going through the whole list
+    }
+
+    public ArrayList<SupplierInventoryControlRole> removeRole(UserAccount u) {
+        SupplierInventoryControlRole searchRole = findSupplierInventoryControlRole(String.valueOf(u.getId()));
+        if (searchRole != null) {
+            supplierInventoryContorlRoleList.remove(searchRole);
+        }
+        return supplierInventoryContorlRoleList;
+    }
 }

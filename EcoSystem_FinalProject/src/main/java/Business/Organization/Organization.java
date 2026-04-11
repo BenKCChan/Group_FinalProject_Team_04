@@ -60,6 +60,13 @@ public class Organization {
         adminDirectory = new AdminDirectory();
         userAccountDirectory = new UserAccountDirectory();
         supplierDirectory = new SupplierDirectory();
+        auditorDirectory = new AuditorDirectory();
+        factoryAnalystDirectory = new FactoryAnalystDirectory();
+        factoryInventoryControlDirectory = new FactoryInventoryControlDirectory();
+        factoryManagerDirectory = new FactoryManagerDirectory();
+        supplierAnalystDirectory = new SupplierAnalystDirectory();
+        supplierInventoryControlDirectory = new SupplierInventoryControlDirectory();
+        fleetMonitorDirectory = new FleetMonitorDirectory();
         ArrayList<Organization> subordinateorgs;
         
     }
