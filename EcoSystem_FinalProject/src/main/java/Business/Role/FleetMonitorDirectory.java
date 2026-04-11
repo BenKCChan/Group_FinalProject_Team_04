@@ -15,12 +15,11 @@ import java.util.ArrayList;
  */
 public class FleetMonitorDirectory {
 
-
     ArrayList<FleetMonitorRole> fleetMonitorList;
 
     public FleetMonitorDirectory() {
 
-     fleetMonitorList = new ArrayList();
+        fleetMonitorList = new ArrayList();
 
     }
 
@@ -39,7 +38,14 @@ public class FleetMonitorDirectory {
                 return sp;
             }
         }
-            return null; //not found after going through the whole list
-         }
-    
+        return null; //not found after going through the whole list
+    }
+
+    public ArrayList<FleetMonitorRole> removeRole(UserAccount u) {
+        FleetMonitorRole searchRole = findFeetMonitor(String.valueOf(u.getId()));
+        if (searchRole != null) {
+            fleetMonitorList.remove(searchRole);
+        }
+        return fleetMonitorList;
+    }
 }

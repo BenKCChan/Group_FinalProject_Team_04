@@ -40,6 +40,7 @@ public class ManageUserWorkAreaJPanel extends javax.swing.JPanel {
     Enterprise enterprise;
     Organization org;
     UserAccount selectedUser;
+
     public ManageUserWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Business.System.System system, Network network, Enterprise enterprise, Organization org) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
@@ -53,13 +54,13 @@ public class ManageUserWorkAreaJPanel extends javax.swing.JPanel {
         comboRole.addItem(Role.RoleType.FactoryInventoryControl.getValue());
         comboRole.addItem(Role.RoleType.FactoryManager.getValue());
         comboRole.addItem(Role.RoleType.OilSupplierAnalyst.getValue());
-        comboRole.addItem(Role.RoleType.OilSupplierInventoryControl.getValue());       
+        comboRole.addItem(Role.RoleType.OilSupplierInventoryControl.getValue());
         comboRole.addItem(Role.RoleType.OilSupplier.getValue());
         comboRole.addItem(Role.RoleType.Auditor.getValue());
         comboRole.addItem(Role.RoleType.FleetMonitor.getValue());
         reloadTable();
     }
-    
+
     public void reloadTable() {
         int rowCount = tblUser.getRowCount();
         DefaultTableModel model = (DefaultTableModel) tblUser.getModel();
@@ -75,37 +76,30 @@ public class ManageUserWorkAreaJPanel extends javax.swing.JPanel {
         SupplierDirectory supplierDirectory = system.getSupplierDirectory();
         SupplierInventoryControlDirectory supplierInventoryControlDirectory = system.getSupplierInventoryControlDirectory();
         SupplierAnalystDirectory supplierAnalystDirectory = system.getSupplierAnalystDirectory();
-        
-        for (UserAccount user : org.getUserAccountDirectory().getUserAccountList()) {
+
+        for (UserAccount user : system.getUserAccountDirectory().getUserAccountList()) {
             Object row[] = new Object[2];
-            row[0] = org;
+            row[0] = user;
             String roleName = "";
-            if(adminUserList.findAdmin(user.getId())!=null){
+
+            if (adminUserList.findAdmin(user.getId()) != null) {
                 roleName += adminUserList.findAdmin(user.getId()).getRole();
-            }
-            else if(auditorDirectory.findAuditor(user.getId())!=null){
-                auditorDirectory.findAuditor(user.getId()).getRole();
-            }
-            else if(fleetMonitorDirectory.findFeetMonitor(user.getId())!=null){
-                fleetMonitorDirectory.findFeetMonitor(user.getId()).getRole();
-            }
-            else if(factoryManagerDirectory.findFactoryManager(user.getId())!=null){
-                factoryManagerDirectory.findFactoryManager(user.getId()).getRole();
-            }
-            else if(factoryAnalystDirectory.findFactoryAnalyst(user.getId())!=null){
-                factoryAnalystDirectory.findFactoryAnalyst(user.getId()).getRole();
-            }
-            else if(factoryInventoryControlDirectory.findFactoryInventoryControlRole(user.getId())!=null){
-                factoryInventoryControlDirectory.findFactoryInventoryControlRole(user.getId()).getRole();
-            }
-            else if(supplierDirectory.findSupplier(user.getId())!=null){
-                supplierDirectory.findSupplier(user.getId()).getRole();
-            }
-            else if(supplierInventoryControlDirectory.findSupplierInventoryControlRole(user.getId())!=null){
-                supplierInventoryControlDirectory.findSupplierInventoryControlRole(user.getId()).getRole();
-            }
-            else if(supplierAnalystDirectory.findSupplierAnalyst(user.getId())!=null){
-                supplierAnalystDirectory.findSupplierAnalyst(user.getId()).getRole();
+            } else if (auditorDirectory.findAuditor(user.getId()) != null) {
+                roleName += auditorDirectory.findAuditor(user.getId()).getRole();
+            } else if (fleetMonitorDirectory.findFeetMonitor(user.getId()) != null) {
+                roleName += fleetMonitorDirectory.findFeetMonitor(user.getId()).getRole();
+            } else if (factoryManagerDirectory.findFactoryManager(user.getId()) != null) {
+                roleName += factoryManagerDirectory.findFactoryManager(user.getId()).getRole();
+            } else if (factoryAnalystDirectory.findFactoryAnalyst(user.getId()) != null) {
+                roleName += factoryAnalystDirectory.findFactoryAnalyst(user.getId()).getRole();
+            } else if (factoryInventoryControlDirectory.findFactoryInventoryControlRole(user.getId()) != null) {
+                roleName += factoryInventoryControlDirectory.findFactoryInventoryControlRole(user.getId()).getRole();
+            } else if (supplierDirectory.findSupplier(user.getId()) != null) {
+                roleName += supplierDirectory.findSupplier(user.getId()).getRole();
+            } else if (supplierInventoryControlDirectory.findSupplierInventoryControlRole(user.getId()) != null) {
+                roleName += supplierInventoryControlDirectory.findSupplierInventoryControlRole(user.getId()).getRole();
+            } else if (supplierAnalystDirectory.findSupplierAnalyst(user.getId()) != null) {
+                roleName += supplierAnalystDirectory.findSupplierAnalyst(user.getId()).getRole();
             }
             row[1] = roleName;
             model.addRow(row);
@@ -308,7 +302,7 @@ public class ManageUserWorkAreaJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "User Name cannot be empty", "ERROR", ERROR_MESSAGE);
             return;
         }
-        if(!txtUserName.getText().matches("[A-Za-z0-9]+")){
+        if (!txtUserName.getText().matches("[A-Za-z0-9]+")) {
             JOptionPane.showMessageDialog(this, "User Name is not accept special characters", "ERROR", ERROR_MESSAGE);
             return;
         }
@@ -316,70 +310,176 @@ public class ManageUserWorkAreaJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Password cannot be empty", "ERROR", ERROR_MESSAGE);
             return;
         }
-        UserAccount newUserAccount = org.getUserAccountDirectory().newUserAccount(txtUserName.getText(),new String(txtPwd.getPassword()));
-        
+
+        UserAccount newUserAccount = system.getUserAccountDirectory().newUserAccount(txtUserName.getText(), new String(txtPwd.getPassword()));
+
         String selectedRole = comboRole.getSelectedItem().toString();
-        if (Role.RoleType.Admin.getValue().equals(selectedRole)){
-            AdminDirectory dir = org.getAdminDirectory();
+        if (Role.RoleType.Admin.getValue().equals(selectedRole)) {
+            AdminDirectory dir = system.getAdminDirectory();
             dir.newAdminRole(newUserAccount);
             reloadTable();
-        }else if(Role.RoleType.FactoryManager.getValue().equals(selectedRole)){
-            FactoryManagerDirectory dir = org.getFactoryManagerDirectory();
+        } else if (Role.RoleType.FactoryManager.getValue().equals(selectedRole)) {
+            FactoryManagerDirectory dir = system.getFactoryManagerDirectory();
             dir.newFactoryManagerRole(newUserAccount);
             reloadTable();
-        }else if(Role.RoleType.FactoryAnalyst.getValue().equals(selectedRole)){
-            FactoryAnalystDirectory dir = org.getFactoryAnalystDirectory();
+        } else if (Role.RoleType.FactoryAnalyst.getValue().equals(selectedRole)) {
+            FactoryAnalystDirectory dir = system.getFactoryAnalystDirectory();
             dir.newFactoryAnalystRole(newUserAccount);
             reloadTable();
-        }else if(Role.RoleType.FactoryInventoryControl.getValue().equals(selectedRole)){
-            FactoryInventoryControlDirectory dir = org.getFactoryInventoryControlDirectory();
+        } else if (Role.RoleType.FactoryInventoryControl.getValue().equals(selectedRole)) {
+            FactoryInventoryControlDirectory dir = system.getFactoryInventoryControlDirectory();
             dir.newFactoryInventoryControlRole(newUserAccount);
             reloadTable();
-        }else if(Role.RoleType.OilSupplier.getValue().equals(selectedRole)){
-            SupplierDirectory dir = org.getSupplierDirectory();
+        } else if (Role.RoleType.OilSupplier.getValue().equals(selectedRole)) {
+            SupplierDirectory dir = system.getSupplierDirectory();
             dir.newSupplierRole(newUserAccount);
             reloadTable();
-        }else if(Role.RoleType.OilSupplierAnalyst.getValue().equals(selectedRole)){
-            SupplierAnalystDirectory dir = org.getSupplierAnalystDirectory();
+        } else if (Role.RoleType.OilSupplierAnalyst.getValue().equals(selectedRole)) {
+            SupplierAnalystDirectory dir = system.getSupplierAnalystDirectory();
             dir.newSupplierAnalystRole(newUserAccount);
             reloadTable();
-        }else if(Role.RoleType.OilSupplierInventoryControl.getValue().equals(selectedRole)){
-            SupplierInventoryControlDirectory dir = org.getSupplierInventoryControlDirectory();
+        } else if (Role.RoleType.OilSupplierInventoryControl.getValue().equals(selectedRole)) {
+            SupplierInventoryControlDirectory dir = system.getSupplierInventoryControlDirectory();
             dir.newSupplierInventoryContorlRole(newUserAccount);
             reloadTable();
-        }else if(Role.RoleType.Auditor.getValue().equals(selectedRole)){
-            AuditorDirectory dir = org.getAuditorDirectory();
+        } else if (Role.RoleType.Auditor.getValue().equals(selectedRole)) {
+            AuditorDirectory dir = system.getAuditorDirectory();
             dir.newAuditorRole(newUserAccount);
             reloadTable();
-        }else if(Role.RoleType.FleetMonitor.getValue().equals(selectedRole)){
-            FleetMonitorDirectory dir = org.getFleetMonitorDirectory();
+        } else if (Role.RoleType.FleetMonitor.getValue().equals(selectedRole)) {
+            FleetMonitorDirectory dir = system.getFleetMonitorDirectory();
             dir.newFleetMonitorRole(newUserAccount);
             reloadTable();
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "System ERROR, Selected Role Not Found", "ERROR", ERROR_MESSAGE);
             return;
         }
-    
-        
+
 //        network.newEnterprise(txtUserName.getText());
-        
+
     }//GEN-LAST:event_btnCreateUserActionPerformed
 
     private void comboRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboRoleActionPerformed
         // TODO add your handling code here:
+
     }//GEN-LAST:event_comboRoleActionPerformed
 
     private void btnUpdateUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateUserActionPerformed
         // TODO add your handling code here:
+        if (selectedUser == null) {
+            JOptionPane.showMessageDialog(this, "Please select a user in the table first.", "ERROR", ERROR_MESSAGE);
+            return;
+        }
+        if (!txtUserName.getText().matches("[A-Za-z0-9]+")) {
+            JOptionPane.showMessageDialog(this, "User Name is not accept special characters", "ERROR", ERROR_MESSAGE);
+            return;
+        }
+        if (txtPwd.getPassword() == null || txtPwd.getPassword().length < 0) {
+            JOptionPane.showMessageDialog(this, "Password cannot be empty", "ERROR", ERROR_MESSAGE);
+            return;
+        }
+
+        // Update password (if provided)
+        char[] pwd = txtPwd.getPassword();
+        system.getUserAccountDirectory().findUserAccount(selectedUser.getId()).setUsername(txtUserName.getText());
+        system.getUserAccountDirectory().findUserAccount(selectedUser.getId()).setPassword(new String(pwd));
+        
+        changeRoleForUser(selectedUser);
+
+        reloadTable();
+        JOptionPane.showMessageDialog(this, "User updated.");
     }//GEN-LAST:event_btnUpdateUserActionPerformed
 
     private void btnDeleteUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteUserActionPerformed
         // TODO add your handling code here:
+        if (selectedUser == null) {
+            JOptionPane.showMessageDialog(this, "Please select a user first.", "ERROR", ERROR_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Delete user: " + selectedUser.getUserLoginName() + " ?",
+                "Confirm delete",
+                JOptionPane.YES_NO_OPTION
+        );
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        removeUserFromAllRoleDirectories(selectedUser);
+
+        system.getUserAccountDirectory().removeUser(selectedUser);
+
+        selectedUser = null;
+        txtUserName.setText("");
+        txtPwd.setText("");
+
+        reloadTable();
     }//GEN-LAST:event_btnDeleteUserActionPerformed
+
+    private void removeUserFromAllRoleDirectories(UserAccount user) {
+
+        system.getAdminDirectory().removeRole(user);
+        system.getAuditorDirectory().newAuditorRole(user);
+        system.getFleetMonitorDirectory().removeRole(user);
+        system.getFactoryManagerDirectory().removeRole(user);
+        system.getFactoryAnalystDirectory().removeRole(user);
+        system.getFactoryInventoryControlDirectory().removeRole(user);
+        system.getSupplierDirectory().removeRole(user);
+        system.getSupplierInventoryControlDirectory().removeRole(user);
+        system.getSupplierAnalystDirectory().removeRole(user);
+    }
+
+    public void changeRoleForUser(UserAccount user) {
+        removeUserFromAllRoleDirectories(user);
+
+        String selectedRole = comboRole.getSelectedItem().toString();
+        if (Role.RoleType.Admin.getValue().equals(selectedRole)) {
+            AdminDirectory dir = system.getAdminDirectory();
+            dir.newAdminRole(user);
+            reloadTable();
+        } else if (Role.RoleType.FactoryManager.getValue().equals(selectedRole)) {
+            FactoryManagerDirectory dir = system.getFactoryManagerDirectory();
+            dir.newFactoryManagerRole(user);
+            reloadTable();
+        } else if (Role.RoleType.FactoryAnalyst.getValue().equals(selectedRole)) {
+            FactoryAnalystDirectory dir = system.getFactoryAnalystDirectory();
+            dir.newFactoryAnalystRole(user);
+            reloadTable();
+        } else if (Role.RoleType.FactoryInventoryControl.getValue().equals(selectedRole)) {
+            FactoryInventoryControlDirectory dir = system.getFactoryInventoryControlDirectory();
+            dir.newFactoryInventoryControlRole(user);
+            reloadTable();
+        } else if (Role.RoleType.OilSupplier.getValue().equals(selectedRole)) {
+            SupplierDirectory dir = system.getSupplierDirectory();
+            dir.newSupplierRole(user);
+            reloadTable();
+        } else if (Role.RoleType.OilSupplierAnalyst.getValue().equals(selectedRole)) {
+            SupplierAnalystDirectory dir = system.getSupplierAnalystDirectory();
+            dir.newSupplierAnalystRole(user);
+            reloadTable();
+        } else if (Role.RoleType.OilSupplierInventoryControl.getValue().equals(selectedRole)) {
+            SupplierInventoryControlDirectory dir = system.getSupplierInventoryControlDirectory();
+            dir.newSupplierInventoryContorlRole(user);
+            reloadTable();
+        } else if (Role.RoleType.Auditor.getValue().equals(selectedRole)) {
+            AuditorDirectory dir = system.getAuditorDirectory();
+            dir.newAuditorRole(user);
+            reloadTable();
+        } else if (Role.RoleType.FleetMonitor.getValue().equals(selectedRole)) {
+            FleetMonitorDirectory dir = system.getFleetMonitorDirectory();
+            dir.newFleetMonitorRole(user);
+            reloadTable();
+        } else {
+            JOptionPane.showMessageDialog(this, "System ERROR, Selected Role Not Found", "ERROR", ERROR_MESSAGE);
+            return;
+        }
+    }
 
     private void tblUserMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUserMousePressed
         // TODO add your handling code here:
-                int size = tblUser.getRowCount();
+        int size = tblUser.getRowCount();
         int selectedrow = tblUser.getSelectionModel().getLeadSelectionIndex();
 
         if (selectedrow < 0 || selectedrow > size - 1) {
