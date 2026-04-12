@@ -26,9 +26,14 @@ public class ManageEnterpriseWorkAreaJPanel extends javax.swing.JPanel {
     Business.System.System system;
     UserAccount userAccount;
     Network network;
+<<<<<<< HEAD:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/CreateEnterpriseWorkAreaJPanel.java
+
+    public CreateEnterpriseWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Business.System.System system, Network network) {
+=======
     Enterprise selectedEnterprise;
 
     public ManageEnterpriseWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Business.System.System system, Network network) {
+>>>>>>> main:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/ManageEnterpriseWorkAreaJPanel.java
         initComponents();
         lblEnterprise.setText("Manage Enterprise -- "+ network.toString() + " Network");
         this.userProcessContainer = userProcessContainer;
@@ -208,10 +213,13 @@ public class ManageEnterpriseWorkAreaJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         if (txtEnterpriseName.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Enterprise Name cannot be empty", "ERROR", ERROR_MESSAGE);
+<<<<<<< HEAD:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/CreateEnterpriseWorkAreaJPanel.java
+=======
             return;
         }
         if(!txtEnterpriseName.getText().matches("[A-Za-z0-9]+")){
             JOptionPane.showMessageDialog(this, "Enterprise Name is not accept special characters", "ERROR", ERROR_MESSAGE);
+>>>>>>> main:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/ManageEnterpriseWorkAreaJPanel.java
             return;
         }
         network.newEnterprise(txtEnterpriseName.getText());

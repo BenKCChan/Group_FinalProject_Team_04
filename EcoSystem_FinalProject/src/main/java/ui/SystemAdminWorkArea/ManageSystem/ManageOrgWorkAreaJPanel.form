@@ -103,6 +103,10 @@
                       <Component id="txtOrgName" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
+<<<<<<< HEAD:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/CreateOrgWorkAreaJPanel.form
+                  <Component id="btnCreateOrg" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="95" max="32767" attributes="0"/>
+=======
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnCreateOrg" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnUpdateOrg" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -115,6 +119,7 @@
                       <Component id="btnBack1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="75" max="32767" attributes="0"/>
+>>>>>>> main:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/ManageOrgWorkAreaJPanel.form
               </Group>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">

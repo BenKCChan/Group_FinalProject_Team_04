@@ -158,7 +158,7 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         IranHormuzMapJPanel iranHormuzMapJPanel = new IranHormuzMapJPanel(userProcessContainer);
         iranHormuzMapJPanel.loadURL("https://www.youtube.com/live/8SAo9jrrB_s");
-        userProcessContainer.add("IranHormuzMapJPanel",iranHormuzMapJPanel);
+        userProcessContainer.add("IranHormuzMapJPanel", iranHormuzMapJPanel);
         layout.next(userProcessContainer);
     }//GEN-LAST:event_btnIranHormuzMapActionPerformed
 

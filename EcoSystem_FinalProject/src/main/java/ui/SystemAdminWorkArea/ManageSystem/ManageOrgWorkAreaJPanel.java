@@ -28,9 +28,14 @@ public class ManageOrgWorkAreaJPanel extends javax.swing.JPanel {
     UserAccount userAccount;
     Network network;
     Enterprise enterprise;
+<<<<<<< HEAD:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/CreateOrgWorkAreaJPanel.java
+
+    public CreateOrgWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Business.System.System system, Network network, Enterprise enterprise) {
+=======
     Organization selectedOrg;
 
     public ManageOrgWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Business.System.System system, Network network, Enterprise enterprise) {
+>>>>>>> main:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/ManageOrgWorkAreaJPanel.java
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
@@ -238,8 +243,12 @@ public class ManageOrgWorkAreaJPanel extends javax.swing.JPanel {
         //            return;
         //        }
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+<<<<<<< HEAD:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/CreateOrgWorkAreaJPanel.java
+
+=======
         ManageUserWorkAreaJPanel manageUserWorkAreaJPanel = new ManageUserWorkAreaJPanel(userProcessContainer, userAccount, system, network, enterprise, selectedOrg );
         userProcessContainer.add("manageUserWorkAreaJPanel", manageUserWorkAreaJPanel);
+>>>>>>> main:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/ManageOrgWorkAreaJPanel.java
         layout.next(userProcessContainer);
     }//GEN-LAST:event_btnNextActionPerformed
 
@@ -249,10 +258,13 @@ public class ManageOrgWorkAreaJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Org Name cannot be empty", "ERROR", ERROR_MESSAGE);
             return;
         }
+<<<<<<< HEAD:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/CreateOrgWorkAreaJPanel.java
+=======
         if(!txtOrgName.getText().matches("[A-Za-z0-9]+")){
             JOptionPane.showMessageDialog(this, "Org Name is not accept special characters", "ERROR", ERROR_MESSAGE);
             return;
         }
+>>>>>>> main:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/ManageOrgWorkAreaJPanel.java
         enterprise.newOrganization(txtOrgName.getText());
         reloadTable();
     }//GEN-LAST:event_btnCreateOrgActionPerformed
