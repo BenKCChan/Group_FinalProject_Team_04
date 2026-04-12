@@ -5,12 +5,12 @@ import Business.UserAccount.UserAccount;
 
 import Business.Network.Network;
 import Business.Operations.RequestBoard;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.Role.AdminDirectory;
 import Business.Role.AdminRole;
 import Business.Role.LogisticsAnalystRole;
 import Business.Role.SupplierAnalystRole;
-import Business.Role.SupplierInventoryContorlRole;
+import Business.Role.SupplierInventoryControlRole;
 import Business.Role.SupplierRole;
 import Business.Role.TransportCoordinatorRole;
 import Business.Role.AuditorDirectory;
@@ -84,7 +84,7 @@ public class ConfigureASystem {
 
         // Oil Inventory Control
         UserAccount uaInv = e3_org3.getUserAccountDirectory().newUserAccount("oil.inventory", "Pass@123");
-        SupplierInventoryContorlRole invRole = new SupplierInventoryContorlRole(uaInv);
+        SupplierInventoryControlRole invRole = new SupplierInventoryControlRole(uaInv);
         e3_org3.getRoleDirectory().addRole(invRole);
 
         // Logistics Corp
@@ -138,22 +138,31 @@ public class ConfigureASystem {
                     switch (random){
                         case 0:
                             adminDirectory.newAdminRole(generatedUser);
+                            break;
                         case 1:
                             auditorDirectory.newAuditorRole(generatedUser);
+                            break;
                         case 2:
                             factoryAnalystDirectory.newFactoryAnalystRole(generatedUser);
+                            break;
                         case 3:
                             factoryInventoryControlDirectory.newFactoryInventoryControlRole(generatedUser);
+                            break;
                         case 4:
                             factoryManagerDirectory.newFactoryManagerRole(generatedUser);
+                            break;
                         case 5:
                             supplierAnalystDirectory.newSupplierAnalystRole(generatedUser);
+                            break;
                         case 6:
                             supplierDirectory.newSupplierRole(generatedUser);
+                            break;
                         case 7:
-                            supplierInventoryControlDirectory.newSupplierInventoryContorlRole(generatedUser);
+                            supplierInventoryControlDirectory.newSupplierInventoryControlRole(generatedUser);
+                            break;
                         default:
                             fleetMonitorDirectory.newFleetMonitorRole(generatedUser);
+                            break;
                     }
                 }
             }

@@ -12,7 +12,7 @@ import Business.Enterprise.Enterprise;
 import Business.Operations.BuyRequest;
 import Business.Operations.PriceSuggestion;
 import Business.Operations.RequestBoard;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import java.awt.Color;
 import java.time.LocalDate;

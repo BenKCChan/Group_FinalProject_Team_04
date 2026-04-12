@@ -6,7 +6,7 @@
 package Business.Role;
 
 import Business.Enterprise.Enterprise;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.System.System;
 import Business.UserAccount.UserAccount;
 import javax.swing.JPanel;
@@ -17,7 +17,8 @@ import javax.swing.JPanel;
  */
 public abstract class Role {
 
-    UserAccount person;
+    private UserAccount person;
+    public RoleType type;
 
     public enum RoleType {
         Admin("Admin"),
@@ -28,7 +29,9 @@ public abstract class Role {
         OilSupplierAnalyst("Oil Supplier Analyst"),
         OilSupplierInventoryControl("Oil Supplier Inventory Control"),
         Auditor("Trade Auditor"),
-        FleetMonitor("Fleet Monitor");
+        FleetMonitor("Fleet Monitor"),
+        LogisticsAnalyst("Logistics Analyst"),
+        TransportCoordinator("Transport Coordinator");
 
         private String value;
 
@@ -45,11 +48,10 @@ public abstract class Role {
             return value;
         }
     }
-    public RoleType type;
 
     public Role(UserAccount p, RoleType type) {
         person = p;
-        type = this.type;
+        this.type = type;
     }
 
     public abstract String getRole();
@@ -59,13 +61,11 @@ public abstract class Role {
     }
 
     public boolean isMatch(String id) {
-        if (person.getId().equals(id)) {
-            return true;
-        }
-        return false;
+        return person.getId().equals(id);
     }
 
-    public abstract JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system);
+    public abstract JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, 
+            Organization organization, Enterprise enterprise, System system);
 
     @Override
     public String toString() {

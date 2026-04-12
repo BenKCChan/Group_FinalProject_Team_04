@@ -12,7 +12,7 @@ import Business.Enterprise.Enterprise;
 import Business.Operations.OilTransaction;
 import Business.Operations.RequestBoard;
 import Business.Operations.SellRequest;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import java.awt.Color;
 import java.util.ArrayList;

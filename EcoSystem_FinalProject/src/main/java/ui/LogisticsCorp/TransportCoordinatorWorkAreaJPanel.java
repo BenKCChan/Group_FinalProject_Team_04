@@ -11,7 +11,7 @@ package ui.LogisticsCorp;
 import Business.Enterprise.Enterprise;
 import Business.Operations.RequestBoard;
 import Business.Operations.ShipmentRequest;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import java.awt.Color;
 import java.time.LocalDate;

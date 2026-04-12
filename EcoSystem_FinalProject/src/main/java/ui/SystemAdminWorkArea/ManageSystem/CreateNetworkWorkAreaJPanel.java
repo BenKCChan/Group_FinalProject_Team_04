@@ -20,9 +20,9 @@ public class CreateNetworkWorkAreaJPanel extends javax.swing.JPanel {
     /**
      * Creates new form CreateNetwork
      */
-    JPanel userProcessContainer;
-    Business.System.System system;
-    UserAccount userAccount;
+    private JPanel userProcessContainer;
+    private Business.System.System system;
+    private UserAccount userAccount;
 
     public CreateNetworkWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Business.System.System system) {
         initComponents();

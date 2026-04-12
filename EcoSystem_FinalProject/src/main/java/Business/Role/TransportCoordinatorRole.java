@@ -9,7 +9,7 @@ package Business.Role;
  * @author lindq
  */
 import Business.Enterprise.Enterprise;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import Business.System.System;
 import javax.swing.JPanel;

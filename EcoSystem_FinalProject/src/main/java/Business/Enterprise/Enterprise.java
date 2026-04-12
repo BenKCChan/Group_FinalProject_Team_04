@@ -4,7 +4,7 @@
  */
 package Business.Enterprise;
 
-import Business.Organization;
+import Business.Organization.Organization;
 import java.util.ArrayList;
 
 /**
@@ -12,40 +12,50 @@ import java.util.ArrayList;
  * @author ben
  */
 public class Enterprise extends Organization {
-    ArrayList<Organization> participatingunits;
-    String name;
+
+    private ArrayList<Organization> participatingUnits;
+
     public Enterprise(String name) {
         super(name);
-        this.name = name;
-        participatingunits = new ArrayList();
+        participatingUnits = new ArrayList<>();
     }
-    
-    public Organization newOrganization(String orgName){
+
+    public Organization newOrganization(String orgName) {
         Organization organization = new Organization(orgName);
-        participatingunits.add(organization);
+        participatingUnits.add(organization);
         return organization;
     }
-    
-    public ArrayList<Organization> getParticipatingunits(){
-        return participatingunits;
+
+    public ArrayList<Organization> getParticipatingunits() {
+        return participatingUnits;
     }
-    
-    public Boolean removeParticipantingunits(Organization organization){
-        if(!organization.getUserAccountDirectory().getUserAccountList().isEmpty()){
+
+    public boolean removeParticipatingUnit(Organization organization) {
+        if (!participatingUnits.contains(organization)) {
             return false;
         }
-        participatingunits.remove(organization);
+        if (!organization.getUserAccountDirectory().getUserAccountList().isEmpty()) {
+            return false;
+        }
+        participatingUnits.remove(organization);
         return true;
     }
-    
-    public Organization updateParticipantingunits(Organization oldOrg, Organization newOrg){
-        int idx = participatingunits.indexOf(oldOrg);
-        participatingunits.set(idx, newOrg);
-        return participatingunits.get(idx);
+
+    public Organization updateParticipatingUnit(Organization oldOrg, Organization newOrg) {
+        int idx = participatingUnits.indexOf(oldOrg);
+        if (idx < 0) {
+            return null;
+        }
+        participatingUnits.set(idx, newOrg);
+        return participatingUnits.get(idx);
     }
-    
+
+    public String getEnterpriseName() {
+        return getName();
+    }
+
     @Override
-    public String toString(){
-        return name;
+    public String toString() {
+        return getName();
     }
 }

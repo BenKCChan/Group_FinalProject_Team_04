@@ -14,7 +14,7 @@ import Business.Operations.PriceSuggestion;
 import Business.Operations.RequestBoard;
 import Business.Operations.SellRequest;
 import Business.Operations.ShipmentRequest;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import java.awt.Color;
 import java.awt.Dimension;

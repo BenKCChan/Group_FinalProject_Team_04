@@ -6,7 +6,7 @@ package ui.SystemAdminWorkArea.ManageSystem;
 
 import Business.Enterprise.Enterprise;
 import Business.Network.Network;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.Role.AdminDirectory;
 import Business.Role.SupplierDirectory;
 import Business.UserAccount.UserAccount;

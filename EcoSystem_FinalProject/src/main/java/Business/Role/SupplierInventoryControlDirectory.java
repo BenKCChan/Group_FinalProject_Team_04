@@ -15,37 +15,36 @@ import java.util.ArrayList;
  */
 public class SupplierInventoryControlDirectory {
 
-    ArrayList<SupplierInventoryControlRole> supplierInventoryContorlRoleList;
+    private ArrayList<SupplierInventoryControlRole> supplierInventoryControlRoleList;
 
     public SupplierInventoryControlDirectory() {
-
-        supplierInventoryContorlRoleList = new ArrayList();
-
+        supplierInventoryControlRoleList = new ArrayList<>();
     }
 
-    public SupplierInventoryControlRole newSupplierInventoryContorlRole(UserAccount p) {
-
+    public SupplierInventoryControlRole newSupplierInventoryControlRole(UserAccount p) {
         SupplierInventoryControlRole sp = new SupplierInventoryControlRole(p);
-        supplierInventoryContorlRoleList.add(sp);
+        supplierInventoryControlRoleList.add(sp);
         return sp;
     }
 
     public SupplierInventoryControlRole findSupplierInventoryControlRole(String id) {
-
-        for (SupplierInventoryControlRole sp : supplierInventoryContorlRoleList) {
-
+        for (SupplierInventoryControlRole sp : supplierInventoryControlRoleList) {
             if (sp.isMatch(id)) {
                 return sp;
             }
         }
-        return null; //not found after going through the whole list
+        return null;
     }
 
     public ArrayList<SupplierInventoryControlRole> removeRole(UserAccount u) {
-        SupplierInventoryControlRole searchRole = findSupplierInventoryControlRole(String.valueOf(u.getId()));
+        SupplierInventoryControlRole searchRole = findSupplierInventoryControlRole(u.getId());
         if (searchRole != null) {
-            supplierInventoryContorlRoleList.remove(searchRole);
+            supplierInventoryControlRoleList.remove(searchRole);
         }
-        return supplierInventoryContorlRoleList;
+        return supplierInventoryControlRoleList;
+    }
+
+    public ArrayList<SupplierInventoryControlRole> getSupplierInventoryControlRoleList() {
+        return supplierInventoryControlRoleList;
     }
 }

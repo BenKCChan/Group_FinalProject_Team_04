@@ -5,7 +5,7 @@
 package ui.SystemAdminWorkArea;
 
 import Business.Enterprise.Enterprise;
-import Business.Organization;
+import Business.Organization.Organization;
 import javax.swing.JPanel;
 import Business.System.System;
 import Business.UserAccount.UserAccount;

@@ -7,7 +7,7 @@ package Business.System;
 import java.util.ArrayList;
 import Business.Network.Network;
 import Business.Operations.RequestBoard;
-import Business.Organization;
+import Business.Organization.Organization;
 
 /**
  *
@@ -18,7 +18,7 @@ public class System extends Organization {
     ArrayList<Network> participantnetworks;
     String name;
 
-    private RequestBoard requestBoard = new RequestBoard();  // ← add this
+    private RequestBoard requestBoard = new RequestBoard();
 
     public System(String name) {
         super();

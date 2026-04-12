@@ -5,36 +5,23 @@
 package Business.Network;
 
 import Business.Enterprise.Enterprise;
-import Business.Organization;
 import Business.Organization.Organization;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
-import static javax.swing.JOptionPane.ERROR_MESSAGE;
+
 
 /**
  *
  * @author ben
  */
-package Business.Network;
 
-import Business.Enterprise.Enterprise;
-import Business.Organization;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
-import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
-/**
- *
- * @author ben
- */
 public class Network extends Organization {
     
-    ArrayList<Enterprise> participatingEnterprise;
-    String name;
+    private ArrayList<Enterprise> participatingEnterprise;
+    
     public Network (String n){
         super(n);
-        name = n;
-        participatingEnterprise = new ArrayList();
+       participatingEnterprise = new ArrayList<>();
     }
     
     public Enterprise newEnterprise(String enterpriseName){
@@ -42,21 +29,26 @@ public class Network extends Organization {
         Enterprise enterprise = new Enterprise(enterpriseName);
         participatingEnterprise.add(enterprise);
         return enterprise;
-    };
+    }
     
     public ArrayList<Enterprise> getEnterpriseDirectory(){
         return participatingEnterprise;
     }
     
-    public Boolean removeEnterprise(Enterprise enterprise){
-        if(!enterprise.getParticipatingunits().isEmpty()){
-            return false;
-        }
-        participatingEnterprise.remove(enterprise);
-        return true;
+    public boolean removeEnterprise(Enterprise enterprise) {
+    if (!participatingEnterprise.contains(enterprise)) {
+        return false;
     }
+    if (!enterprise.getParticipatingunits().isEmpty()) {
+        return false;
+    }
+    participatingEnterprise.remove(enterprise);
+    return true;
+    }
+    
     @Override
     public String toString(){
-        return name;
+        return getName();
     }
+
 }
