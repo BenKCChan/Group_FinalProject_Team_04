@@ -5,31 +5,47 @@
  */
 package Business.Role;
 
-import Business.Enterprise.Enterprise;
-import Business.Organization;
 import Business.UserAccount.UserAccount;
-import Business.System.System;
-import javax.swing.JPanel;
-import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
+
+import java.util.ArrayList;
 
 /**
  *
  * @author kal bugrara
  */
-public class FactoryManagerRole extends Role {
+public class FactoryManagerDirectory {
 
-    public FactoryManagerRole(UserAccount p) {
-        super(p, RoleType.FactoryManager);
+    ArrayList<FactoryManagerRole> factoryList;
+
+    public FactoryManagerDirectory() {
+
+        factoryList = new ArrayList();
+
     }
 
-    @Override
-    public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
+    public FactoryManagerRole newFactoryManagerRole(UserAccount p) {
 
-        return new AdminWorkAreaJPanel(userProcessContainer, account, organization, enterprise, system);
+        FactoryManagerRole sp = new FactoryManagerRole(p);
+        factoryList.add(sp);
+        return sp;
     }
 
-    @Override
-    public String getRole() {
-        return RoleType.FactoryManager.getValue();
+    public FactoryManagerRole findFactoryManager(String id) {
+
+        for (FactoryManagerRole sp : factoryList) {
+
+            if (sp.isMatch(id)) {
+                return sp;
+            }
+        }
+        return null; //not found after going through the whole list
+    }
+
+    public ArrayList<FactoryManagerRole> removeRole(UserAccount u) {
+        FactoryManagerRole searchRole = findFactoryManager(String.valueOf(u.getId()));
+        if (searchRole != null) {
+            factoryList.remove(searchRole);
+        }
+        return factoryList;
     }
 }

@@ -8,13 +8,11 @@ import Business.Operations.RequestBoard;
 import Business.Organization;
 import Business.Role.AdminDirectory;
 import Business.Role.AdminRole;
-<<<<<<< HEAD
 import Business.Role.LogisticsAnalystRole;
 import Business.Role.SupplierAnalystRole;
 import Business.Role.SupplierInventoryContorlRole;
 import Business.Role.SupplierRole;
 import Business.Role.TransportCoordinatorRole;
-=======
 import Business.Role.AuditorDirectory;
 import Business.Role.FactoryAnalystDirectory;
 import Business.Role.FactoryInventoryControlDirectory;
@@ -23,18 +21,14 @@ import Business.Role.FleetMonitorDirectory;
 import Business.Role.SupplierAnalystDirectory;
 import Business.Role.SupplierDirectory;
 import Business.Role.SupplierInventoryControlDirectory;
->>>>>>> main
 import Business.utils.RealTimeOilAPI;
 import com.github.javafaker.Faker;
 import java.io.IOException;
-<<<<<<< HEAD
 
 import Business.utils.FakerDataGenerator;
 
-=======
 import java.util.ArrayList;
->>>>>>> main
-/**
+/*
  *
  * @author rrheg
  */

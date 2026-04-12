@@ -18,22 +18,21 @@ import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
  */
 public class FactoryAnalystRole extends Role {
 
+    UserAccount person;
+    
     public FactoryAnalystRole(UserAccount p) {
         super(p, RoleType.FactoryAnalyst);
     }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> main
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
-
-        return new AdminWorkAreaJPanel(userProcessContainer, account, organization, enterprise, system);
+        
+        return new AdminWorkAreaJPanel(userProcessContainer,account, organization, enterprise, system);
     }
 
     @Override
-    public String getRole() {
-        return RoleType.FactoryAnalyst.getValue();
+    public String getRole(){
+        return  RoleType.FactoryAnalyst.getValue();
     }
 }

@@ -41,8 +41,6 @@ public class FactoryManagerDirectory {
         return null; //not found after going through the whole list
     }
 
-<<<<<<< HEAD
-=======
     public ArrayList<FactoryManagerRole> removeRole(UserAccount u) {
         FactoryManagerRole searchRole = findFactoryManager(String.valueOf(u.getId()));
         if (searchRole != null) {
@@ -50,5 +48,4 @@ public class FactoryManagerDirectory {
         }
         return factoryList;
     }
->>>>>>> main
 }

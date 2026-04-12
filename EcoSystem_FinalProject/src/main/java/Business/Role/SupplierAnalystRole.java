@@ -11,7 +11,6 @@ import Business.UserAccount.UserAccount;
 import Business.System.System;
 import javax.swing.JPanel;
 import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
-import ui.UAEOilSupplier.OilAnalystWorkAreaJPanel;
 
 /**
  *
@@ -19,21 +18,20 @@ import ui.UAEOilSupplier.OilAnalystWorkAreaJPanel;
  */
 public class SupplierAnalystRole extends Role {
 
+    UserAccount person;
+    
     public SupplierAnalystRole(UserAccount p) {
         super(p, RoleType.OilSupplierAnalyst);
     }
 
-<<<<<<< HEAD
     @Override
-    public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account,
-            Organization organization, Enterprise enterprise, System system) {
-        return new OilAnalystWorkAreaJPanel(userProcessContainer, account, organization, enterprise, system);
+    public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
+        
+        return new AdminWorkAreaJPanel(userProcessContainer,account, organization, enterprise, system);
     }
 
-=======
->>>>>>> main
     @Override
-    public String getRole() {
-        return RoleType.OilSupplierAnalyst.getValue();
+    public String getRole(){
+        return  RoleType.OilSupplierAnalyst.getValue();
     }
 }

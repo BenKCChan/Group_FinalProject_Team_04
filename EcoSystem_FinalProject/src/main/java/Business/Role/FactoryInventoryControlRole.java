@@ -18,18 +18,20 @@ import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
  */
 public class FactoryInventoryControlRole extends Role {
 
+    UserAccount person;
+    
     public FactoryInventoryControlRole(UserAccount p) {
         super(p, RoleType.FactoryInventoryControl);
     }
 
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
-
-        return new AdminWorkAreaJPanel(userProcessContainer, account, organization, enterprise, system);
+        
+        return new AdminWorkAreaJPanel(userProcessContainer,account, organization, enterprise, system);
     }
 
     @Override
-    public String getRole() {
-        return RoleType.FactoryInventoryControl.getValue();
+    public String getRole(){
+        return  RoleType.FactoryInventoryControl.getValue();
     }
 }

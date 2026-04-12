@@ -15,8 +15,20 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
  *
  * @author ben
  */
-public class Network extends Organization {
+package Business.Network;
 
+import Business.Enterprise.Enterprise;
+import Business.Organization;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+
+/**
+ *
+ * @author ben
+ */
+public class Network extends Organization {
+    
     ArrayList<Enterprise> participatingEnterprise;
     String name;
     public Network (String n){
@@ -24,17 +36,15 @@ public class Network extends Organization {
         name = n;
         participatingEnterprise = new ArrayList();
     }
-
-    public Enterprise newEnterprise(String enterpriseName) {
-
+    
+    public Enterprise newEnterprise(String enterpriseName){
+        
         Enterprise enterprise = new Enterprise(enterpriseName);
         participatingEnterprise.add(enterprise);
         return enterprise;
-    }
-
-    ;
+    };
     
-    public ArrayList<Enterprise> getEnterpriseDirectory() {
+    public ArrayList<Enterprise> getEnterpriseDirectory(){
         return participatingEnterprise;
     }
     
