@@ -1,4 +1,3 @@
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -42,6 +41,8 @@ public class FactoryAnalystDirectory {
         return null; //not found after going through the whole list
     }
 
+<<<<<<< HEAD
+=======
     public ArrayList<FactoryAnalystRole> removeRole(UserAccount u) {
         FactoryAnalystRole searchRole = findFactoryAnalyst(String.valueOf(u.getId()));
         if (searchRole != null) {
@@ -49,4 +50,5 @@ public class FactoryAnalystDirectory {
         }
         return factoryList;
     }
+>>>>>>> main
 }

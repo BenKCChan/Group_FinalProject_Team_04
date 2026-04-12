@@ -13,26 +13,26 @@ import java.util.ArrayList;
  *
  * @author kal bugrara
  */
-public class SupplierInventoryControlDirectory {
+public class SupplierInventoryContorlDirectory {
 
-    ArrayList<SupplierInventoryControlRole> supplierInventoryContorlRoleList;
+    ArrayList<SupplierInventoryContorlRole> supplierInventoryContorlRoleList;
 
-    public SupplierInventoryControlDirectory() {
+    public SupplierInventoryContorlDirectory() {
 
         supplierInventoryContorlRoleList = new ArrayList();
 
     }
 
-    public SupplierInventoryControlRole newSupplierInventoryContorlRole(UserAccount p) {
+    public SupplierInventoryContorlRole newSupplierInventoryContorlRole(UserAccount p) {
 
-        SupplierInventoryControlRole sp = new SupplierInventoryControlRole(p);
+        SupplierInventoryContorlRole sp = new SupplierInventoryContorlRole(p);
         supplierInventoryContorlRoleList.add(sp);
         return sp;
     }
 
-    public SupplierInventoryControlRole findSupplierInventoryControlRole(String id) {
+    public SupplierInventoryContorlRole findSupplierInventoryControlRole(String id) {
 
-        for (SupplierInventoryControlRole sp : supplierInventoryContorlRoleList) {
+        for (SupplierInventoryContorlRole sp : supplierInventoryContorlRoleList) {
 
             if (sp.isMatch(id)) {
                 return sp;
@@ -41,11 +41,4 @@ public class SupplierInventoryControlDirectory {
         return null; //not found after going through the whole list
     }
 
-    public ArrayList<SupplierInventoryControlRole> removeRole(UserAccount u) {
-        SupplierInventoryControlRole searchRole = findSupplierInventoryControlRole(String.valueOf(u.getId()));
-        if (searchRole != null) {
-            supplierInventoryContorlRoleList.remove(searchRole);
-        }
-        return supplierInventoryContorlRoleList;
-    }
 }

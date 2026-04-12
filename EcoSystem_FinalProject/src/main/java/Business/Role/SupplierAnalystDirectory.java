@@ -41,6 +41,8 @@ public class SupplierAnalystDirectory {
         return null; //not found after going through the whole list
     }
 
+<<<<<<< HEAD
+=======
     public ArrayList<SupplierAnalystRole> removeRole(UserAccount u) {
         SupplierAnalystRole searchRole = findSupplierAnalyst(String.valueOf(u.getId()));
         if (searchRole != null) {
@@ -48,4 +50,5 @@ public class SupplierAnalystDirectory {
         }
         return supplierAnalystList;
     }
+>>>>>>> main
 }

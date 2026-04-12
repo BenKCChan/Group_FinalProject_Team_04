@@ -27,8 +27,13 @@ public abstract class Role {
         OilSupplier("Oil Supplier"),
         OilSupplierAnalyst("Oil Supplier Analyst"),
         OilSupplierInventoryControl("Oil Supplier Inventory Control"),
+<<<<<<< HEAD
+        TransportCoordinator("Transport Coordinator"),
+        LogisticsAnalyst("Logistics Analyst");
+=======
         Auditor("Trade Auditor"),
         FleetMonitor("Fleet Monitor");
+>>>>>>> main
 
         private String value;
 
@@ -49,7 +54,7 @@ public abstract class Role {
 
     public Role(UserAccount p, RoleType type) {
         person = p;
-        type = this.type;
+        this.type = type;
     }
 
     public abstract String getRole();
