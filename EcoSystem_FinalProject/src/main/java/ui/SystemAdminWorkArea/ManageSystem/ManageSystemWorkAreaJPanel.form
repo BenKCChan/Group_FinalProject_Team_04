@@ -26,10 +26,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="lblManageSystem" min="-2" max="-2" attributes="0"/>
                   <Component id="btnBack1" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="btnCreateNetwork" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnManageNetwork" alignment="0" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="btnManageNetwork" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="259" max="32767" attributes="0"/>
           </Group>
@@ -41,10 +38,8 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="lblManageSystem" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="btnCreateNetwork" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
               <Component id="btnManageNetwork" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="183" max="32767" attributes="0"/>
+              <EmptySpace pref="212" max="32767" attributes="0"/>
               <Component id="btnBack1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -59,14 +54,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Manage System"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnCreateNetwork">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Create Network"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCreateNetworkActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnBack1">
       <Properties>

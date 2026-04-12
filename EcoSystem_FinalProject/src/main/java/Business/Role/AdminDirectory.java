@@ -41,4 +41,12 @@ public class AdminDirectory {
         return null; //not found after going through the whole list
     }
 
+    public ArrayList<AdminRole> removeRole(UserAccount u) {
+        AdminRole adminRole = findAdmin(String.valueOf(u.getId()));
+        if (adminRole != null) {
+            adminlist.remove(adminRole);
+        }
+        return adminlist; 
+    }
+
 }

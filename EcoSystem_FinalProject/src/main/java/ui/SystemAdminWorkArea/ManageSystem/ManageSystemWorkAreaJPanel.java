@@ -42,7 +42,6 @@ public class ManageSystemWorkAreaJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         lblManageSystem = new javax.swing.JLabel();
-        btnCreateNetwork = new javax.swing.JButton();
         btnBack1 = new javax.swing.JButton();
         btnManageNetwork = new javax.swing.JButton();
 
@@ -50,13 +49,6 @@ public class ManageSystemWorkAreaJPanel extends javax.swing.JPanel {
 
         lblManageSystem.setFont(new java.awt.Font("Microsoft JhengHei UI", 0, 18)); // NOI18N
         lblManageSystem.setText("Manage System");
-
-        btnCreateNetwork.setText("Create Network");
-        btnCreateNetwork.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCreateNetworkActionPerformed(evt);
-            }
-        });
 
         btnBack1.setText("<< Back");
         btnBack1.addActionListener(new java.awt.event.ActionListener() {
@@ -81,9 +73,7 @@ public class ManageSystemWorkAreaJPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblManageSystem)
                     .addComponent(btnBack1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(btnCreateNetwork, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnManageNetwork, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(btnManageNetwork))
                 .addContainerGap(259, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -92,10 +82,8 @@ public class ManageSystemWorkAreaJPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(lblManageSystem)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCreateNetwork)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnManageNetwork)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 183, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 212, Short.MAX_VALUE)
                 .addComponent(btnBack1)
                 .addContainerGap())
         );
@@ -107,19 +95,17 @@ public class ManageSystemWorkAreaJPanel extends javax.swing.JPanel {
         layout.previous(userProcessContainer);
     }//GEN-LAST:event_btnBack1ActionPerformed
 
-    private void btnCreateNetworkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateNetworkActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_btnCreateNetworkActionPerformed
-
     private void btnManageNetworkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageNetworkActionPerformed
         // TODO add your handling code here:
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        ManageNetworkWorkAreaJPanel manageNetworkAreaJPanel = new ManageNetworkWorkAreaJPanel(userProcessContainer, userAccount, system );
+        userProcessContainer.add("manageNetworkAreaJPanel", manageNetworkAreaJPanel);
+        layout.next(userProcessContainer);
     }//GEN-LAST:event_btnManageNetworkActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack1;
-    private javax.swing.JButton btnCreateNetwork;
     private javax.swing.JButton btnManageNetwork;
     private javax.swing.JLabel lblManageSystem;
     // End of variables declaration//GEN-END:variables

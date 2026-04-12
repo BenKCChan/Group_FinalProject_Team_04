@@ -23,7 +23,7 @@ public class FactoryAnalystDirectory {
 
     }
 
-    public FactoryAnalystRole newFactoryManagerRole(UserAccount p) {
+    public FactoryAnalystRole newFactoryAnalystRole(UserAccount p) {
 
         FactoryAnalystRole sp = new FactoryAnalystRole(p);
         factoryList.add(sp);
@@ -41,4 +41,14 @@ public class FactoryAnalystDirectory {
         return null; //not found after going through the whole list
     }
 
+<<<<<<< HEAD
+=======
+    public ArrayList<FactoryAnalystRole> removeRole(UserAccount u) {
+        FactoryAnalystRole searchRole = findFactoryAnalyst(String.valueOf(u.getId()));
+        if (searchRole != null) {
+            factoryList.remove(searchRole);
+        }
+        return factoryList;
+    }
+>>>>>>> main
 }

@@ -23,12 +23,15 @@ public class SupplierAnalystRole extends Role {
         super(p, RoleType.OilSupplierAnalyst);
     }
 
+<<<<<<< HEAD
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account,
             Organization organization, Enterprise enterprise, System system) {
         return new OilAnalystWorkAreaJPanel(userProcessContainer, account, organization, enterprise, system);
     }
 
+=======
+>>>>>>> main
     @Override
     public String getRole() {
         return RoleType.OilSupplierAnalyst.getValue();

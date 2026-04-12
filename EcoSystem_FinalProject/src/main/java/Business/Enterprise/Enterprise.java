@@ -30,6 +30,20 @@ public class Enterprise extends Organization {
         return participatingunits;
     }
     
+    public Boolean removeParticipantingunits(Organization organization){
+        if(!organization.getUserAccountDirectory().getUserAccountList().isEmpty()){
+            return false;
+        }
+        participatingunits.remove(organization);
+        return true;
+    }
+    
+    public Organization updateParticipantingunits(Organization oldOrg, Organization newOrg){
+        int idx = participatingunits.indexOf(oldOrg);
+        participatingunits.set(idx, newOrg);
+        return participatingunits.get(idx);
+    }
+    
     @Override
     public String toString(){
         return name;

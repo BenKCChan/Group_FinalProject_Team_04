@@ -2,13 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Business;
+package Business.Organization;
 
 import Business.Role.AdminDirectory;
 import Business.Role.SupplierDirectory;
 import Business.UserAccount.UserAccountDirectory;
 import Business.Operations.Workspace;
+import Business.Role.AuditorDirectory;
+import Business.Role.FactoryAnalystDirectory;
+import Business.Role.FactoryInventoryControlDirectory;
+import Business.Role.FactoryManagerDirectory;
+import Business.Role.FleetMonitorDirectory;
 import Business.Role.RoleDirectory;
+import Business.Role.SupplierAnalystDirectory;
+import Business.Role.SupplierInventoryControlDirectory;
 import java.util.ArrayList;
 
 /**
@@ -20,9 +27,16 @@ public class Organization {
     String name;
     private RoleDirectory roleDirectory = new RoleDirectory();
     AdminDirectory adminDirectory;
-    UserAccountDirectory userAccountDirectory;
+    UserAccountDirectory userAccountDirectory; 
+    AuditorDirectory auditorDirectory;
+    FactoryAnalystDirectory factoryAnalystDirectory;
+    FactoryInventoryControlDirectory factoryInventoryControlDirectory;
+    FactoryManagerDirectory factoryManagerDirectory;
     SupplierDirectory supplierDirectory;
-
+    SupplierAnalystDirectory supplierAnalystDirectory;
+    SupplierInventoryControlDirectory supplierInventoryControlDirectory;
+    FleetMonitorDirectory fleetMonitorDirectory;
+    
     ArrayList<Workspace> operations;
 
     public Organization(String n) {
@@ -31,6 +45,13 @@ public class Organization {
         adminDirectory = new AdminDirectory();
         userAccountDirectory = new UserAccountDirectory();
         supplierDirectory = new SupplierDirectory();
+        auditorDirectory = new AuditorDirectory();
+        factoryAnalystDirectory = new FactoryAnalystDirectory();
+        factoryInventoryControlDirectory = new FactoryInventoryControlDirectory();
+        factoryManagerDirectory = new FactoryManagerDirectory();
+        supplierAnalystDirectory = new SupplierAnalystDirectory();
+        supplierInventoryControlDirectory = new SupplierInventoryControlDirectory();
+        fleetMonitorDirectory = new FleetMonitorDirectory();
         ArrayList<Organization> subordinateorgs;
 
     }
@@ -41,6 +62,13 @@ public class Organization {
         adminDirectory = new AdminDirectory();
         userAccountDirectory = new UserAccountDirectory();
         supplierDirectory = new SupplierDirectory();
+        auditorDirectory = new AuditorDirectory();
+        factoryAnalystDirectory = new FactoryAnalystDirectory();
+        factoryInventoryControlDirectory = new FactoryInventoryControlDirectory();
+        factoryManagerDirectory = new FactoryManagerDirectory();
+        supplierAnalystDirectory = new SupplierAnalystDirectory();
+        supplierInventoryControlDirectory = new SupplierInventoryControlDirectory();
+        fleetMonitorDirectory = new FleetMonitorDirectory();
         ArrayList<Organization> subordinateorgs;
 
     }

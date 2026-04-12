@@ -41,4 +41,14 @@ public class SupplierDirectory {
         return null; //not found after going through the whole list
     }
 
+<<<<<<< HEAD
+=======
+    public ArrayList<SupplierRole> removeRole(UserAccount u) {
+        SupplierRole searchRole = findSupplier(String.valueOf(u.getId()));
+        if (searchRole != null) {
+            supplierList.remove(searchRole);
+        }
+        return supplierList;
+    }
+>>>>>>> main
 }

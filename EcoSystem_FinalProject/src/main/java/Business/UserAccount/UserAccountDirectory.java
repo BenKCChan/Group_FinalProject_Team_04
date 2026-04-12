@@ -51,10 +51,24 @@ public class UserAccountDirectory {
                 return ua;
             }
         }
+<<<<<<< HEAD
         return null; //not found after going through the whole list
     }
 
     public ArrayList<UserAccount> getUserAccountList() {
         return useraccountlist;
     }
+=======
+            return null; //not found after going through the whole list
+         }   
+     public ArrayList<UserAccount> getUserAccountList()
+     {
+         return useraccountlist;
+     }
+      public ArrayList<UserAccount> removeUser(UserAccount userAccount)
+     {
+         useraccountlist.remove(userAccount);
+         return useraccountlist;
+     }
+>>>>>>> main
 }

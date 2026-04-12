@@ -41,4 +41,15 @@ public class FactoryInventoryControlDirectory {
         return null; //not found after going through the whole list
     }
 
+<<<<<<< HEAD
+=======
+    public ArrayList<FactoryInventoryControlRole> removeRole(UserAccount u) {
+        FactoryInventoryControlRole searchRole = findFactoryInventoryControlRole(String.valueOf(u.getId()));
+        if (searchRole != null) {
+            factoryList.remove(searchRole);
+        }
+        return factoryList;
+    }
+
+>>>>>>> main
 }

@@ -44,13 +44,20 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="lblTitle" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnSystemAdminReport" max="32767" attributes="0"/>
-                      <Component id="btnIranHormuzMap" alignment="0" pref="244" max="32767" attributes="0"/>
-                      <Component id="btnManageSystem" alignment="1" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="btnUserReport" alignment="0" min="-2" pref="318" max="-2" attributes="0"/>
+                      <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="lblTitle" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="btnEnterpriseReport" min="-2" pref="153" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnOrgReport" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="btnManageSystem" alignment="0" max="32767" attributes="0"/>
+                          <Component id="btnIranHormuzMap" alignment="0" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace pref="119" max="32767" attributes="0"/>
+                  <EmptySpace pref="45" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -62,10 +69,15 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnManageSystem" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="btnSystemAdminReport" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="btnEnterpriseReport" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                      <Component id="btnOrgReport" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="btnUserReport" min="-2" pref="40" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
                   <Component id="btnIranHormuzMap" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="127" max="32767" attributes="0"/>
+                  <EmptySpace pref="11" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -87,12 +99,12 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnIranHormuzMapActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnSystemAdminReport">
+        <Component class="javax.swing.JButton" name="btnEnterpriseReport">
           <Properties>
-            <Property name="text" type="java.lang.String" value="System Report"/>
+            <Property name="text" type="java.lang.String" value="Enterprise Report"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSystemAdminReportActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEnterpriseReportActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnManageSystem">
@@ -101,6 +113,22 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnManageSystemActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnOrgReport">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Organization Report"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnOrgReportActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnUserReport">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Organization(s) User Report"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUserReportActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
