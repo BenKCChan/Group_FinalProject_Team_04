@@ -30,7 +30,8 @@ public class OrgReportWorkAreaJPanel extends javax.swing.JPanel {
     /**
      * Creates new form EnterpriseReportWorkAreaJPanel
      */
-    private JFXPanel fxPanel;              // Swing container for JavaFX
+    private JFXPanel fxPanel;
+    private JPanel fxHost;
     private BarChart<String, Number> chart; // keep reference if you want to update later
     JPanel userProcessContainer;
     Business.System.System system;
@@ -41,19 +42,36 @@ public class OrgReportWorkAreaJPanel extends javax.swing.JPanel {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.system = system;
-        this.userProcessContainer = userProcessContainer;
-        this.system = system;
-        chartContainerPanel.setLayout(new BorderLayout());   // IMPORTANT
+
+        // Populate combo (also clear first to avoid duplicates)
+        cbbEnterprise.removeAllItems();
         for (Enterprise e : system.getNetworkList().get(0).getEnterpriseDirectory()) {
             cbbEnterprise.addItem(e.toString());
         }
+
+        // Host for JavaFX
+        fxHost = new JPanel(new BorderLayout());
         chartContainerPanel.removeAll();
-        // Put JavaFX inside the designer panel, NOT directly on "this"
+        chartContainerPanel.setLayout(new BorderLayout()); // ideally set this in designer instead
+        chartContainerPanel.add(fxHost, BorderLayout.CENTER);
+
         fxPanel = new JFXPanel();
-        chartContainerPanel.add(fxPanel, BorderLayout.CENTER);
+        fxHost.add(fxPanel, BorderLayout.CENTER);
+
         chartContainerPanel.revalidate();
         chartContainerPanel.repaint();
-        Platform.runLater(this::initChartsFx);
+    }
+
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        Platform.runLater(() -> {
+            if (fxPanel.getScene() == null) {
+                initChartsFx();   // MUST create chart + setScene again
+            } else {
+                updateChart();
+            }
+        });
     }
 
     private void initChartsFx() {
@@ -165,9 +183,10 @@ public class OrgReportWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
+        // Stop FX rendering and POP this card so previous() behaves like Back
         Platform.runLater(() -> fxPanel.setScene(null));
 
-        userProcessContainer.remove(this);
+        userProcessContainer.remove(this); // POP (important!)
 
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.previous(userProcessContainer);

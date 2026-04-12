@@ -30,7 +30,8 @@ public class UserReportWorkAreaJPanel extends javax.swing.JPanel {
     /**
      * Creates new form EnterpriseReportWorkAreaJPanel
      */
-    private JFXPanel fxPanel;              // Swing container for JavaFX
+    private JFXPanel fxPanel;
+    private JPanel fxHost;
     private BarChart<String, Number> barChart;
     JPanel userProcessContainer;
     Business.System.System system;
@@ -42,23 +43,41 @@ public class UserReportWorkAreaJPanel extends javax.swing.JPanel {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.system = system;
-        this.userProcessContainer = userProcessContainer;
-        this.system = system;
-        chartContainerPanel.setLayout(new BorderLayout());   // IMPORTANT
+
+        // Populate combo safely (avoid duplicates if panel is recreated)
+        cbbEnterprise.removeAllItems();
         for (Enterprise e : system.getNetworkList().get(0).getEnterpriseDirectory()) {
             cbbEnterprise.addItem(e.toString());
         }
+
+        // IMPORTANT: do NOT rely on the NetBeans-generated GroupLayout here.
+        // We create our own host with BorderLayout and place it inside chartContainerPanel.
         chartContainerPanel.removeAll();
-        // Put JavaFX inside the designer panel, NOT directly on "this"
+        chartContainerPanel.setLayout(new BorderLayout());
+
+        fxHost = new JPanel(new BorderLayout());
+        chartContainerPanel.add(fxHost, BorderLayout.CENTER);
+
         fxPanel = new JFXPanel();
-        chartContainerPanel.add(fxPanel, BorderLayout.CENTER);
+        fxHost.add(fxPanel, BorderLayout.CENTER);
+
         chartContainerPanel.revalidate();
         chartContainerPanel.repaint();
-        Platform.runLater(this::initChartsFx);
+    }
+
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        Platform.runLater(() -> {
+            if (fxPanel.getScene() == null) {
+                initChartsFx();
+            } else {
+                updateChart();
+            }
+        });
     }
 
     private void initChartsFx() {
-
         selectedEnterprise = system.getNetworkList().get(0).getEnterpriseDirectory().get(0);
 
         xAxis = new CategoryAxis();
@@ -94,7 +113,7 @@ public class UserReportWorkAreaJPanel extends javax.swing.JPanel {
             series.getData().add(new XYChart.Data<>(org.toString(), userCount));
         }
 
-        barChart.getData().setAll(series); // this replaces existing series cleanly
+        barChart.getData().setAll(series);
     }
 
     /**
@@ -182,9 +201,10 @@ public class UserReportWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
+        // Stop FX rendering and POP this card so previous() behaves like Back
         Platform.runLater(() -> fxPanel.setScene(null));
 
-        userProcessContainer.remove(this);
+        userProcessContainer.remove(this); // POP (important!)
 
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.previous(userProcessContainer);

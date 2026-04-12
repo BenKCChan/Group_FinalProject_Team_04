@@ -166,30 +166,38 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
 //        ManageSystemWorkAreaJPanel manageSystemWorkAreaJPanel = new ManageSystemWorkAreaJPanel(userProcessContainer, userAccount, system);
-        userProcessContainer.add("EnterpriseReportWorkAreaJPanel",new EnterpriseReportWorkAreaJPanel(userProcessContainer, system));
+        userProcessContainer.add("EnterpriseReportWorkAreaJPanel", new EnterpriseReportWorkAreaJPanel(userProcessContainer, system));
         layout.next(userProcessContainer);
+        userProcessContainer.revalidate();
+        userProcessContainer.repaint();
     }//GEN-LAST:event_btnEnterpriseReportActionPerformed
 
     private void btnManageSystemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageSystemActionPerformed
         // TODO add your handling code here:
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         ManageSystemWorkAreaJPanel manageSystemWorkAreaJPanel = new ManageSystemWorkAreaJPanel(userProcessContainer, userAccount, system);
-        userProcessContainer.add("manageSystemWorkAreaJPanel",manageSystemWorkAreaJPanel);
+        userProcessContainer.add("manageSystemWorkAreaJPanel", manageSystemWorkAreaJPanel);
         layout.next(userProcessContainer);
+        userProcessContainer.revalidate();
+        userProcessContainer.repaint();
     }//GEN-LAST:event_btnManageSystemActionPerformed
 
     private void btnOrgReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrgReportActionPerformed
         // TODO add your handling code here:
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        userProcessContainer.add("OrgReportWorkAreaJPanel",new OrgReportWorkAreaJPanel(userProcessContainer, system));
+        userProcessContainer.add("OrgReportWorkAreaJPanel", new OrgReportWorkAreaJPanel(userProcessContainer, system));
         layout.next(userProcessContainer);
+        userProcessContainer.revalidate();
+        userProcessContainer.repaint();
     }//GEN-LAST:event_btnOrgReportActionPerformed
 
     private void btnUserReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserReportActionPerformed
         // TODO add your handling code here:
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        userProcessContainer.add("UserReportWorkAreaJPanel",new UserReportWorkAreaJPanel(userProcessContainer, system));
+        userProcessContainer.add("UserReportWorkAreaJPanel", new UserReportWorkAreaJPanel(userProcessContainer, system));
         layout.next(userProcessContainer);
+        userProcessContainer.revalidate();
+        userProcessContainer.repaint();
     }//GEN-LAST:event_btnUserReportActionPerformed
 
 

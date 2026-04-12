@@ -33,34 +33,69 @@ public class EnterpriseReportWorkAreaJPanel extends javax.swing.JPanel {
     private BarChart<String, Number> chart; // keep reference if you want to update later
     JPanel userProcessContainer;
     Business.System.System system;
+    private JPanel fxHost;
 
     public EnterpriseReportWorkAreaJPanel(JPanel userProcessContainer, Business.System.System system) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.system = system;
-        this.userProcessContainer = userProcessContainer;
-        this.system = system;
-        chartContainerPanel.setLayout(new BorderLayout());
-        // Put JavaFX inside the designer panel, NOT directly on "this"
-        fxPanel = new JFXPanel();
+
+        // Make chartContainerPanel a stable BorderLayout container
         chartContainerPanel.removeAll();
-        chartContainerPanel.add(fxPanel, BorderLayout.CENTER);
+        chartContainerPanel.setLayout(new BorderLayout());
+
+        fxHost = new JPanel(new BorderLayout());
+        chartContainerPanel.add(fxHost, BorderLayout.CENTER);
+
+        fxPanel = new JFXPanel();
+        fxHost.add(fxPanel, BorderLayout.CENTER);
+
         chartContainerPanel.revalidate();
         chartContainerPanel.repaint();
-        Platform.runLater(this::initChartsFx);
+    }
+
+    // Initialize (or re-init) JavaFX AFTER Swing component is attached
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        Platform.runLater(() -> {
+            if (fxPanel.getScene() == null) {
+                initChartsFx();
+            } else {
+                // optional: refresh if data can change
+                refreshPie();
+            }
+        });
     }
 
     private void initChartsFx() {
-        PieChart pie1 = new PieChart();
-        pie1.setTitle("Enterprise Categories");
+        PieChart pie = buildPie();
+        fxPanel.setScene(new Scene(new BorderPane(pie), 800, 450));
+    }
 
-        var enterprises = system.getNetworkList().get(0).getEnterpriseDirectory();
-        pie1.getData().clear();
-        for (Enterprise e : enterprises) {
-            pie1.getData().add(new PieChart.Data(e.toString(), 1)); // equal slices
+    private PieChart buildPie() {
+        PieChart pie = new PieChart();
+        pie.setTitle("Enterprise Categories");
+        refreshPie(pie);
+        return pie;
+    }
+
+    private void refreshPie() {
+        // refresh existing pie if scene already created
+        if (fxPanel.getScene() == null) {
+            return;
         }
+        BorderPane root = (BorderPane) fxPanel.getScene().getRoot();
+        PieChart pie = (PieChart) root.getCenter();
+        refreshPie(pie);
+    }
 
-        fxPanel.setScene(new Scene(new javafx.scene.layout.BorderPane(pie1), 800, 450));
+    private void refreshPie(PieChart pie) {
+        var enterprises = system.getNetworkList().get(0).getEnterpriseDirectory();
+        pie.getData().clear();
+        for (Enterprise e : enterprises) {
+            pie.getData().add(new PieChart.Data(e.toString(), 1));
+        }
     }
 
     /**
@@ -102,9 +137,10 @@ public class EnterpriseReportWorkAreaJPanel extends javax.swing.JPanel {
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
 
+        // Stop FX rendering and POP this card so previous() behaves like Back
         Platform.runLater(() -> fxPanel.setScene(null));
 
-        userProcessContainer.remove(this);
+        userProcessContainer.remove(this); // POP (important!)
 
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.previous(userProcessContainer);
