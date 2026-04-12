@@ -10,28 +10,26 @@ import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import Business.System.System;
 import javax.swing.JPanel;
-import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
+import ui.UAEOilSupplier.OilInventoryWorkAreaJPanel;
 
 /**
  *
  * @author kal bugrara
  */
-public class SupplierInventoryControlRole extends Role {
+ public class SupplierInventoryControlRole extends Role {
 
-    UserAccount person;
-    
     public SupplierInventoryControlRole(UserAccount p) {
         super(p, RoleType.OilSupplierInventoryControl);
     }
 
     @Override
-    public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
-        
-        return new AdminWorkAreaJPanel(userProcessContainer,account, organization, enterprise, system);
+    public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account,
+            Organization organization, Enterprise enterprise, System system) {
+        return new OilInventoryWorkAreaJPanel(userProcessContainer, account, organization, enterprise, system);
     }
 
     @Override
-    public String getRole(){
-        return  RoleType.OilSupplierInventoryControl.getValue();
+    public String getRole() {
+        return RoleType.OilSupplierInventoryControl.getValue();
     }
 }
