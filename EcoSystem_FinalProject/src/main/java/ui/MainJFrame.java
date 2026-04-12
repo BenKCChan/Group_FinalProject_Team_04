@@ -4,14 +4,18 @@
  */
 package ui;
 
-import Business.ConfigureASystem;
+import Business.System.ConfigureASystem;
 import Business.System.System;
 //import Business.DB4OUtil.DB4OUtil;
 import Business.Enterprise.Enterprise;
 import Business.Network.Network;
-import Business.Organization;
+import Business.Organization.Organization;
+import Business.Role.Role;
 import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
@@ -28,11 +32,12 @@ public class MainJFrame extends javax.swing.JFrame {
     private System system;
 //    private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
 
-    public MainJFrame() {
+    public MainJFrame() throws IOException, InterruptedException, Exception {
         initComponents();
 //        system = dB4OUtil.retrieveSystem();
         system = ConfigureASystem.initialize();
         this.setSize(1680, 1050);
+
     }
 
     /**
@@ -131,62 +136,67 @@ public class MainJFrame extends javax.swing.JFrame {
         // Get Password
         char[] passwordCharArray = passwordField.getPassword();
         String password = String.valueOf(passwordCharArray);
-        
+
         //Step1: Check in the system admin user account directory if you have the user
-        UserAccount userAccount=system.getUserAccountDirectory().AuthenticateUser(userName, password);
-        
-        Enterprise inEnterprise=null;
-        Organization inOrganization=null;
-        
-        if(userAccount==null){
+        UserAccount userAccount = system.getUserAccountDirectory().AuthenticateUser(userName, password);
+
+        Enterprise inEnterprise = null;
+        Organization inOrganization = null;
+
+        if (userAccount == null) {
             //Step 2: Go inside each network and check each enterprise
-            for(Network network:system.getNetworkList()){
+            for (Network network : system.getNetworkList()) {
                 //Step 2.a: check against each enterprise
-                for(Enterprise enterprise:network.getEnterpriseDirectory()){
-                    userAccount=enterprise.getUserAccountDirectory().AuthenticateUser(userName, password);
-                    if(userAccount==null){
-                       //Step 3:check against each organization for each enterprise
-                       for(Organization organization:enterprise.getParticipatingunits()){
-                           userAccount=organization.getUserAccountDirectory().AuthenticateUser(userName, password);
-                           if(userAccount!=null){
-                               inEnterprise=enterprise;
-                               inOrganization=organization;
-                               
-                               if(inEnterprise.equals("Admin") && inOrganization.equals("Admin")){
-                                    CardLayout layout=(CardLayout)container.getLayout();
-                                    container.add("workArea",userAccount.getAssociatedPersonProfile().createWorkArea(container, userAccount, inOrganization, inEnterprise, system));
-                                    layout.next(container);
-                               }
-                               
-                               break;
-                           }
-                       }
-                        
-                    }
-                    else{
-                       inEnterprise=enterprise;
-                       break;
-                    }
-                    if(inOrganization!=null){
+                for (Enterprise enterprise : network.getEnterpriseDirectory()) {
+                    userAccount = enterprise.getUserAccountDirectory().AuthenticateUser(userName, password);
+                    if (userAccount == null) {
+                        //Step 3:check against each organization for each enterprise
+                        for (Organization organization : enterprise.getParticipatingunits()) {
+                            userAccount = organization.getUserAccountDirectory().AuthenticateUser(userName, password);
+                            if (userAccount != null) {
+                                inEnterprise = enterprise;
+                                inOrganization = organization;
+
+                                break;
+                            }
+                        }
+
+                    } else {
+                        inEnterprise = enterprise;
                         break;
-                    }  
+                    }
+                    if (inOrganization != null) {
+                        break;
+                    }
                 }
-                if(inEnterprise!=null){
+                if (inEnterprise != null) {
                     break;
                 }
             }
         }
-        
-        if(userAccount==null){
+
+        if (userAccount == null) {
             JOptionPane.showMessageDialog(null, "Invalid credentials");
             return;
         }
-        else{
-            CardLayout layout=(CardLayout)container.getLayout();
-            container.add("workArea",userAccount.getAssociatedPersonProfile().createWorkArea(container, userAccount, inOrganization, inEnterprise, system));
-            layout.next(container);
+
+        // Find role — check admin directory first, then org role directory
+        Role foundRole = system.getAdminDirectory().findAdmin(userAccount.getId());
+
+        if (foundRole == null && inOrganization != null) {
+            foundRole = inOrganization.getRoleDirectory().findRoleByAccountId(userAccount.getId());
         }
-        
+
+        if (foundRole == null) {
+            JOptionPane.showMessageDialog(null, "No role found for this account.");
+            return;
+        }
+
+        CardLayout layout = (CardLayout) container.getLayout();
+        container.add("workArea", foundRole.createWorkArea(
+                container, userAccount, inOrganization, inEnterprise, system));
+        layout.next(container);
+
         loginJButton.setEnabled(false);
         logoutJButton.setEnabled(true);
         userNameJTextField.setEnabled(false);
@@ -212,8 +222,10 @@ public class MainJFrame extends javax.swing.JFrame {
 
     /**
      * @param args the command line arguments
+     * @throws java.io.IOException
+     * @throws java.lang.InterruptedException
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException, InterruptedException, Exception {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -240,7 +252,15 @@ public class MainJFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainJFrame().setVisible(true);
+                try {
+                    new MainJFrame().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {          // ← add this
+                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

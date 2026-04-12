@@ -5,7 +5,7 @@
  */
 package Business.Role;
 
-import Business.Person.PersonAccount;
+import Business.UserAccount.UserAccount;
 
 import java.util.ArrayList;
 
@@ -15,31 +15,38 @@ import java.util.ArrayList;
  */
 public class SupplierDirectory {
 
-
-    ArrayList<SupplierRole> studentlist;
+    ArrayList<SupplierRole> supplierList;
 
     public SupplierDirectory() {
 
-     studentlist = new ArrayList();
+        supplierList = new ArrayList();
 
     }
 
-    public SupplierRole newStudentProfile(PersonAccount p) {
+    public SupplierRole newSupplierRole(UserAccount p) {
 
         SupplierRole sp = new SupplierRole(p);
-        studentlist.add(sp);
+        supplierList.add(sp);
         return sp;
     }
 
-    public SupplierRole findStudent(String id) {
+    public SupplierRole findSupplier(String id) {
 
-        for (SupplierRole sp : studentlist) {
+        for (SupplierRole sp : supplierList) {
 
             if (sp.isMatch(id)) {
                 return sp;
             }
         }
-            return null; //not found after going through the whole list
-         }
-    
+        return null; //not found after going through the whole list
+    }
+
+    public ArrayList<SupplierRole> removeRole(UserAccount u) {
+        SupplierRole searchRole = findSupplier(String.valueOf(u.getId()));
+        if (searchRole != null) {
+            supplierList.remove(searchRole);
+        }
+        return supplierList;
+    }
+
 }

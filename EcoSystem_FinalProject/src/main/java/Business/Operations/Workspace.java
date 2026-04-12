@@ -9,5 +9,5 @@ package Business.Operations;
  * @author ben
  */
 public class Workspace {
-    
+
 }

@@ -6,12 +6,12 @@
 package Business.Role;
 
 import Business.Enterprise.Enterprise;
-import Business.Organization;
-import Business.Person.PersonAccount;
+import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import Business.System.System;
 import javax.swing.JPanel;
 import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
+import ui.UAEOilSupplier.OilSupplierAgentWorkAreaJPanel;
 
 /**
  *
@@ -19,24 +19,17 @@ import ui.SystemAdminWorkArea.AdminWorkAreaJPanel;
  */
 public class SupplierRole extends Role {
 
-    PersonAccount person;
-    
-    public SupplierRole(PersonAccount p) {
-        super(p, RoleType.Supplier);
-    }
-
-    public boolean isMatch(String id) {
-        return person.getPersonId().equals(id);
+    public SupplierRole(UserAccount p) {
+        super(p, RoleType.OilSupplier);
     }
 
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
-        
-        return new AdminWorkAreaJPanel(userProcessContainer, system);
+        return new OilSupplierAgentWorkAreaJPanel(userProcessContainer, account, organization, enterprise, system);
     }
 
     @Override
-    public String getRole(){
-        return  "OilSupplier";
+    public String getRole() {
+        return RoleType.OilSupplier.getValue();
     }
 }

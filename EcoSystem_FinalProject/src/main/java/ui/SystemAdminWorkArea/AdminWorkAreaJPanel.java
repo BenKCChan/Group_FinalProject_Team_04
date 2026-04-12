@@ -4,8 +4,19 @@
  */
 package ui.SystemAdminWorkArea;
 
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
 import javax.swing.JPanel;
 import Business.System.System;
+import Business.UserAccount.UserAccount;
+import java.awt.CardLayout;
+import java.awt.Component;
+import ui.SystemAdminWorkArea.ManageSystem.EnterpriseReportWorkAreaJPanel;
+import ui.SystemAdminWorkArea.ManageSystem.ManageSystemWorkAreaJPanel;
+import ui.SystemAdminWorkArea.ManageSystem.OrgReportWorkAreaJPanel;
+import ui.SystemAdminWorkArea.ManageSystem.UserReportWorkAreaJPanel;
+import ui.utils.IranHormuzMapJPanel;
+
 /**
  *
  * @author ben
@@ -15,14 +26,22 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
     /**
      * Creates new form AdminWorkAreaJPanel
      */
-    
     JPanel userProcessContainer;
     System system;
-    /** Creates new form AdminWorkAreaJPanel */
-    public AdminWorkAreaJPanel(JPanel userProcessContainer, System system) {
+    UserAccount userAccount;
+    Organization inOrganization;
+    Enterprise inEnterprise;
+
+    /**
+     * Creates new form AdminWorkAreaJPanel
+     */
+    public AdminWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Organization inOrganization, Enterprise inEnterprise, System system) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.system = system;
+        this.userAccount = userAccount;
+        this.inOrganization = inOrganization;
+        this.inEnterprise = inEnterprise;
     }
 
     /**
@@ -36,11 +55,51 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
+        btnIranHormuzMap = new javax.swing.JButton();
+        btnEnterpriseReport = new javax.swing.JButton();
+        btnManageSystem = new javax.swing.JButton();
+        btnOrgReport = new javax.swing.JButton();
+        btnUserReport = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         lblTitle.setText("Administrative Work Area");
+
+        btnIranHormuzMap.setText("Iran Hormuz situation");
+        btnIranHormuzMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIranHormuzMapActionPerformed(evt);
+            }
+        });
+
+        btnEnterpriseReport.setText("Enterprise Report");
+        btnEnterpriseReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnterpriseReportActionPerformed(evt);
+            }
+        });
+
+        btnManageSystem.setText("Manage System");
+        btnManageSystem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageSystemActionPerformed(evt);
+            }
+        });
+
+        btnOrgReport.setText("Organization Report");
+        btnOrgReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOrgReportActionPerformed(evt);
+            }
+        });
+
+        btnUserReport.setText("Organization(s) User Report");
+        btnUserReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUserReportActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -48,15 +107,34 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(37, 37, 37)
-                .addComponent(lblTitle)
-                .addContainerGap(189, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnUserReport, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblTitle)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(btnEnterpriseReport, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnOrgReport))
+                        .addComponent(btnManageSystem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnIranHormuzMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addComponent(lblTitle)
-                .addContainerGap(255, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnManageSystem)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEnterpriseReport, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnOrgReport, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnUserReport, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(76, 76, 76)
+                .addComponent(btnIranHormuzMap)
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -75,8 +153,60 @@ public class AdminWorkAreaJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnIranHormuzMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIranHormuzMapActionPerformed
+        // TODO add your handling code here:
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        IranHormuzMapJPanel iranHormuzMapJPanel = new IranHormuzMapJPanel(userProcessContainer);
+        iranHormuzMapJPanel.loadURL("https://www.youtube.com/live/8SAo9jrrB_s");
+        userProcessContainer.add("IranHormuzMapJPanel", iranHormuzMapJPanel);
+        layout.next(userProcessContainer);
+    }//GEN-LAST:event_btnIranHormuzMapActionPerformed
+
+    private void btnEnterpriseReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnterpriseReportActionPerformed
+        // TODO add your handling code here:
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+//        ManageSystemWorkAreaJPanel manageSystemWorkAreaJPanel = new ManageSystemWorkAreaJPanel(userProcessContainer, userAccount, system);
+        userProcessContainer.add("EnterpriseReportWorkAreaJPanel", new EnterpriseReportWorkAreaJPanel(userProcessContainer, system));
+        layout.next(userProcessContainer);
+        userProcessContainer.revalidate();
+        userProcessContainer.repaint();
+    }//GEN-LAST:event_btnEnterpriseReportActionPerformed
+
+    private void btnManageSystemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageSystemActionPerformed
+        // TODO add your handling code here:
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        ManageSystemWorkAreaJPanel manageSystemWorkAreaJPanel = new ManageSystemWorkAreaJPanel(userProcessContainer, userAccount, system);
+        userProcessContainer.add("manageSystemWorkAreaJPanel", manageSystemWorkAreaJPanel);
+        layout.next(userProcessContainer);
+        userProcessContainer.revalidate();
+        userProcessContainer.repaint();
+    }//GEN-LAST:event_btnManageSystemActionPerformed
+
+    private void btnOrgReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrgReportActionPerformed
+        // TODO add your handling code here:
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        userProcessContainer.add("OrgReportWorkAreaJPanel", new OrgReportWorkAreaJPanel(userProcessContainer, system));
+        layout.next(userProcessContainer);
+        userProcessContainer.revalidate();
+        userProcessContainer.repaint();
+    }//GEN-LAST:event_btnOrgReportActionPerformed
+
+    private void btnUserReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserReportActionPerformed
+        // TODO add your handling code here:
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        userProcessContainer.add("UserReportWorkAreaJPanel", new UserReportWorkAreaJPanel(userProcessContainer, system));
+        layout.next(userProcessContainer);
+        userProcessContainer.revalidate();
+        userProcessContainer.repaint();
+    }//GEN-LAST:event_btnUserReportActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEnterpriseReport;
+    private javax.swing.JButton btnIranHormuzMap;
+    private javax.swing.JButton btnManageSystem;
+    private javax.swing.JButton btnOrgReport;
+    private javax.swing.JButton btnUserReport;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblTitle;
     // End of variables declaration//GEN-END:variables

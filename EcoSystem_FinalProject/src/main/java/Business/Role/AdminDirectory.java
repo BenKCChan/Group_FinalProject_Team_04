@@ -5,7 +5,7 @@
  */
 package Business.Role;
 
-import Business.Person.PersonAccount;
+import Business.UserAccount.UserAccount;
 
 import java.util.ArrayList;
 
@@ -23,7 +23,7 @@ public class AdminDirectory {
 
     }
 
-    public AdminRole newAdminRole(PersonAccount p) {
+    public AdminRole newAdminRole(UserAccount p) {
 
         AdminRole sp = new AdminRole(p);
         adminlist.add(sp);
@@ -38,7 +38,15 @@ public class AdminDirectory {
                 return admin;
             }
         }
-            return null; //not found after going through the whole list
-         }
-    
+        return null; //not found after going through the whole list
+    }
+
+    public ArrayList<AdminRole> removeRole(UserAccount u) {
+        AdminRole adminRole = findAdmin(String.valueOf(u.getId()));
+        if (adminRole != null) {
+            adminlist.remove(adminRole);
+        }
+        return adminlist; 
+    }
+
 }
