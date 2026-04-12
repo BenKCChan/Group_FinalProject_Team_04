@@ -22,20 +22,16 @@ public class ManageEnterpriseWorkAreaJPanel extends javax.swing.JPanel {
     /**
      * Creates new form ManageEnterpriseWorkAreaJPanel
      */
-    JPanel userProcessContainer;
-    Business.System.System system;
-    UserAccount userAccount;
-    Network network;
-<<<<<<< HEAD:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/CreateEnterpriseWorkAreaJPanel.java
+    private JPanel userProcessContainer;
+    private Business.System.System system;
+    private UserAccount userAccount;
+    private Network network;
+    private Enterprise selectedEnterprise;
 
-    public CreateEnterpriseWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Business.System.System system, Network network) {
-=======
-    Enterprise selectedEnterprise;
-
-    public ManageEnterpriseWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Business.System.System system, Network network) {
->>>>>>> main:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/ManageEnterpriseWorkAreaJPanel.java
+    public ManageEnterpriseWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount,
+            Business.System.System system, Network network) {
         initComponents();
-        lblEnterprise.setText("Manage Enterprise -- "+ network.toString() + " Network");
+        lblEnterprise.setText("Manage Enterprise -- " + network.toString() + " Network");
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
         this.system = system;
@@ -213,13 +209,10 @@ public class ManageEnterpriseWorkAreaJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         if (txtEnterpriseName.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Enterprise Name cannot be empty", "ERROR", ERROR_MESSAGE);
-<<<<<<< HEAD:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/CreateEnterpriseWorkAreaJPanel.java
-=======
             return;
         }
-        if(!txtEnterpriseName.getText().matches("[A-Za-z0-9]+")){
-            JOptionPane.showMessageDialog(this, "Enterprise Name is not accept special characters", "ERROR", ERROR_MESSAGE);
->>>>>>> main:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/ManageEnterpriseWorkAreaJPanel.java
+        if (!txtEnterpriseName.getText().matches("[A-Za-z0-9 ]+")) {
+            JOptionPane.showMessageDialog(this, "Enterprise Name does not accept special characters", "ERROR", ERROR_MESSAGE);
             return;
         }
         network.newEnterprise(txtEnterpriseName.getText());

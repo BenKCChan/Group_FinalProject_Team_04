@@ -6,7 +6,7 @@ package ui.SystemAdminWorkArea.ManageSystem;
 
 import Business.Enterprise.Enterprise;
 import Business.Network.Network;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
@@ -23,19 +23,16 @@ public class ManageOrgWorkAreaJPanel extends javax.swing.JPanel {
     /**
      * Creates new form ManageOrgWorkAreaJPanel
      */
-    JPanel userProcessContainer;
-    Business.System.System system;
-    UserAccount userAccount;
-    Network network;
-    Enterprise enterprise;
-<<<<<<< HEAD:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/CreateOrgWorkAreaJPanel.java
-
-    public CreateOrgWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Business.System.System system, Network network, Enterprise enterprise) {
-=======
-    Organization selectedOrg;
-
-    public ManageOrgWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Business.System.System system, Network network, Enterprise enterprise) {
->>>>>>> main:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/ManageOrgWorkAreaJPanel.java
+    
+   private JPanel userProcessContainer;
+    private Business.System.System system;
+    private UserAccount userAccount;
+    private Network network;
+    private Enterprise enterprise;
+    private Organization selectedOrg;
+    
+ public ManageOrgWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, 
+            Business.System.System system, Network network, Enterprise enterprise) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.userAccount = userAccount;
@@ -242,36 +239,34 @@ public class ManageOrgWorkAreaJPanel extends javax.swing.JPanel {
         //            JOptionPane.showMessageDialog(this, "Network Name Cannot be Empty", "ERROR", ERROR_MESSAGE);
         //            return;
         //        }
+      if (selectedOrg == null) {
+            JOptionPane.showMessageDialog(this, "Please select an Organization", "ERROR", ERROR_MESSAGE);
+            return;
+        }
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-<<<<<<< HEAD:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/CreateOrgWorkAreaJPanel.java
-
-=======
-        ManageUserWorkAreaJPanel manageUserWorkAreaJPanel = new ManageUserWorkAreaJPanel(userProcessContainer, userAccount, system, network, enterprise, selectedOrg );
+        ManageUserWorkAreaJPanel manageUserWorkAreaJPanel = new ManageUserWorkAreaJPanel(
+                userProcessContainer, userAccount, system, network, enterprise, selectedOrg);
         userProcessContainer.add("manageUserWorkAreaJPanel", manageUserWorkAreaJPanel);
->>>>>>> main:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/ManageOrgWorkAreaJPanel.java
         layout.next(userProcessContainer);
     }//GEN-LAST:event_btnNextActionPerformed
 
     private void btnCreateOrgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateOrgActionPerformed
         // TODO add your handling code here:
-        if (txtOrgName.getText().isEmpty()) {
+         if (txtOrgName.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Org Name cannot be empty", "ERROR", ERROR_MESSAGE);
             return;
         }
-<<<<<<< HEAD:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/CreateOrgWorkAreaJPanel.java
-=======
-        if(!txtOrgName.getText().matches("[A-Za-z0-9]+")){
-            JOptionPane.showMessageDialog(this, "Org Name is not accept special characters", "ERROR", ERROR_MESSAGE);
+        if (!txtOrgName.getText().matches("[A-Za-z0-9 ]+")) {
+            JOptionPane.showMessageDialog(this, "Org Name does not accept special characters", "ERROR", ERROR_MESSAGE);
             return;
         }
->>>>>>> main:EcoSystem_FinalProject/src/main/java/ui/SystemAdminWorkArea/ManageSystem/ManageOrgWorkAreaJPanel.java
         enterprise.newOrganization(txtOrgName.getText());
         reloadTable();
     }//GEN-LAST:event_btnCreateOrgActionPerformed
 
     private void btnUpdateOrgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateOrgActionPerformed
         // TODO add your handling code here:
-        if(selectedOrg==null){
+        if (selectedOrg == null) {
             JOptionPane.showMessageDialog(this, "Please select the Organization", "ERROR", ERROR_MESSAGE);
             return;
         }
@@ -279,21 +274,25 @@ public class ManageOrgWorkAreaJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Org Name cannot be empty", "ERROR", ERROR_MESSAGE);
             return;
         }
-        if(!txtOrgName.getText().matches("[A-Za-z0-9]+")){
-            JOptionPane.showMessageDialog(this, "Org Name is not accept special characters", "ERROR", ERROR_MESSAGE);
+        if (!txtOrgName.getText().matches("[A-Za-z0-9 ]+")) {
+            JOptionPane.showMessageDialog(this, "Org Name does not accept special characters", "ERROR", ERROR_MESSAGE);
             return;
         }
-        Organization updatedOrg = enterprise.updateParticipantingunits(selectedOrg, new Organization(txtOrgName.getText()));
+        enterprise.updateParticipatingUnit(selectedOrg, new Organization(txtOrgName.getText()));
         reloadTable();
     }//GEN-LAST:event_btnUpdateOrgActionPerformed
 
     private void btnDeleteOrgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteOrgActionPerformed
         // TODO add your handling code here:
-        if(selectedOrg==null){
+         if (selectedOrg == null) {
             JOptionPane.showMessageDialog(this, "Please select the Organization", "ERROR", ERROR_MESSAGE);
             return;
         }
-        Boolean result = enterprise.removeParticipantingunits(selectedOrg);
+        boolean result = enterprise.removeParticipatingUnit(selectedOrg);
+        if (!result) {
+            JOptionPane.showMessageDialog(this, "Cannot delete Organization with existing users", "ERROR", ERROR_MESSAGE);
+            return;
+        }
         reloadTable();
     }//GEN-LAST:event_btnDeleteOrgActionPerformed
 

@@ -6,7 +6,7 @@ package ui.SystemAdminWorkArea.ManageSystem;
 
 import Business.Enterprise.Enterprise;
 import Business.Network.Network;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.Role.AdminDirectory;
 import Business.Role.AuditorDirectory;
 import Business.Role.FactoryAnalystDirectory;
@@ -33,13 +33,13 @@ public class ManageUserWorkAreaJPanel extends javax.swing.JPanel {
     /**
      * Creates new form CreateOrgWorkAreaJPanel
      */
-    JPanel userProcessContainer;
-    Business.System.System system;
-    UserAccount userAccount;
-    Network network;
-    Enterprise enterprise;
-    Organization org;
-    UserAccount selectedUser;
+    private JPanel userProcessContainer;
+    private Business.System.System system;
+    private UserAccount userAccount;
+    private Network network;
+    private Enterprise enterprise;
+    private Organization org;
+    private UserAccount selectedUser;
 
     public ManageUserWorkAreaJPanel(JPanel userProcessContainer, UserAccount userAccount, Business.System.System system, Network network, Enterprise enterprise, Organization org) {
         initComponents();
@@ -311,7 +311,14 @@ public class ManageUserWorkAreaJPanel extends javax.swing.JPanel {
             return;
         }
 
-        UserAccount newUserAccount = system.getUserAccountDirectory().newUserAccount(txtUserName.getText(), new String(txtPwd.getPassword()));
+        UserAccount newUserAccount;
+        try {
+            newUserAccount = system.getUserAccountDirectory().newUserAccount(
+                    txtUserName.getText(), new String(txtPwd.getPassword()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Username already exists. Please choose a different name.", "ERROR", ERROR_MESSAGE);
+            return;
+        }
 
         String selectedRole = comboRole.getSelectedItem().toString();
         if (Role.RoleType.Admin.getValue().equals(selectedRole)) {
@@ -340,7 +347,7 @@ public class ManageUserWorkAreaJPanel extends javax.swing.JPanel {
             reloadTable();
         } else if (Role.RoleType.OilSupplierInventoryControl.getValue().equals(selectedRole)) {
             SupplierInventoryControlDirectory dir = system.getSupplierInventoryControlDirectory();
-            dir.newSupplierInventoryContorlRole(newUserAccount);
+            dir.newSupplierInventoryControlRole(newUserAccount);
             reloadTable();
         } else if (Role.RoleType.Auditor.getValue().equals(selectedRole)) {
             AuditorDirectory dir = system.getAuditorDirectory();
@@ -371,21 +378,20 @@ public class ManageUserWorkAreaJPanel extends javax.swing.JPanel {
             return;
         }
         if (!txtUserName.getText().matches("[A-Za-z0-9]+")) {
-            JOptionPane.showMessageDialog(this, "User Name is not accept special characters", "ERROR", ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "User Name does not accept special characters", "ERROR", ERROR_MESSAGE);
             return;
         }
-        if (txtPwd.getPassword() == null || txtPwd.getPassword().length < 0) {
+        if (txtPwd.getPassword() == null || txtPwd.getPassword().length == 0) {  // fixed
             JOptionPane.showMessageDialog(this, "Password cannot be empty", "ERROR", ERROR_MESSAGE);
             return;
         }
 
-        // Update password (if provided)
         char[] pwd = txtPwd.getPassword();
-        system.getUserAccountDirectory().findUserAccount(selectedUser.getId()).setUsername(txtUserName.getText());
-        system.getUserAccountDirectory().findUserAccount(selectedUser.getId()).setPassword(new String(pwd));
-        
-        changeRoleForUser(selectedUser);
+        // fixed — use getUserLoginName() not getId()
+        system.getUserAccountDirectory().findUserAccount(selectedUser.getUserLoginName()).setUsername(txtUserName.getText());
+        system.getUserAccountDirectory().findUserAccount(selectedUser.getUserLoginName()).setPassword(new String(pwd));
 
+        changeRoleForUser(selectedUser);
         reloadTable();
         JOptionPane.showMessageDialog(this, "User updated.");
     }//GEN-LAST:event_btnUpdateUserActionPerformed
@@ -421,7 +427,7 @@ public class ManageUserWorkAreaJPanel extends javax.swing.JPanel {
     private void removeUserFromAllRoleDirectories(UserAccount user) {
 
         system.getAdminDirectory().removeRole(user);
-        system.getAuditorDirectory().newAuditorRole(user);
+        system.getAuditorDirectory().removeRole(user);
         system.getFleetMonitorDirectory().removeRole(user);
         system.getFactoryManagerDirectory().removeRole(user);
         system.getFactoryAnalystDirectory().removeRole(user);
@@ -461,7 +467,7 @@ public class ManageUserWorkAreaJPanel extends javax.swing.JPanel {
             reloadTable();
         } else if (Role.RoleType.OilSupplierInventoryControl.getValue().equals(selectedRole)) {
             SupplierInventoryControlDirectory dir = system.getSupplierInventoryControlDirectory();
-            dir.newSupplierInventoryContorlRole(user);
+            dir.newSupplierInventoryControlRole(user);
             reloadTable();
         } else if (Role.RoleType.Auditor.getValue().equals(selectedRole)) {
             AuditorDirectory dir = system.getAuditorDirectory();
