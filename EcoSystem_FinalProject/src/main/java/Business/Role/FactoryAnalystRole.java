@@ -6,7 +6,7 @@
 package Business.Role;
 
 import Business.Enterprise.Enterprise;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import Business.System.System;
 import javax.swing.JPanel;
@@ -22,10 +22,6 @@ public class FactoryAnalystRole extends Role {
         super(p, RoleType.FactoryAnalyst);
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> main
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, System system) {
 

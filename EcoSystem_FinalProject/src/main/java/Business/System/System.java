@@ -7,7 +7,7 @@ package Business.System;
 import java.util.ArrayList;
 import Business.Network.Network;
 import Business.Operations.RequestBoard;
-import Business.Organization;
+import Business.Organization.Organization;
 
 /**
  *

@@ -6,7 +6,7 @@
 package Business.Role;
 
 import Business.Enterprise.Enterprise;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import Business.System.System;
 import javax.swing.JPanel;
@@ -19,13 +19,10 @@ import ui.UAEOilSupplier.OilInventoryWorkAreaJPanel;
  */
 public class SupplierInventoryControlRole extends Role {
 
-<<<<<<< HEAD:EcoSystem_FinalProject/src/main/java/Business/Role/SupplierInventoryContorlRole.java
-    public SupplierInventoryContorlRole(UserAccount p) {
-=======
+
     UserAccount person;
     
     public SupplierInventoryControlRole(UserAccount p) {
->>>>>>> main:EcoSystem_FinalProject/src/main/java/Business/Role/SupplierInventoryControlRole.java
         super(p, RoleType.OilSupplierInventoryControl);
     }
 

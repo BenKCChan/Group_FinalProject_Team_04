@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class SupplierInventoryContorlDirectory {
 
-    ArrayList<SupplierInventoryContorlRole> supplierInventoryContorlRoleList;
+    ArrayList<SupplierInventoryControlRole> supplierInventoryContorlRoleList;
 
     public SupplierInventoryContorlDirectory() {
 
@@ -23,16 +23,16 @@ public class SupplierInventoryContorlDirectory {
 
     }
 
-    public SupplierInventoryContorlRole newSupplierInventoryContorlRole(UserAccount p) {
+    public SupplierInventoryControlRole newSupplierInventoryContorlRole(UserAccount p) {
 
-        SupplierInventoryContorlRole sp = new SupplierInventoryContorlRole(p);
+        SupplierInventoryControlRole sp = new SupplierInventoryControlRole(p);
         supplierInventoryContorlRoleList.add(sp);
         return sp;
     }
 
-    public SupplierInventoryContorlRole findSupplierInventoryControlRole(String id) {
+    public SupplierInventoryControlRole findSupplierInventoryControlRole(String id) {
 
-        for (SupplierInventoryContorlRole sp : supplierInventoryContorlRoleList) {
+        for (SupplierInventoryControlRole sp : supplierInventoryContorlRoleList) {
 
             if (sp.isMatch(id)) {
                 return sp;

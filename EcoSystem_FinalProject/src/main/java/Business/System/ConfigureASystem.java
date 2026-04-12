@@ -5,16 +5,15 @@ import Business.UserAccount.UserAccount;
 
 import Business.Network.Network;
 import Business.Operations.RequestBoard;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.Role.AdminDirectory;
 import Business.Role.AdminRole;
-<<<<<<< HEAD
+
 import Business.Role.LogisticsAnalystRole;
 import Business.Role.SupplierAnalystRole;
-import Business.Role.SupplierInventoryContorlRole;
 import Business.Role.SupplierRole;
 import Business.Role.TransportCoordinatorRole;
-=======
+
 import Business.Role.AuditorDirectory;
 import Business.Role.FactoryAnalystDirectory;
 import Business.Role.FactoryInventoryControlDirectory;
@@ -23,17 +22,17 @@ import Business.Role.FleetMonitorDirectory;
 import Business.Role.SupplierAnalystDirectory;
 import Business.Role.SupplierDirectory;
 import Business.Role.SupplierInventoryControlDirectory;
->>>>>>> main
+import Business.Role.SupplierInventoryControlRole;
+
 import Business.utils.RealTimeOilAPI;
 import com.github.javafaker.Faker;
 import java.io.IOException;
-<<<<<<< HEAD
+
 
 import Business.utils.FakerDataGenerator;
 
-=======
 import java.util.ArrayList;
->>>>>>> main
+
 /**
  *
  * @author rrheg
@@ -90,7 +89,7 @@ public class ConfigureASystem {
 
         // Oil Inventory Control
         UserAccount uaInv = e3_org3.getUserAccountDirectory().newUserAccount("oil.inventory", "Pass@123");
-        SupplierInventoryContorlRole invRole = new SupplierInventoryContorlRole(uaInv);
+        SupplierInventoryControlRole invRole = new SupplierInventoryControlRole(uaInv);
         e3_org3.getRoleDirectory().addRole(invRole);
 
         // Logistics Corp

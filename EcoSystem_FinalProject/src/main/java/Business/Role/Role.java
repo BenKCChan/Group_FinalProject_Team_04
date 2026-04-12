@@ -6,7 +6,7 @@
 package Business.Role;
 
 import Business.Enterprise.Enterprise;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.System.System;
 import Business.UserAccount.UserAccount;
 import javax.swing.JPanel;
@@ -27,13 +27,10 @@ public abstract class Role {
         OilSupplier("Oil Supplier"),
         OilSupplierAnalyst("Oil Supplier Analyst"),
         OilSupplierInventoryControl("Oil Supplier Inventory Control"),
-<<<<<<< HEAD
         TransportCoordinator("Transport Coordinator"),
-        LogisticsAnalyst("Logistics Analyst");
-=======
+        LogisticsAnalyst("Logistics Analyst"),
         Auditor("Trade Auditor"),
         FleetMonitor("Fleet Monitor");
->>>>>>> main
 
         private String value;
 

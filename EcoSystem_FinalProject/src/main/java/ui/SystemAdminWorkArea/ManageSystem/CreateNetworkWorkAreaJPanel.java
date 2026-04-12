@@ -138,7 +138,7 @@ public class CreateNetworkWorkAreaJPanel extends javax.swing.JPanel {
         }
         Network newNetwork = system.newNetwork(txtNetworkName.getText());
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        userProcessContainer.add("CreateEnterpriseWorkAreaJPanel", new CreateEnterpriseWorkAreaJPanel(userProcessContainer, userAccount, system, newNetwork));
+        userProcessContainer.add("ManageEnterpriseWorkAreaJPanel", new ManageEnterpriseWorkAreaJPanel(userProcessContainer, userAccount, system, newNetwork));
         layout.next(userProcessContainer);
     }//GEN-LAST:event_btnSaveActionPerformed
 

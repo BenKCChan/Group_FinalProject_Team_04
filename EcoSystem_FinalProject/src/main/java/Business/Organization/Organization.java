@@ -89,4 +89,41 @@ public class Organization {
         return roleDirectory;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public AuditorDirectory getAuditorDirectory() {
+        return auditorDirectory;
+    }
+
+    public FactoryAnalystDirectory getFactoryAnalystDirectory() {
+        return factoryAnalystDirectory;
+    }
+
+    public FactoryInventoryControlDirectory getFactoryInventoryControlDirectory() {
+        return factoryInventoryControlDirectory;
+    }
+
+    public FactoryManagerDirectory getFactoryManagerDirectory() {
+        return factoryManagerDirectory;
+    }
+
+    public SupplierAnalystDirectory getSupplierAnalystDirectory() {
+        return supplierAnalystDirectory;
+    }
+
+    public SupplierInventoryControlDirectory getSupplierInventoryControlDirectory() {
+        return supplierInventoryControlDirectory;
+    }
+
+    public FleetMonitorDirectory getFleetMonitorDirectory() {
+        return fleetMonitorDirectory;
+    }
+    
+    @Override
+    public String toString(){
+        return name;
+    }
+
 }

@@ -23,9 +23,9 @@ public class UserAccountDirectory {
 
     }
 
-    public UserAccount newUserAccount(String un, String pw) throws Exception {
+    public UserAccount newUserAccount(String un, String pw) {
         if (findUserAccount(un) != null) {
-            throw new Exception("User Name exist");
+            return null;
         }
         UserAccount ua = new UserAccount(un, pw);
         useraccountlist.add(ua);
@@ -51,24 +51,17 @@ public class UserAccountDirectory {
                 return ua;
             }
         }
-<<<<<<< HEAD
+
         return null; //not found after going through the whole list
     }
 
     public ArrayList<UserAccount> getUserAccountList() {
         return useraccountlist;
     }
-=======
-            return null; //not found after going through the whole list
-         }   
-     public ArrayList<UserAccount> getUserAccountList()
-     {
-         return useraccountlist;
-     }
-      public ArrayList<UserAccount> removeUser(UserAccount userAccount)
-     {
-         useraccountlist.remove(userAccount);
-         return useraccountlist;
-     }
->>>>>>> main
+
+    public ArrayList<UserAccount> removeUser(UserAccount userAccount) {
+        useraccountlist.remove(userAccount);
+        return useraccountlist;
+    }
+
 }

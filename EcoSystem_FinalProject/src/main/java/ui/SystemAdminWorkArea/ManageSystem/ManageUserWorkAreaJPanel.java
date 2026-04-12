@@ -6,7 +6,7 @@ package ui.SystemAdminWorkArea.ManageSystem;
 
 import Business.Enterprise.Enterprise;
 import Business.Network.Network;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.Role.AdminDirectory;
 import Business.Role.AuditorDirectory;
 import Business.Role.FactoryAnalystDirectory;
@@ -312,7 +312,12 @@ public class ManageUserWorkAreaJPanel extends javax.swing.JPanel {
         }
 
         UserAccount newUserAccount = system.getUserAccountDirectory().newUserAccount(txtUserName.getText(), new String(txtPwd.getPassword()));
-
+        
+        if(newUserAccount==null){
+            JOptionPane.showMessageDialog(this, "Account is exist", "ERROR", ERROR_MESSAGE);
+            return;
+        }
+        
         String selectedRole = comboRole.getSelectedItem().toString();
         if (Role.RoleType.Admin.getValue().equals(selectedRole)) {
             AdminDirectory dir = system.getAdminDirectory();
@@ -381,8 +386,8 @@ public class ManageUserWorkAreaJPanel extends javax.swing.JPanel {
 
         // Update password (if provided)
         char[] pwd = txtPwd.getPassword();
-        system.getUserAccountDirectory().findUserAccount(selectedUser.getId()).setUsername(txtUserName.getText());
-        system.getUserAccountDirectory().findUserAccount(selectedUser.getId()).setPassword(new String(pwd));
+        system.getUserAccountDirectory().findUserAccount(selectedUser.getUserLoginName()).setUsername(txtUserName.getText());
+        system.getUserAccountDirectory().findUserAccount(selectedUser.getUserLoginName()).setPassword(new String(pwd));
         
         changeRoleForUser(selectedUser);
 

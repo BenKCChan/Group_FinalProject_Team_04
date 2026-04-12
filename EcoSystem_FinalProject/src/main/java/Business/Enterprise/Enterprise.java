@@ -4,7 +4,7 @@
  */
 package Business.Enterprise;
 
-import Business.Organization;
+import Business.Organization.Organization;
 import java.util.ArrayList;
 
 /**
