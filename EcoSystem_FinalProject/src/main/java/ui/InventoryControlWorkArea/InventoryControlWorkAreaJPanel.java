@@ -5,7 +5,7 @@
 package ui.InventoryControlWorkArea;
 
 import Business.Enterprise.Enterprise;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import java.awt.Color;
 import javax.swing.JLabel;

@@ -4,7 +4,7 @@
  */
 package Business.Role;
 
-import Business.Person.PersonAccount;
+import Business.UserAccount.UserAccount;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +17,7 @@ public class AnalystDirectory {
     public AnalystDirectory() {
         analystList = new ArrayList();
     }
-    public AnalystRole newAnalystRole(PersonAccount p) {
+    public AnalystRole newAnalystRole(UserAccount p) {
         AnalystRole ar = new AnalystRole(p);
         analystList.add(ar);
         return ar;

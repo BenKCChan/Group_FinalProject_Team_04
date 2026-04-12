@@ -5,8 +5,7 @@
 package Business.Role;
 
 import Business.Enterprise.Enterprise;
-import Business.Organization;
-import Business.Person.PersonAccount;
+import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import javax.swing.JPanel;
 import Business.System.System;
@@ -18,7 +17,7 @@ import ui.InventoryControlWorkArea.InventoryControlWorkAreaJPanel;
  */
 public class InventoryControlRole extends Role {
     
-    public InventoryControlRole(PersonAccount p) {
+    public InventoryControlRole(UserAccount p) {
         super(p, RoleType.InventoryControl);
     }
     @Override

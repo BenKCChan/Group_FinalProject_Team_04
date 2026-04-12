@@ -5,8 +5,7 @@
 package Business.Role;
 
 import Business.Enterprise.Enterprise;
-import Business.Organization;
-import Business.Person.PersonAccount;
+import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import javax.swing.JPanel;
 import ui.AnalystWorkArea.AnalystWorkAreaJPanel;
@@ -19,7 +18,7 @@ import Business.System.System;
  */
 public class AnalystRole extends Role {
     
-    public AnalystRole(PersonAccount p) {
+    public AnalystRole(UserAccount p) {
         super(p, RoleType.Analyst);
     }
     @Override

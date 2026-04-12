@@ -5,7 +5,7 @@
 package ui.FactoryManagerWorkArea;
 
 import Business.Enterprise.Enterprise;
-import Business.Organization;
+import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import Business.System.System;
 import java.awt.Color;

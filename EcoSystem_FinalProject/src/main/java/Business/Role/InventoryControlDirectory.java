@@ -4,9 +4,9 @@
  */
 package Business.Role;
 
-import Business.Person.PersonAccount;
 import java.util.ArrayList;
 import Business.System.System;
+import Business.UserAccount.UserAccount;
 
 /**
  *
@@ -19,7 +19,7 @@ public class InventoryControlDirectory {
     public InventoryControlDirectory() {
         controlList = new ArrayList();
     }
-    public InventoryControlRole newInventoryControlRole(PersonAccount p) {
+    public InventoryControlRole newInventoryControlRole(UserAccount p) {
         InventoryControlRole ic = new InventoryControlRole(p);
         controlList.add(ic);
         return ic;

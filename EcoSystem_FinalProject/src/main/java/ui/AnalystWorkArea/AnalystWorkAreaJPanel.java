@@ -6,8 +6,7 @@ package ui.AnalystWorkArea;
 
 import Business.Enterprise.Enterprise;
 import Business.OilTrade.OilTradeRequest;
-import Business.Organization;
-import Business.Role.AnalystRole;
+import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -76,8 +75,7 @@ public class AnalystWorkAreaJPanel extends javax.swing.JPanel {
             DefaultTableModel model = (DefaultTableModel) tblRequests.getModel();
             model.setRowCount(0);
             
-            AnalystRole role = (AnalystRole) account.getAssociatedPersonProfile();
-            String userId = role.getPerson().getPersonId();
+            String userId = account.getUserLoginName();
             
             for (OilTradeRequest req : system.getNetworkList().get(0).getTradeRequestList().getRequestsByUser(userId)) {
             model.addRow(new Object[] {
@@ -347,8 +345,7 @@ public class AnalystWorkAreaJPanel extends javax.swing.JPanel {
                 return;
             }
 
-            AnalystRole role = (AnalystRole) account.getAssociatedPersonProfile();
-            String requestedBy = role.getPerson().getPersonId();
+            String requestedBy = account.getUserLoginName();
 
             system.getNetworkList().get(0).getTradeRequestList().addRequest(
                 organization.getName(),
@@ -384,8 +381,7 @@ try {
                 return;
             }
 
-            AnalystRole role = (AnalystRole) account.getAssociatedPersonProfile();
-            String requestedBy = role.getPerson().getPersonId();
+            String requestedBy = account.getUserLoginName();
 
             system.getNetworkList().get(0).getTradeRequestList().addRequest(
                 organization.getName(),
